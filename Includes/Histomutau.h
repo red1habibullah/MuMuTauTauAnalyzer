@@ -30,6 +30,14 @@ class Histomutau{
         TH1D* dRMuTau;
         TH1D* invMassMuMu;
         TH1D* invMassMuTau;
+
+        TH1D* Mu1IsoMuMuPair;
+        TH1D* Mu2IsoMuMuPair;
+        TH1D* Mu3IsoMuTauPair;
+        TH1D* TauIsoMVAMuTauPair;
+
+        TH1D* unMatchedMuIso;
+        TH1D* unMatchedTauIsoMVA;
 };
 
 #endif
