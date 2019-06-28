@@ -12,7 +12,7 @@ CXX           = g++ -std=c++11
 CXXFLAGS      = -g -Wall -fPIC   	
 CXXFLAGS      += $(ROOTCFLAGS) 
 
-SOURCES = Histomutau.cc MuTauAnalyzer.cc
+SOURCES = Histomutau.cc MuTauAnalyzer.cc lumiana.cc
 
 SRCLIST = $(addprefix $(SRCDIR), $(SOURCES))
 OBJLIST = $(SRCLIST:.cc=.o)
