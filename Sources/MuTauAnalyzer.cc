@@ -234,6 +234,7 @@ void MuTauAnalyzer::Loop()
           TLorentzVector Mu1Mu2 = Mu1 + Mu2;
           dRMuMu->Fill(Mu1.DeltaR(Mu2));
           invMassMuMu->Fill(Mu1Mu2.M());
+          dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M());
 
           Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon));
           Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon));
@@ -246,6 +247,7 @@ void MuTauAnalyzer::Loop()
           TLorentzVector MuTau = Mu3 + Tau;
           dRMuTau->Fill(Mu3.DeltaR(Tau));
           invMassMuTau->Fill(MuTau.M());
+          dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M());
 
           Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau));
           TauIsoMVAMuTauPair->Fill(TauIso.at(iTau));

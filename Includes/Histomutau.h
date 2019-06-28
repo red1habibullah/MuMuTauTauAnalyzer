@@ -2,6 +2,7 @@
 #define _Histomutau_h_
 
 #include "TH1.h"
+#include "TH2.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -12,11 +13,16 @@ class Histomutau{
 
     public:
 
-        vector<TH1D*> histColl;
+        vector<TH1*> histColl;
 
-        TH1D* newTH1D(string, string, string, int, double*);
-        TH1D* newTH1D(string, string, string, int, double, double);
-        TH1D* newTH1D(string, string, string, vector<double>&);
+        TH1D* newTH1D(string, string, int, double*);
+        TH1D* newTH1D(string, string, int, double, double);
+        TH1D* newTH1D(string, string, vector<double>&);
+
+        TH2D* newTH2D(string, string, string, int, double*, int, double*);
+        TH2D* newTH2D(string, string, string, int, double*, int, double, double);
+        TH2D* newTH2D(string, string, string, int, double, double, int, double*);
+        TH2D* newTH2D(string, string, string, int, double, double, int, double, double);
 
         Histomutau();
         ~Histomutau();
@@ -38,6 +44,9 @@ class Histomutau{
 
         TH1D* unMatchedMuIso;
         TH1D* unMatchedTauIsoMVA;
+
+        TH2D* dRInvMassMuMu;
+        TH2D* dRInvMassMuTau;
 };
 
 #endif
