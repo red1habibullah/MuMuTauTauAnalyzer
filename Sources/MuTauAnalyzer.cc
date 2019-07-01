@@ -64,6 +64,7 @@ void MuTauAnalyzer::Loop()
       vector<float> Mu2Iso;
       vector<float> Mu3Iso;
       vector<float> TauIso;
+      vector<float> TauMediumIsoDisc;
 
       Mu1s.clear();
       Mu2s.clear();
@@ -74,6 +75,7 @@ void MuTauAnalyzer::Loop()
       Mu2Iso.clear();
       Mu3Iso.clear();
       TauIso.clear();
+      TauMediumIsoDisc.clear();
       // ========================================================================
 
       // ---- these vectors containing the rank of each matched muon to avoid double counting ---
@@ -198,6 +200,7 @@ void MuTauAnalyzer::Loop()
 
               Mu3Iso.push_back(recoMuonIsolation->at(indexMu3));
               TauIso.push_back(recoTauIsoMVArawValue->at(iTau));
+              TauMediumIsoDisc.push_back(recoTauIsoMVAMedium->at(iTau));
           } // end if findMu3
 
           else{
@@ -227,8 +230,18 @@ void MuTauAnalyzer::Loop()
       nUnMatchedMu->Fill(unMatchedMus.size());
       nUnMatchedTau->Fill(unMatchedTaus.size());
 
+      int nBadIsoMuons = 0;
+      int nBadIsoTaus = 0;
+
       for (int iMuon=0; iMuon<Mu1s.size(); iMuon++)
       {
+          // --- require loose muon isolation ---
+          if (Mu1Iso.at(iMuon) > 0.25 || Mu2Iso.at(iMuon) > 0.25)
+          {
+              nBadIsoMuons += ((Mu1Iso.at(iMuon) > 0.25 && Mu2Iso.at(iMuon) > 0.25) ? 2 : 1);
+              continue;
+          } // end if isolation requirement for muon pairs
+
           Mu1 = Mu1s.at(iMuon);
           Mu2 = Mu2s.at(iMuon);
           TLorentzVector Mu1Mu2 = Mu1 + Mu2;
@@ -242,6 +255,14 @@ void MuTauAnalyzer::Loop()
 
       for (int iTau=0; iTau<Taus.size(); iTau++)
       {
+          // --- require medium tau isolation ---
+          //cout << "*** Tau medium isolation discriminator: " << TauMediumIsoDisc.at(iTau) << endl;
+          if (TauMediumIsoDisc.at(iTau) <= 0)
+          {
+              nBadIsoTaus++;
+              continue;
+          } // end if medium ID requirement for matched taus
+
           Mu3 = Mu3s.at(iTau);
           Tau = Taus.at(iTau);
           TLorentzVector MuTau = Mu3 + Tau;
@@ -262,6 +283,9 @@ void MuTauAnalyzer::Loop()
       {
           unMatchedTauIsoMVA->Fill(unMatchedTauIso.at(iTau));
       } // end loop for unMatched taus
+
+      nBadIsoMu->Fill(nBadIsoMuons);
+      nBadIsoTau->Fill(nBadIsoTaus);
 
    }// end loop for events
 

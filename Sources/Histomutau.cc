@@ -76,10 +76,12 @@ TH2D* Histomutau::newTH2D(string name, string xTitle, string yTitle, int nBinsX,
 // --------------- customize the binning of output histograms -----------------
 Histomutau::Histomutau(){
 
-    nMatchedMuPairs = newTH1D("nMatchedMuPairs", "Num(#mu_{1}#mu_{2})", 5, 0, 5);
-    nMatchedMuTauPairs = newTH1D("nMatchedMuTauPairs", "Num(#mu#tau)", 5, 0, 5);
-    nUnMatchedMu = newTH1D("nUnMatchedMu", "Num_unmatch(#mu)", 5, 0, 5);
-    nUnMatchedTau = newTH1D("nUnMatchedTau", "Num_unmatch(#tau)", 5, 0, 5);
+    nMatchedMuPairs = newTH1D("nMatchedMuPairs", "N(#mu_{1}#mu_{2})", 5, 0, 5);
+    nMatchedMuTauPairs = newTH1D("nMatchedMuTauPairs", "N(#mu#tau)", 5, 0, 5);
+    nUnMatchedMu = newTH1D("nUnMatchedMu", "N_{#mu}(unMatch)", 5, 0, 5);
+    nUnMatchedTau = newTH1D("nUnMatchedTau", "N_{#tau}(unMatch)", 5, 0, 5);
+    nBadIsoMu = newTH1D("nBadIsoMu", "N_{#mu}(badIso)", 5, 0, 5);
+    nBadIsoTau = newTH1D("nBadIsoTau", "N_{#tau}(badIso)", 5, 0, 5);
 
     invMassMuMu = newTH1D("invMassMuMu", "M(#mu_{1}#mu_{2})[GeV]", 100, 0, 100);
     invMassMuTau = newTH1D("invMassMuTau", "M(#mu#tau)[GeV]", 100, 0, 100);
@@ -87,8 +89,8 @@ Histomutau::Histomutau(){
     dRMuMu = newTH1D("dRMuMu", "#Delta R(#mu_{1}#mu_{2})", 25, 0, 5.0);
     dRMuTau = newTH1D("dRMuTau", "#Delta R(#mu#tau)", 25, 0, 5.0);
 
-    Mu1IsoMuMuPair = newTH1D("Mu1IsoMuMuPair", "#mu_{1}^{iso}(#mu#mu)", 200, 0, 200);
-    Mu2IsoMuMuPair = newTH1D("Mu2IsoMuMuPair", "#mu_{2}^{iso}(#mu#mu)", 200, 0, 200);
+    Mu1IsoMuMuPair = newTH1D("Mu1IsoMuMuPair", "#mu_{1}^{iso}(#mu#mu)", 20, 0, 0.25);
+    Mu2IsoMuMuPair = newTH1D("Mu2IsoMuMuPair", "#mu_{2}^{iso}(#mu#mu)", 20, 0, 0.25);
     Mu3IsoMuTauPair = newTH1D("Mu3IsoMuTauPair", "#mu_{3}^{iso}(#mu#tau)", 200, 0, 200);
     TauIsoMVAMuTauPair = newTH1D("TauIsoMVAMuTauPair", "#tau^{iso}(#mu#tau)", 20, -1, 1);
 
