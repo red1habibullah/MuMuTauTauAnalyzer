@@ -76,8 +76,10 @@ TH2D* Histomutau::newTH2D(string name, string xTitle, string yTitle, int nBinsX,
 // --------------- customize the binning of output histograms -----------------
 Histomutau::Histomutau(){
 
-    nMatchedMuPairs = newTH1D("nMatchedMuPairs", "N(#mu_{1}#mu_{2})", 5, 0, 5);
-    nMatchedMuTauPairs = newTH1D("nMatchedMuTauPairs", "N(#mu#tau)", 5, 0, 5);
+    nMatchedMuPair = newTH1D("nMatchedMuPair", "N(#mu_{1}#mu_{2})", 5, 0, 5);
+    nMatchedMuTauPair = newTH1D("nMatchedMuTauPair", "N(#mu#tau)", 5, 0, 5);
+    nGoodMatchedMuPair = newTH1D("nGoodMatchedMuPair", "N_{good}(#mu_{1}#mu_{2})", 5, 0, 5);
+    nGoodMatchedMuTauPair = newTH1D("nGoodMatchedMuTauPair", "N_{good}(#mu#tau)", 5, 0, 5);
     nUnMatchedMu = newTH1D("nUnMatchedMu", "N_{#mu}(unMatch)", 5, 0, 5);
     nUnMatchedTau = newTH1D("nUnMatchedTau", "N_{#tau}(unMatch)", 5, 0, 5);
     nBadIsoMu = newTH1D("nBadIsoMu", "N_{#mu}(badIso)", 5, 0, 5);

@@ -27,8 +27,10 @@ class Histomutau{
         Histomutau();
         ~Histomutau();
 
-        TH1D* nMatchedMuPairs;
-        TH1D* nMatchedMuTauPairs;
+        TH1D* nMatchedMuPair;
+        TH1D* nMatchedMuTauPair;
+        TH1D* nGoodMatchedMuPair;
+        TH1D* nGoodMatchedMuTauPair;
         TH1D* nUnMatchedMu;
         TH1D* nUnMatchedTau;
         TH1D* nBadIsoMu;

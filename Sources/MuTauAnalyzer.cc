@@ -225,11 +225,13 @@ void MuTauAnalyzer::Loop()
       } // end loop for unMatched muon candidates
 
       // ---- fill histograms ----
-      nMatchedMuPairs->Fill(Mu1s.size());
-      nMatchedMuTauPairs->Fill(Taus.size());
+      nMatchedMuPair->Fill(Mu1s.size());
+      nMatchedMuTauPair->Fill(Taus.size());
       nUnMatchedMu->Fill(unMatchedMus.size());
       nUnMatchedTau->Fill(unMatchedTaus.size());
 
+      int nGoodMuPairs = 0;
+      int nGoodMuTauPairs = 0;
       int nBadIsoMuons = 0;
       int nBadIsoTaus = 0;
 
@@ -251,6 +253,7 @@ void MuTauAnalyzer::Loop()
 
           Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon));
           Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon));
+          nGoodMuPairs++;
       } // end loop for mu pairs
 
       for (int iTau=0; iTau<Taus.size(); iTau++)
@@ -272,6 +275,7 @@ void MuTauAnalyzer::Loop()
 
           Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau));
           TauIsoMVAMuTauPair->Fill(TauIso.at(iTau));
+          nGoodMuTauPairs++;
       } // end loop for mu-tau pairs
 
       for (int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
@@ -284,6 +288,8 @@ void MuTauAnalyzer::Loop()
           unMatchedTauIsoMVA->Fill(unMatchedTauIso.at(iTau));
       } // end loop for unMatched taus
 
+      nGoodMatchedMuPair->Fill(nGoodMuPairs);
+      nGoodMatchedMuTauPair->Fill(nGoodMuTauPairs);
       nBadIsoMu->Fill(nBadIsoMuons);
       nBadIsoTau->Fill(nBadIsoTaus);
 
