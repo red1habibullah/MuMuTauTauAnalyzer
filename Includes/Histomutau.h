@@ -33,8 +33,6 @@ class Histomutau{
         TH1D* nGoodMatchedMuTauPair;
         TH1D* nUnMatchedMu;
         TH1D* nUnMatchedTau;
-        TH1D* nBadIsoMu;
-        TH1D* nBadIsoTau;
 
         TH1D* dRMuMu;
         TH1D* dRMuTau;

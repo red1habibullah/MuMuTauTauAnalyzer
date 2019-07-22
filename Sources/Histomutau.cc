@@ -82,8 +82,6 @@ Histomutau::Histomutau(){
     nGoodMatchedMuTauPair = newTH1D("nGoodMatchedMuTauPair", "N_{good}(#mu#tau)", 5, 0, 5);
     nUnMatchedMu = newTH1D("nUnMatchedMu", "N_{#mu}(unMatch)", 5, 0, 5);
     nUnMatchedTau = newTH1D("nUnMatchedTau", "N_{#tau}(unMatch)", 5, 0, 5);
-    nBadIsoMu = newTH1D("nBadIsoMu", "N_{#mu}(badIso)", 5, 0, 5);
-    nBadIsoTau = newTH1D("nBadIsoTau", "N_{#tau}(badIso)", 5, 0, 5);
 
     invMassMuMu = newTH1D("invMassMuMu", "M(#mu_{1}#mu_{2})[GeV]", 100, 0, 100);
     invMassMuTau = newTH1D("invMassMuTau", "M(#mu#tau)[GeV]", 100, 0, 100);

@@ -8,7 +8,7 @@ of variable histograms and/or flat trees (latter TBD).
 
 First you must make sure you have the ROOT library included in your local environment. 
 
-$ git clone https://github.com/Fengwangdong/MuMuTauTauTreeMaker.git
+$ git clone https://github.com/Fengwangdong/MuMuTauTauAnalyzer.git
 
 $ cd MuMuTauTauAnalyzer
 

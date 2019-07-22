@@ -110,21 +110,8 @@ void MuTauAnalyzer::Loop()
       TLorentzVector unMatchedMu;
       // ============================================================================
 
-      // ---- read the four momentum information of pre-ordered first and second muons ----
-      Mu1.SetPtEtaPhiE(recoMuonPt->at(0), recoMuonEta->at(0), recoMuonPhi->at(0), recoMuonEnergy->at(0));
-      Mu2.SetPtEtaPhiE(recoMuonPt->at(1), recoMuonEta->at(1), recoMuonPhi->at(1), recoMuonEnergy->at(1));
-      
-      Mu1s.push_back(Mu1);
-      Mu2s.push_back(Mu2);
-
-      indexMu1s.push_back(0);
-      indexMu2s.push_back(1);
-
-      Mu1Iso.push_back(recoMuonIsolation->at(0));
-      Mu2Iso.push_back(recoMuonIsolation->at(1));
-
       // ---- start loop on other muon candidates ----
-      for (int iMuon=2; iMuon<recoMuonPt->size(); iMuon++)
+      for (int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           if (indexMu2s.size() > 0) 
           {
@@ -133,6 +120,7 @@ void MuTauAnalyzer::Loop()
           } // end if there is any matched Mu2 candidiate
 
           //cout << "******** Mu1 index: " << iMuon << endl;
+          if (recoMuonIsolation->at(iMuon) > 0.25) continue;
           Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
           float smallestDR = 99.0;
           bool findMu2 = false;
@@ -144,6 +132,7 @@ void MuTauAnalyzer::Loop()
               if (iter2 != indexMu2s.end()) continue;
 
               //cout << "******** Mu2 index: " << iMuon2 << endl;
+              if (recoMuonIsolation->at(iMuon2) > 0.25) continue;
               Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
               if((Mu1.DeltaR(Mu2) < smallestDR) && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
               {
@@ -170,6 +159,7 @@ void MuTauAnalyzer::Loop()
       // ------- start loop on tau candidates -------
       for (int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
+          if (recoTauIsoMVAMedium->at(iTau) <= 0) continue;
           Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
           float smallestDR = 99.0;
           bool findMu3 = false;
@@ -232,18 +222,9 @@ void MuTauAnalyzer::Loop()
 
       int nGoodMuPairs = 0;
       int nGoodMuTauPairs = 0;
-      int nBadIsoMuons = 0;
-      int nBadIsoTaus = 0;
 
       for (int iMuon=0; iMuon<Mu1s.size(); iMuon++)
       {
-          // --- require loose muon isolation ---
-          if (Mu1Iso.at(iMuon) > 0.25 || Mu2Iso.at(iMuon) > 0.25)
-          {
-              nBadIsoMuons += ((Mu1Iso.at(iMuon) > 0.25 && Mu2Iso.at(iMuon) > 0.25) ? 2 : 1);
-              continue;
-          } // end if isolation requirement for muon pairs
-
           Mu1 = Mu1s.at(iMuon);
           Mu2 = Mu2s.at(iMuon);
           TLorentzVector Mu1Mu2 = Mu1 + Mu2;
@@ -258,14 +239,6 @@ void MuTauAnalyzer::Loop()
 
       for (int iTau=0; iTau<Taus.size(); iTau++)
       {
-          // --- require medium tau isolation ---
-          //cout << "*** Tau medium isolation discriminator: " << TauMediumIsoDisc.at(iTau) << endl;
-          if (TauMediumIsoDisc.at(iTau) <= 0)
-          {
-              nBadIsoTaus++;
-              continue;
-          } // end if medium ID requirement for matched taus
-
           Mu3 = Mu3s.at(iTau);
           Tau = Taus.at(iTau);
           TLorentzVector MuTau = Mu3 + Tau;
@@ -290,8 +263,6 @@ void MuTauAnalyzer::Loop()
 
       nGoodMatchedMuPair->Fill(nGoodMuPairs);
       nGoodMatchedMuTauPair->Fill(nGoodMuTauPairs);
-      nBadIsoMu->Fill(nBadIsoMuons);
-      nBadIsoTau->Fill(nBadIsoTaus);
 
    }// end loop for events
 
