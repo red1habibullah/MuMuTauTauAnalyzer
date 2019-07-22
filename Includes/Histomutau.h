@@ -29,8 +29,6 @@ class Histomutau{
 
         TH1D* nMatchedMuPair;
         TH1D* nMatchedMuTauPair;
-        TH1D* nGoodMatchedMuPair;
-        TH1D* nGoodMatchedMuTauPair;
         TH1D* nUnMatchedMu;
         TH1D* nUnMatchedTau;
 
@@ -49,6 +47,7 @@ class Histomutau{
 
         TH2D* dRInvMassMuMu;
         TH2D* dRInvMassMuTau;
+        TH2D* nMatchedMuPairNMatchedMuTauPair;
 };
 
 #endif
