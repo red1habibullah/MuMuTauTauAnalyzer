@@ -45,6 +45,28 @@ class Histomutau{
         TH1D* unMatchedMuIso;
         TH1D* unMatchedTauIsoMVA;
 
+        TH1D* mu1Pt;
+        TH1D* mu1Eta;
+        TH1D* mu1Phi;
+        
+        TH1D* mu2Pt;
+        TH1D* mu2Eta;
+        TH1D* mu2Phi;
+
+        TH1D* mu3Pt;
+        TH1D* mu3Eta;
+        TH1D* mu3Phi;
+
+        TH1D* tauPt;
+        TH1D* tauEta;
+        TH1D* tauPhi;
+        TH1D* tauMass;
+
+        TH1D* dRMu1Mu3;
+        TH1D* dRMu1Tau;
+        TH1D* dRMu2Mu3;
+        TH1D* dRMu2Tau;
+
         TH2D* dRInvMassMuMu;
         TH2D* dRInvMassMuTau;
         TH2D* nMatchedMuPairNMatchedMuTauPair;

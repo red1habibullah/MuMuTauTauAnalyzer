@@ -89,11 +89,33 @@ Histomutau::Histomutau(){
 
     Mu1IsoMuMuPair = newTH1D("Mu1IsoMuMuPair", "#mu_{1}^{iso}(#mu#mu)", 20, 0, 0.25);
     Mu2IsoMuMuPair = newTH1D("Mu2IsoMuMuPair", "#mu_{2}^{iso}(#mu#mu)", 20, 0, 0.25);
-    Mu3IsoMuTauPair = newTH1D("Mu3IsoMuTauPair", "#mu_{3}^{iso}(#mu#tau)", 200, 0, 200);
+    Mu3IsoMuTauPair = newTH1D("Mu3IsoMuTauPair", "#mu_{3}^{iso}(#mu#tau)", 20, 0, 20);
     TauIsoMVAMuTauPair = newTH1D("TauIsoMVAMuTauPair", "#tau^{iso}(#mu#tau)", 20, -1, 1);
 
     unMatchedMuIso = newTH1D("unMatchedMuIso", "#mu^{iso}(unMatch)", 200, 0, 200);
     unMatchedTauIsoMVA = newTH1D("unMatchedTauIsoMVA", "#tau^{iso}(unMatch)", 20, -1, 1);
+
+    mu1Pt = newTH1D("mu1Pt", "p_{T}(#mu_{1}) [GeV]", 50, 5, 205);
+    mu1Eta = newTH1D("mu1Eta", "#eta(#mu_{1})", 20, -2.1, 2.1);
+    mu1Phi = newTH1D("mu1Phi", "#phi(#mu_{1})", 20, -2.5, 2.5);
+
+    mu2Pt = newTH1D("mu2Pt", "p_{T}(#mu_{2}) [GeV]", 50, 3, 203);
+    mu2Eta = newTH1D("mu2Eta", "#eta(#mu_{2})", 20, -2.1, 2.1);
+    mu2Phi = newTH1D("mu2Phi", "#phi(#mu_{2})", 20, -2.5, 2.5);
+
+    mu3Pt = newTH1D("mu3Pt", "p_{T}(#mu_{3}) [GeV]", 50, 3, 203);
+    mu3Eta = newTH1D("mu3Eta", "#eta(#mu_{3})", 20, -2.1, 2.1);
+    mu3Phi = newTH1D("mu3Phi", "#phi(#mu_{3})", 20, -2.5, 2.5);
+
+    tauPt = newTH1D("tauPt", "p_{T}(#tau) [GeV]", 50, 3, 203);
+    tauEta = newTH1D("tauEta", "#eta(#tau)", 20, -2.1, 2.1);
+    tauPhi = newTH1D("tauPhi", "#phi(#tau)", 20, -2.5, 2.5);
+    tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 20, 0, 20);
+
+    dRMu1Mu3 = newTH1D("dRMu1Mu3", "#Delta R(#mu_{1}#mu_{3})", 25, 0, 5);
+    dRMu1Tau = newTH1D("dRMu1Tau", "#Delta R(#mu_{1}#tau)", 25, 0, 5);
+    dRMu2Mu3 = newTH1D("dRMu2Mu3", "#Delta R(#mu_{2}#mu_{3})", 25, 0, 5);
+    dRMu2Tau = newTH1D("dRMu2Tau", "#Delta R(#mu_{2}#tau)", 25, 0, 5);
 
     dRInvMassMuMu = newTH2D("dRInvMassMuMu", "#Delta R(#mu_{1}#mu_{2})", "M(#mu_{1}#mu_{2})[GeV]", 25, 0, 1, 100, 0, 100);
     dRInvMassMuTau = newTH2D("dRInvMassMuTau", "#Delta R(#mu#tau)", "M(#mu#tau)[GeV]", 25, 0, 1, 100, 0, 100);

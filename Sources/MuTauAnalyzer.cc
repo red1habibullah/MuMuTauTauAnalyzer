@@ -225,31 +225,73 @@ void MuTauAnalyzer::Loop()
       nUnMatchedTau->Fill(unMatchedTaus.size());
       nMatchedMuPairNMatchedMuTauPair->Fill(Mu1s.size(),Taus.size());
 
-      for (int iMuon=0; iMuon<Mu1s.size(); iMuon++)
+      if (Mu1s.size() >0 && Taus.size() >0)
       {
-          Mu1 = Mu1s.at(iMuon);
-          Mu2 = Mu2s.at(iMuon);
-          TLorentzVector Mu1Mu2 = Mu1 + Mu2;
-          dRMuMu->Fill(Mu1.DeltaR(Mu2));
-          invMassMuMu->Fill(Mu1Mu2.M());
-          dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M());
+          for (int iMuon=0; iMuon<Mu1s.size(); iMuon++)
+          {
+              Mu1 = Mu1s.at(iMuon);
+              Mu2 = Mu2s.at(iMuon);
+              TLorentzVector Mu1Mu2 = Mu1 + Mu2;
+              dRMuMu->Fill(Mu1.DeltaR(Mu2));
+              invMassMuMu->Fill(Mu1Mu2.M());
+              dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M());
 
-          Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon));
-          Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon));
-      } // end loop for mu pairs
+              Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon));
+              Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon));
 
-      for (int iTau=0; iTau<Taus.size(); iTau++)
-      {
-          Mu3 = Mu3s.at(iTau);
-          Tau = Taus.at(iTau);
-          TLorentzVector MuTau = Mu3 + Tau;
-          dRMuTau->Fill(Mu3.DeltaR(Tau));
-          invMassMuTau->Fill(MuTau.M());
-          dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M());
+              mu1Pt->Fill(Mu1.Pt());
+              mu1Eta->Fill(Mu1.Eta());
+              mu1Phi->Fill(Mu1.Phi());
 
-          Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau));
-          TauIsoMVAMuTauPair->Fill(TauIso.at(iTau));
-      } // end loop for mu-tau pairs
+              mu2Pt->Fill(Mu2.Pt());
+              mu2Eta->Fill(Mu2.Eta());
+              mu2Phi->Fill(Mu2.Phi());
+
+          } // end loop for mu pairs
+
+          for (int iTau=0; iTau<Taus.size(); iTau++)
+          {
+              Mu3 = Mu3s.at(iTau);
+              Tau = Taus.at(iTau);
+              TLorentzVector MuTau = Mu3 + Tau;
+              dRMuTau->Fill(Mu3.DeltaR(Tau));
+              invMassMuTau->Fill(MuTau.M());
+              dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M());
+
+              Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau));
+              TauIsoMVAMuTauPair->Fill(TauIso.at(iTau));
+
+              mu3Pt->Fill(Mu3.Pt());
+              mu3Eta->Fill(Mu3.Eta());
+              mu3Phi->Fill(Mu3.Phi());
+
+              tauPt->Fill(Tau.Pt());
+              tauEta->Fill(Tau.Eta());
+              tauPhi->Fill(Tau.Phi());
+              tauMass->Fill(Tau.M());
+
+          } // end loop for mu-tau pairs
+
+          // --- filling histograms of four-body of mu-mu-mu-tau ---
+          for (int iMuon=0; iMuon<Mu1s.size(); iMuon++)
+          {
+              Mu1 = Mu1s.at(iMuon);
+              Mu2 = Mu2s.at(iMuon);
+              TLorentzVector Mu1Mu2 = Mu1 + Mu2;
+
+              for (int iTau=0; iTau<Taus.size(); iTau++)
+              {
+                  Mu3 = Mu3s.at(iTau);
+                  Tau = Taus.at(iTau);
+                  TLorentzVector MuTau = Mu3 + Tau;
+
+                  dRMu1Mu3->Fill(Mu1.DeltaR(Mu3));
+                  dRMu1Tau->Fill(Mu1.DeltaR(Tau));
+                  dRMu2Mu3->Fill(Mu2.DeltaR(Mu3));
+                  dRMu2Tau->Fill(Mu2.DeltaR(Tau));
+              } // end loop for mu-tau pairs
+          } // end loop for mu-mu pairs
+      } // end if mu-mu & mu-tau pairs
 
       for (int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
