@@ -16,6 +16,6 @@ $ make clean
 
 $ make # compile the C++ functions
 
-$ ./runMuTauAnalyzer # for analyzing the dimuon channel (control region)
+$ ./runMuMuAnalyzer ###### for analyzing the dimuon channel (control region)
 
-$ ./runMuTauAnalyzer # for analyzing the tau_mu + tau_had channel
+$ ./runMuTauAnalyzer ###### for analyzing the tau_mu + tau_had channel
