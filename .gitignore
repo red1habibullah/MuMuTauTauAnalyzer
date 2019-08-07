@@ -1,3 +1,6 @@
 *.o
+*.bk
+*.cc~
+runMuMuAnalyzer
 runMuTauAnalyzer
 *.root
