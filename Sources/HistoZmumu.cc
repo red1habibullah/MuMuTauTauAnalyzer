@@ -96,7 +96,7 @@ HistoZmumu::HistoZmumu(){
     mu2Eta = newTH1D("mu2Eta", "#eta(#mu_{2})", 20, -2.1, 2.1);
     mu2Phi = newTH1D("mu2Phi", "#phi(#mu_{2})", 20, -2.5, 2.5);
 
-    dRInvMassMuMu = newTH2D("dRInvMassMuMu", "#Delta R(#mu_{1}#mu_{2})", "M(#mu_{1}#mu_{2})[GeV]", 25, 0, 1, 100, 0, 100);
+    dRInvMassMuMu = newTH2D("dRInvMassMuMu", "#Delta R(#mu_{1}#mu_{2})", "M(#mu_{1}#mu_{2})[GeV]", 25, 0, 5, 100, 60, 120);
 }
 
 HistoZmumu::~HistoZmumu()
