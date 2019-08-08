@@ -189,6 +189,9 @@ void MuMuAnalyzer::Loop()
 
       for (int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
+          unMatchedMuPt->Fill(unMatchedMus.at(iMuon).Pt());
+          unMatchedMuEta->Fill(unMatchedMus.at(iMuon).Eta());
+          unMatchedMuPhi->Fill(unMatchedMus.at(iMuon).Phi());
           unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon));
       } // end loop for unMatched muons
 

@@ -80,12 +80,10 @@ HistoZmumu::HistoZmumu(){
     nUnMatchedMu = newTH1D("nUnMatchedMu", "N_{#mu}(unMatch)", 5, 0, 5);
 
     invMassMuMu = newTH1D("invMassMuMu", "M(#mu_{1}#mu_{2})[GeV]", 100, 60, 120);
-
     dRMuMu = newTH1D("dRMuMu", "#Delta R(#mu_{1}#mu_{2})", 25, 0, 5.0);
 
     Mu1IsoMuMuPair = newTH1D("Mu1IsoMuMuPair", "#mu_{1}^{iso}(#mu#mu)", 20, 0, 0.25);
     Mu2IsoMuMuPair = newTH1D("Mu2IsoMuMuPair", "#mu_{2}^{iso}(#mu#mu)", 20, 0, 0.25);
-
     unMatchedMuIso = newTH1D("unMatchedMuIso", "#mu^{iso}(unMatch)", 200, 0, 200);
 
     mu1Pt = newTH1D("mu1Pt", "p_{T}(#mu_{1}) [GeV]", 50, 5, 205);
@@ -95,6 +93,10 @@ HistoZmumu::HistoZmumu(){
     mu2Pt = newTH1D("mu2Pt", "p_{T}(#mu_{2}) [GeV]", 50, 3, 203);
     mu2Eta = newTH1D("mu2Eta", "#eta(#mu_{2})", 20, -2.1, 2.1);
     mu2Phi = newTH1D("mu2Phi", "#phi(#mu_{2})", 20, -2.5, 2.5);
+
+    unMatchedMuPt = newTH1D("unMatchedMuPt", "p_{T}(#mu_{unMatched}) [GeV]", 50, 3, 203);
+    unMatchedMuEta = newTH1D("unMatchedMuEta", "#eta(#mu_{unMatched})", 20, -2.1, 2.1);
+    unMatchedMuPhi = newTH1D("unMatchedMuPhi", "#phi(#mu_{unMatched})", 20, -2.5, 2.5);
 
     dRInvMassMuMu = newTH2D("dRInvMassMuMu", "#Delta R(#mu_{1}#mu_{2})", "M(#mu_{1}#mu_{2})[GeV]", 25, 0, 5, 100, 60, 120);
 }
