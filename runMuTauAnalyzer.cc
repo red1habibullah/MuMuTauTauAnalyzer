@@ -16,6 +16,7 @@ int main(int argc, char **argv)
     TString outputDir  = cfg.getS("outputDir");
     TString doWhat     = cfg.getS("doWhat", "DYJETS");
     Long_t maxEvents   = cfg.getL("maxEvents", -1);
+    double lumi        = cfg.getD("lumi", 1);
 
     //--- Parse the arguments -----------------------------------------------------
     if (argc > 1)
@@ -44,13 +45,16 @@ int main(int argc, char **argv)
             {
                 getArg(currentArg, maxEvents);
             }
+            else if (currentArg.BeginsWith("lumi="))
+            {
+                getArg(currentArg, lumi);
+            }
         } // end for loop in argc
     } // end if argc > 1
     
     doWhat.ToUpper();
 
-    // ----- This two variables to be used for MC reweighting -----
-    //double lumi = 41.9; // fb-1
+    // ----- This variable is to be used for MC reweighting -----
     float summedWeights = 0;
 
     //------------------------- data histograms production -------------------
@@ -62,7 +66,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuTauAnalyzer DYJetsHist(inputFile, outputDir, 1, 1, maxEvents);
+            MuTauAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -74,7 +78,7 @@ int main(int argc, char **argv)
             {
                 lumiana DYJetsLumi(fileName);
                 summedWeights = DYJetsLumi.Loop();
-                MuTauAnalyzer DYJetsHist(fileName, outputDir, 1, 1, maxEvents);
+                MuTauAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
