@@ -16,6 +16,13 @@ $ make clean
 
 $ make # compile the C++ functions
 
-$ ./runMuMuAnalyzer ###### for analyzing the dimuon channel (control region)
+$ cp example.cfg mumutautau.cfg
 
-$ ./runMuTauAnalyzer ###### for analyzing the tau_mu + tau_had channel
+One needs the "mumutautau.cfg" file to customize the default input parameters before running the analyzer. In addition, these parameters can be 
+also customized in the command line for instance when executing the analyzer:
+
+$ ./runMuMuAnalyzer doWhat=DYJets maxEvents=1000 ###### for analyzing the dimuon channel (control region)
+
+$ ./runMuTauAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for analyzing the tau_mu + tau_had channel
+
+NOTE: If the parameters are customized in the command line, their default values in "mumutautau.cfg" will be ignored.

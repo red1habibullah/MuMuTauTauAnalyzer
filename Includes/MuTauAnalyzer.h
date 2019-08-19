@@ -37,7 +37,7 @@ public :
    vector<float>   *recoTauPhi;
    vector<float>   *recoTauEnergy;
    vector<int>     *recoTauPDGId;
-   vector<float>   *recoTauDecayModeFinding;
+   vector<float>   *recoTauDecayMode;
    vector<float>   *recoTauIsoMVArawValue;
    vector<float>   *recoTauIsoMVAVVLoose;
    vector<float>   *recoTauIsoMVAVLoose;
@@ -70,7 +70,7 @@ public :
    TBranch        *b_recoTauPhi;   //!
    TBranch        *b_recoTauEnergy;   //!
    TBranch        *b_recoTauPDGId;   //!
-   TBranch        *b_recoTauDecayModeFinding;   //!
+   TBranch        *b_recoTauDecayMode;   //!
    TBranch        *b_recoTauIsoMVArawValue;   //!
    TBranch        *b_recoTauIsoMVAVVLoose;   //!
    TBranch        *b_recoTauIsoMVAVLoose;   //!
@@ -92,10 +92,12 @@ public :
    TBranch        *b_genEventWeight;   //!
 
    TString fileName;
+   TString outputDir;
+   Long_t  nMaxEvents;
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
 
-   MuTauAnalyzer(TString fileName_, float lumiScale_, float summedWeights_ = 1.0);
+   MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0);
    string createOutputFileName();
    virtual ~MuTauAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -105,31 +107,43 @@ public :
    virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
-   bool isData;
 };
 
 #endif
 
 #ifdef MuTauAnalyzer_cxx
-MuTauAnalyzer::MuTauAnalyzer(TString fileName_, float lumiScale_, float summedWeights_) : Histomutau() 
+MuTauAnalyzer::MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_) : Histomutau() 
 {
     fileName = fileName_;
+    outputDir = outputDir_;
     lumiScale = lumiScale_;
     summedWeights = summedWeights_;
+    nMaxEvents = nMaxEvents_;
+
+    //--- Create output directory if necessary ---
+    if (nMaxEvents > 0) {
+        outputDir.Remove(TString::kTrailing, '/');
+        outputDir += TString::Format("_%ldevts/", nMaxEvents);
+        cout << "Output directory has been changed to " << outputDir << endl;
+    }
+
+    TString command = "mkdir -p " + outputDir;
+    system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + ".root/MuMuTauMuTauHadAnalyzer/objectTree";
+    TString treePath = fileName + "/MuMuTauMuTauHadAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
-    isData = ((fileName.Index("Data") >= 0) || (fileName.Index("data") >= 0));
 }
 
 string MuTauAnalyzer::createOutputFileName()
 {
     ostringstream outputName;
-    fileName.ReplaceAll("Tree/","");
-    outputName << "Histogram/";
+    fileName.Replace(0, fileName.Last('/'), "");
+    fileName.ReplaceAll(".root","");
+    outputName << outputDir;
+    outputName << "/";
     outputName << fileName;
     outputName << "_histogram";
     outputName << ".root";
@@ -183,7 +197,7 @@ void MuTauAnalyzer::Init()
    recoTauPhi = 0;
    recoTauEnergy = 0;
    recoTauPDGId = 0;
-   recoTauDecayModeFinding = 0;
+   recoTauDecayMode = 0;
    recoTauIsoMVArawValue = 0;
    recoTauIsoMVAVVLoose = 0;
    recoTauIsoMVAVLoose = 0;
@@ -214,7 +228,7 @@ void MuTauAnalyzer::Init()
    fChain->SetBranchAddress("recoTauPhi", &recoTauPhi, &b_recoTauPhi);
    fChain->SetBranchAddress("recoTauEnergy", &recoTauEnergy, &b_recoTauEnergy);
    fChain->SetBranchAddress("recoTauPDGId", &recoTauPDGId, &b_recoTauPDGId);
-   fChain->SetBranchAddress("recoTauDecayModeFinding", &recoTauDecayModeFinding, &b_recoTauDecayModeFinding);
+   fChain->SetBranchAddress("recoTauDecayMode", &recoTauDecayMode, &b_recoTauDecayMode);
    fChain->SetBranchAddress("recoTauIsoMVArawValue", &recoTauIsoMVArawValue, &b_recoTauIsoMVArawValue);
    fChain->SetBranchAddress("recoTauIsoMVAVVLoose", &recoTauIsoMVAVVLoose, &b_recoTauIsoMVAVVLoose);
    fChain->SetBranchAddress("recoTauIsoMVAVLoose", &recoTauIsoMVAVLoose, &b_recoTauIsoMVAVLoose);

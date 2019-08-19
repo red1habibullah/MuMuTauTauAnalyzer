@@ -64,10 +64,12 @@ public :
    TBranch        *b_genEventWeight;   //!
 
    TString fileName;
+   TString outputDir;
+   Long_t  nMaxEvents;
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
 
-   MuMuAnalyzer(TString fileName_, float lumiScale_, float summedWeights_ = 1.0);
+   MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0);
    string createOutputFileName();
    virtual ~MuMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -77,31 +79,43 @@ public :
    virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
-   bool isData;
 };
 
 #endif
 
 #ifdef MuMuAnalyzer_cxx
-MuMuAnalyzer::MuMuAnalyzer(TString fileName_, float lumiScale_, float summedWeights_) : HistoZmumu() 
+MuMuAnalyzer::MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_) : HistoZmumu() 
 {
     fileName = fileName_;
+    outputDir = outputDir_;
     lumiScale = lumiScale_;
     summedWeights = summedWeights_;
+    nMaxEvents = nMaxEvents_;
+
+    //--- Create output directory if necessary ---
+    if (nMaxEvents > 0) {
+        outputDir.Remove(TString::kTrailing, '/');
+        outputDir += TString::Format("_%ldevts/", nMaxEvents);
+        cout << "Output directory has been changed to " << outputDir << endl;
+    }
+
+    TString command = "mkdir -p " + outputDir;
+    system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + ".root/DiMuonAnalyzer/objectTree";
+    TString treePath = fileName + "/DiMuonAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
-    isData = ((fileName.Index("Data") >= 0) || (fileName.Index("data") >= 0));
 }
 
 string MuMuAnalyzer::createOutputFileName()
 {
     ostringstream outputName;
-    fileName.ReplaceAll("Tree/","");
-    outputName << "Histogram/";
+    fileName.Replace(0, fileName.Last('/'), "");
+    fileName.ReplaceAll(".root","");
+    outputName << outputDir;
+    outputName << "/";
     outputName << fileName;
     outputName << "_histogram";
     outputName << ".root";

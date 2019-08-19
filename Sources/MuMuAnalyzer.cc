@@ -7,6 +7,7 @@
 #include <TFile.h>
 #include <sys/time.h>
 #include <iomanip>
+#include <iostream>
 #include <TLorentzVector.h>
 #include <math.h>
 using namespace std;
@@ -18,6 +19,8 @@ void MuMuAnalyzer::Loop()
    if (fChain == 0) return;
 
    Long64_t nentries = fChain->GetEntries();
+   if (nMaxEvents >= 0 && nMaxEvents  < nentries) nentries = nMaxEvents;
+   cout << "We will run on " << nentries << " events" << endl;
 
    Long64_t nbytes = 0, nb = 0;
 
@@ -201,7 +204,7 @@ void MuMuAnalyzer::Loop()
 
    int numberofhist = histColl.size();
    for(int i=0; i<numberofhist; i++){
-       if (!isData) histColl[i]->Scale(lumiScale/summedWeights);
+       histColl[i]->Scale(lumiScale/summedWeights);
        histColl[i]->Write();
    } // end loop for writing all the histograms into the output file
 

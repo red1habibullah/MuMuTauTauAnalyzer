@@ -19,11 +19,9 @@ float lumiana::Loop()
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
-      nb = fChain->GetEntry(jentry);   nbytes += nb;
-
-      if (!isData){
-        WeightSum += summedWeights;
-      }
+      nb = fChain->GetEntry(jentry);   
+      nbytes += nb;
+      WeightSum += summedWeights;
       // if (Cut(ientry) < 0) continue;
    }
 

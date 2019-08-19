@@ -35,7 +35,6 @@ public :
    virtual float    Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
-   bool isData;
 };
 
 #endif
@@ -44,11 +43,10 @@ public :
 lumiana::lumiana(TString fileName_) : fileName(fileName_) 
 {
    TChain *chain = new TChain("","");
-   TString treePath = fileName + ".root/lumiTree/LumiTree";
+   TString treePath = fileName + "/lumiTree/LumiTree";
    chain->Add(treePath);
    fChain = chain;
    Init();
-   isData = ((fileName.Index("Data") >= 0) || (fileName.Index("data") >= 0));
 }
 
 lumiana::~lumiana()
