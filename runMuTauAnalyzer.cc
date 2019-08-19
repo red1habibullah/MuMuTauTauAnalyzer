@@ -77,7 +77,10 @@ int main(int argc, char **argv)
             while (getline(fin, fileName))
             {
                 lumiana DYJetsLumi(fileName);
-                summedWeights = DYJetsLumi.Loop();
+                summedWeights += DYJetsLumi.Loop();
+            }// end while loop for weight sum
+            while (getline(fin, fileName))
+            {
                 MuTauAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
                 DYJetsHist.Loop();
             } // end while loop on input file list
@@ -101,7 +104,10 @@ int main(int argc, char **argv)
             while (getline(fin, fileName))
             {
                 lumiana H125AA5Lumi(fileName);
-                summedWeights = H125AA5Lumi.Loop();
+                summedWeights += H125AA5Lumi.Loop();
+            } // end while loop for weight sum
+            while (getline(fin, fileName))
+            {
                 MuTauAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents);
                 H125AA5Hist.Loop();
             } // end while loop on input file list

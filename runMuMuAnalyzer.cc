@@ -77,7 +77,11 @@ int main(int argc, char **argv)
             while (getline(fin, fileName))
             {
                 lumiana DYJetsLumi(fileName);
-                summedWeights = DYJetsLumi.Loop();
+                summedWeights += DYJetsLumi.Loop();
+            } // end while loop on weight sum
+
+            while (getline(fin, fileName))
+            {
                 MuMuAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
                 DYJetsHist.Loop();
             } // end while loop on input file list
