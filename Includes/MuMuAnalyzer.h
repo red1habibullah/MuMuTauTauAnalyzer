@@ -191,10 +191,10 @@ void MuMuAnalyzer::Init()
    fChain->SetBranchAddress("recoMET", &recoMET, &b_recoMET);
    fChain->SetBranchAddress("recoMETPhi", &recoMETPhi, &b_recoMETPhi);
    fChain->SetBranchAddress("recoNPrimaryVertex", &recoNPrimaryVertex, &b_recoNPrimaryVertex);
-   fChain->SetBranchAddress("recoNPU", &recoNPU, &b_recoNPU);
-   fChain->SetBranchAddress("trueNInteraction", &trueNInteraction, &b_trueNInteraction);
    if (isMC) 
    {
+       fChain->SetBranchAddress("recoNPU", &recoNPU, &b_recoNPU);
+       fChain->SetBranchAddress("trueNInteraction", &trueNInteraction, &b_trueNInteraction);
        fChain->SetBranchAddress("genEventWeight", &genEventWeight, &b_genEventWeight);
    } // end if isMC
    Notify();
