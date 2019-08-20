@@ -2,8 +2,8 @@
 # Makefile for MuTau Analysis 
 # =============================== 
 
-ROOTGLIBS     = $(shell $(HOME)/Desktop/ROOT/bin/root-config --glibs)
-ROOTCFLAGS    = $(shell $(HOME)/Desktop/ROOT/bin/root-config --cflags) 
+ROOTGLIBS     = $(shell $(ROOTSYS)/bin/root-config --glibs)
+ROOTCFLAGS    = $(shell $(ROOTSYS)/bin/root-config --cflags)
 
 SRCDIR = Sources/
 INCDIR = -IIncludes/
