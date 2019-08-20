@@ -221,12 +221,19 @@ void MuTauAnalyzer::Loop()
           } // end if find unMatched Mu
       } // end loop for unMatched muon candidates
 
+      // ---- prepare event weight info ----
+      double weight = 1;
+      if (isMC == true)
+      {
+          weight *= genEventWeight; 
+      } // end if isMC == true
+
       // ---- fill histograms ----
-      nMatchedMuPair->Fill(Mu1s.size());
-      nMatchedMuTauPair->Fill(Taus.size());
-      nUnMatchedMu->Fill(unMatchedMus.size());
-      nUnMatchedTau->Fill(unMatchedTaus.size());
-      nMatchedMuPairNMatchedMuTauPair->Fill(Mu1s.size(),Taus.size());
+      nMatchedMuPair->Fill(Mu1s.size(), weight);
+      nMatchedMuTauPair->Fill(Taus.size(), weight);
+      nUnMatchedMu->Fill(unMatchedMus.size(), weight);
+      nUnMatchedTau->Fill(unMatchedTaus.size(), weight);
+      nMatchedMuPairNMatchedMuTauPair->Fill(Mu1s.size(), Taus.size(), weight);
 
       if (Mu1s.size() >0 && Taus.size() >0)
       {
@@ -248,46 +255,46 @@ void MuTauAnalyzer::Loop()
                   {
                       passDR = true;
 
-                      dRMuTau->Fill(Mu3.DeltaR(Tau));
-                      invMassMuTau->Fill(MuTau.M());
-                      dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M());
+                      dRMuTau->Fill(Mu3.DeltaR(Tau), weight);
+                      invMassMuTau->Fill(MuTau.M(), weight);
+                      dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M(), weight);
 
-                      Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau));
-                      TauIsoMVAMuTauPair->Fill(TauIso.at(iTau));
+                      Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau), weight);
+                      TauIsoMVAMuTauPair->Fill(TauIso.at(iTau), weight);
 
-                      mu3Pt->Fill(Mu3.Pt());
-                      mu3Eta->Fill(Mu3.Eta());
-                      mu3Phi->Fill(Mu3.Phi());
+                      mu3Pt->Fill(Mu3.Pt(), weight);
+                      mu3Eta->Fill(Mu3.Eta(), weight);
+                      mu3Phi->Fill(Mu3.Phi(), weight);
 
-                      tauPt->Fill(Tau.Pt());
-                      tauEta->Fill(Tau.Eta());
-                      tauPhi->Fill(Tau.Phi());
-                      tauMass->Fill(Tau.M());
+                      tauPt->Fill(Tau.Pt(), weight);
+                      tauEta->Fill(Tau.Eta(), weight);
+                      tauPhi->Fill(Tau.Phi(), weight);
+                      tauMass->Fill(Tau.M(), weight);
 
-                      dRMu1Mu3->Fill(Mu1.DeltaR(Mu3));
-                      dRMu1Tau->Fill(Mu1.DeltaR(Tau));
-                      dRMu2Mu3->Fill(Mu2.DeltaR(Mu3));
-                      dRMu2Tau->Fill(Mu2.DeltaR(Tau));
+                      dRMu1Mu3->Fill(Mu1.DeltaR(Mu3), weight);
+                      dRMu1Tau->Fill(Mu1.DeltaR(Tau), weight);
+                      dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
+                      dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
                       break;
                   } // end if dR between mu-mu pair and mu-tau pair
               } // end loop for mu-tau pairs
               
               if (passDR == true)
               {
-                  dRMuMu->Fill(Mu1.DeltaR(Mu2));
-                  invMassMuMu->Fill(Mu1Mu2.M());
-                  dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M());
+                  dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
+                  invMassMuMu->Fill(Mu1Mu2.M(), weight);
+                  dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
 
-                  Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon));
-                  Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon));
+                  Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon), weight);
+                  Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon), weight);
 
-                  mu1Pt->Fill(Mu1.Pt());
-                  mu1Eta->Fill(Mu1.Eta());
-                  mu1Phi->Fill(Mu1.Phi());
+                  mu1Pt->Fill(Mu1.Pt(), weight);
+                  mu1Eta->Fill(Mu1.Eta(), weight);
+                  mu1Phi->Fill(Mu1.Phi(), weight);
 
-                  mu2Pt->Fill(Mu2.Pt());
-                  mu2Eta->Fill(Mu2.Eta());
-                  mu2Phi->Fill(Mu2.Phi());
+                  mu2Pt->Fill(Mu2.Pt(), weight);
+                  mu2Eta->Fill(Mu2.Eta(), weight);
+                  mu2Phi->Fill(Mu2.Phi(), weight);
                   break;
               } // end if passDR between mu-mu pair and mu-tau pair
           } // end loop for mu-mu pairs
@@ -295,12 +302,12 @@ void MuTauAnalyzer::Loop()
 
       for (int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
-          unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon));
+          unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon), weight);
       } // end loop for unMatched muons
 
       for (int iTau=0; iTau<unMatchedTaus.size(); iTau++)
       {
-          unMatchedTauIsoMVA->Fill(unMatchedTauIso.at(iTau));
+          unMatchedTauIsoMVA->Fill(unMatchedTauIso.at(iTau), weight);
       } // end loop for unMatched taus
 
    }// end loop for events
@@ -309,7 +316,7 @@ void MuTauAnalyzer::Loop()
 
    int numberofhist = histColl.size();
    for(int i=0; i<numberofhist; i++){
-       histColl[i]->Scale(lumiScale/summedWeights);
+       if (isMC) histColl[i]->Scale(lumiScale/summedWeights);
        histColl[i]->Write();
    } // end loop for writing all the histograms into the output file
 

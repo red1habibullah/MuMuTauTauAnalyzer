@@ -160,9 +160,16 @@ void MuMuAnalyzer::Loop()
           } // end if find unMatched Mu
       } // end loop for unMatched muon candidates
 
+      // ---- prepare event weight info ----
+      double weight = 1;
+      if (isMC == true)
+      {
+          weight *= genEventWeight; 
+      } // end if isMC == true
+
       // ---- fill histograms ----
-      nMatchedMuPair->Fill(Mu1s.size());
-      nUnMatchedMu->Fill(unMatchedMus.size());
+      nMatchedMuPair->Fill(Mu1s.size(), weight);
+      nUnMatchedMu->Fill(unMatchedMus.size(), weight);
       
       if (Mu1s.size() >0)
       {
@@ -173,29 +180,29 @@ void MuMuAnalyzer::Loop()
               Mu2 = Mu2s.at(iMuon);
               TLorentzVector Mu1Mu2 = Mu1 + Mu2;
 
-              dRMuMu->Fill(Mu1.DeltaR(Mu2));
-              invMassMuMu->Fill(Mu1Mu2.M());
-              dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M());
+              dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
+              invMassMuMu->Fill(Mu1Mu2.M(), weight);
+              dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
 
-              Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon));
-              Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon));
+              Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon), weight);
+              Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon), weight);
 
-              mu1Pt->Fill(Mu1.Pt());
-              mu1Eta->Fill(Mu1.Eta());
-              mu1Phi->Fill(Mu1.Phi());
+              mu1Pt->Fill(Mu1.Pt(), weight);
+              mu1Eta->Fill(Mu1.Eta(), weight);
+              mu1Phi->Fill(Mu1.Phi(), weight);
 
-              mu2Pt->Fill(Mu2.Pt());
-              mu2Eta->Fill(Mu2.Eta());
-              mu2Phi->Fill(Mu2.Phi());
+              mu2Pt->Fill(Mu2.Pt(), weight);
+              mu2Eta->Fill(Mu2.Eta(), weight);
+              mu2Phi->Fill(Mu2.Phi(), weight);
           } // end loop for mu-mu pairs
       } // end if mu-mu pairs
 
       for (int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
-          unMatchedMuPt->Fill(unMatchedMus.at(iMuon).Pt());
-          unMatchedMuEta->Fill(unMatchedMus.at(iMuon).Eta());
-          unMatchedMuPhi->Fill(unMatchedMus.at(iMuon).Phi());
-          unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon));
+          unMatchedMuPt->Fill(unMatchedMus.at(iMuon).Pt(), weight);
+          unMatchedMuEta->Fill(unMatchedMus.at(iMuon).Eta(), weight);
+          unMatchedMuPhi->Fill(unMatchedMus.at(iMuon).Phi(), weight);
+          unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon), weight);
       } // end loop for unMatched muons
 
    }// end loop for events
@@ -204,7 +211,7 @@ void MuMuAnalyzer::Loop()
 
    int numberofhist = histColl.size();
    for(int i=0; i<numberofhist; i++){
-       histColl[i]->Scale(lumiScale/summedWeights);
+       if (isMC) histColl[i]->Scale(lumiScale/summedWeights);
        histColl[i]->Write();
    } // end loop for writing all the histograms into the output file
 

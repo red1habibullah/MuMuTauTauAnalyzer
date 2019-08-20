@@ -68,8 +68,9 @@ public :
    Long_t  nMaxEvents;
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
+   bool isMC;
 
-   MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0);
+   MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC = false);
    string createOutputFileName();
    virtual ~MuMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -84,13 +85,14 @@ public :
 #endif
 
 #ifdef MuMuAnalyzer_cxx
-MuMuAnalyzer::MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_) : HistoZmumu() 
+MuMuAnalyzer::MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
     lumiScale = lumiScale_;
     summedWeights = summedWeights_;
     nMaxEvents = nMaxEvents_;
+    isMC = isMC_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
@@ -191,7 +193,10 @@ void MuMuAnalyzer::Init()
    fChain->SetBranchAddress("recoNPrimaryVertex", &recoNPrimaryVertex, &b_recoNPrimaryVertex);
    fChain->SetBranchAddress("recoNPU", &recoNPU, &b_recoNPU);
    fChain->SetBranchAddress("trueNInteraction", &trueNInteraction, &b_trueNInteraction);
-   fChain->SetBranchAddress("genEventWeight", &genEventWeight, &b_genEventWeight);
+   if (isMC) 
+   {
+       fChain->SetBranchAddress("genEventWeight", &genEventWeight, &b_genEventWeight);
+   } // end if isMC
    Notify();
 }
 

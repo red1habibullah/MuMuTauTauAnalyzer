@@ -66,23 +66,25 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuMuAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
+            MuMuAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
         else{
-            ifstream fin;
-            fin.open(inputFile);
+            ifstream finLumi;
+            finLumi.open(inputFile);
             string fileName;
-            while (getline(fin, fileName))
+            while (getline(finLumi, fileName))
             {
                 lumiana DYJetsLumi(fileName);
                 summedWeights += DYJetsLumi.Loop();
             } // end while loop on weight sum
 
-            while (getline(fin, fileName))
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
             {
-                MuMuAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
+                MuMuAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else

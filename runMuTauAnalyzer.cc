@@ -66,26 +66,32 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuTauAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
+            MuTauAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
         else{
-            ifstream fin;
-            fin.open(inputFile);
+            ifstream finLumi;
+            finLumi.open(inputFile);
             string fileName;
-            while (getline(fin, fileName))
+            while (getline(finLumi, fileName))
             {
                 lumiana DYJetsLumi(fileName);
                 summedWeights += DYJetsLumi.Loop();
             }// end while loop for weight sum
-            while (getline(fin, fileName))
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
             {
-                MuTauAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents);
+                MuTauAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
     } // end if DYJets
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
 
     if (doWhat == "H125AA5" || doWhat == "ALL")
     {
@@ -93,22 +99,25 @@ int main(int argc, char **argv)
         {
             lumiana H125AA5Lumi(inputFile);
             summedWeights = H125AA5Lumi.Loop();
-            MuTauAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents);
+            MuTauAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true);
             H125AA5Hist.Loop();
         } // end if inputFile.EndsWith(".root")
         
         else{
-            ifstream fin;
-            fin.open(inputFile);
+            ifstream finLumi;
+            finLumi.open(inputFile);
             string fileName;
-            while (getline(fin, fileName))
+            while (getline(finLumi, fileName))
             {
                 lumiana H125AA5Lumi(fileName);
                 summedWeights += H125AA5Lumi.Loop();
             } // end while loop for weight sum
-            while (getline(fin, fileName))
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
             {
-                MuTauAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents);
+                MuTauAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true);
                 H125AA5Hist.Loop();
             } // end while loop on input file list
         } // end else 
