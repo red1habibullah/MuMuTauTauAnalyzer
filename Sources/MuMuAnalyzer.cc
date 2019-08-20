@@ -94,7 +94,7 @@ void MuMuAnalyzer::Loop()
       // ============================================================================
 
       // ---- start loop on muon candidates ----
-      for (int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+      for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           if (indexMu2s.size() > 0) 
           {
@@ -112,7 +112,7 @@ void MuMuAnalyzer::Loop()
           bool findMu2 = false;
           int indexMu2 = 0;
 
-          for (int iMuon2=iMuon+1; iMuon2<recoMuonPt->size(); iMuon2++)
+          for (unsigned int iMuon2=iMuon+1; iMuon2<recoMuonPt->size(); iMuon2++)
           {
               std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon2);
               if (iter2 != indexMu2s.end()) continue;
@@ -147,7 +147,7 @@ void MuMuAnalyzer::Loop()
       } // end loop for mu1
 
       // ---- search for unMatched muon candidates ----
-      for (int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+      for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
           std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
@@ -174,7 +174,7 @@ void MuMuAnalyzer::Loop()
       if (Mu1s.size() >0)
       {
           // --- filling histograms of mu-mu ---
-          for (int iMuon=0; iMuon<Mu1s.size(); iMuon++)
+          for (unsigned int iMuon=0; iMuon<Mu1s.size(); iMuon++)
           {
               Mu1 = Mu1s.at(iMuon);
               Mu2 = Mu2s.at(iMuon);
@@ -197,7 +197,7 @@ void MuMuAnalyzer::Loop()
           } // end loop for mu-mu pairs
       } // end if mu-mu pairs
 
-      for (int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
+      for (unsigned int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
           unMatchedMuPt->Fill(unMatchedMus.at(iMuon).Pt(), weight);
           unMatchedMuEta->Fill(unMatchedMus.at(iMuon).Eta(), weight);

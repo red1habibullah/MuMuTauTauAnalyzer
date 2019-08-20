@@ -114,7 +114,7 @@ void MuTauAnalyzer::Loop()
       // ============================================================================
 
       // ---- start loop on muon candidates ----
-      for (int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+      for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           if (indexMu2s.size() > 0) 
           {
@@ -129,7 +129,7 @@ void MuTauAnalyzer::Loop()
           bool findMu2 = false;
           int indexMu2 = 0;
 
-          for (int iMuon2=iMuon+1; iMuon2<recoMuonPt->size(); iMuon2++)
+          for (unsigned int iMuon2=iMuon+1; iMuon2<recoMuonPt->size(); iMuon2++)
           {
               std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon2);
               if (iter2 != indexMu2s.end()) continue;
@@ -162,7 +162,7 @@ void MuTauAnalyzer::Loop()
       } // end loop for mu1
 
       // ------- start loop on tau candidates -------
-      for (int iTau=0; iTau<recoTauPt->size(); iTau++)
+      for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
           if (recoTauIsoMVAMedium->at(iTau) <= 0) continue;
           Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
@@ -170,7 +170,7 @@ void MuTauAnalyzer::Loop()
           bool findMu3 = false;
           int indexMu3 = 0;
 
-          for (int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+          for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
           {
               std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
               std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
@@ -207,7 +207,7 @@ void MuTauAnalyzer::Loop()
       } // end loop for tau
 
       // ---- search for unMatched muon candidates ----
-      for (int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+      for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
           std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
@@ -238,14 +238,14 @@ void MuTauAnalyzer::Loop()
       if (Mu1s.size() >0 && Taus.size() >0)
       {
           // --- filling histograms of four-body of mu-mu-mu-tau ---
-          for (int iMuon=0; iMuon<Mu1s.size(); iMuon++)
+          for (unsigned int iMuon=0; iMuon<Mu1s.size(); iMuon++)
           {
               Mu1 = Mu1s.at(iMuon);
               Mu2 = Mu2s.at(iMuon);
               TLorentzVector Mu1Mu2 = Mu1 + Mu2;
               bool passDR = false; // dR between mu-mu pair and mu-tau pair
 
-              for (int iTau=0; iTau<Taus.size(); iTau++)
+              for (unsigned int iTau=0; iTau<Taus.size(); iTau++)
               {
                   Mu3 = Mu3s.at(iTau);
                   Tau = Taus.at(iTau);
@@ -300,12 +300,12 @@ void MuTauAnalyzer::Loop()
           } // end loop for mu-mu pairs
       } // end if mu-mu & mu-tau pairs
 
-      for (int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
+      for (unsigned int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
           unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon), weight);
       } // end loop for unMatched muons
 
-      for (int iTau=0; iTau<unMatchedTaus.size(); iTau++)
+      for (unsigned int iTau=0; iTau<unMatchedTaus.size(); iTau++)
       {
           unMatchedTauIsoMVA->Fill(unMatchedTauIso.at(iTau), weight);
       } // end loop for unMatched taus
