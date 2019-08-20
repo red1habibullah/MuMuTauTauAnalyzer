@@ -1,8 +1,11 @@
 *.o
 *.bk
 *.cc~
-mumutautau.cfg
 *.txt
+*.sh
+*.py
+*.sub
+*.root
 runMuMuAnalyzer
 runMuTauAnalyzer
-*.root
+mumutautau.cfg
