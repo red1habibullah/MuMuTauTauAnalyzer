@@ -54,10 +54,29 @@ int main(int argc, char **argv)
     
     doWhat.ToUpper();
 
+    //------------------------- data histograms production -------------------
+    if (doWhat == "DATA" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            MuTauAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false);
+            DataHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+        
+        else{
+            ifstream finTree;
+            finTree.open(inputFile);
+            string fileName;
+            while (getline(finTree, fileName))
+            {
+                MuTauAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false);
+                DataHist.Loop();
+            } // end while loop on file list 
+        } // end else inputFile.EndsWith(".root")
+    } // end if data
+
     // ----- This variable is to be used for MC reweighting -----
     float summedWeights = 0;
-
-    //------------------------- data histograms production -------------------
 
     // ------------------------ MC histogram production ------------------
     if (doWhat == "DYJETS" || doWhat == "ALL")
