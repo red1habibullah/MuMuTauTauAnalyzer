@@ -6,6 +6,9 @@
 *.py
 *.sub
 *.root
+*.log
+*.err
+*.out
 runMuMuAnalyzer
 runMuTauAnalyzer
 mumutautau.cfg
