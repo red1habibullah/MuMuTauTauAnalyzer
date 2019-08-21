@@ -4,6 +4,9 @@
 *.txt
 *.sh
 *.py
+*.pyc
+*.pdf
+*.png
 *.sub
 *.root
 *.log
