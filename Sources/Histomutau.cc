@@ -94,6 +94,7 @@ Histomutau::Histomutau(){
 
     unMatchedMuIso = newTH1D("unMatchedMuIso", "#mu^{iso}(unMatch)", 200, 0, 200);
     unMatchedTauIsoMVA = newTH1D("unMatchedTauIsoMVA", "#tau^{iso}(unMatch)", 20, -1, 1);
+    unMatchedTauDecayMode = newTH1D("unMatchedTauDecayMode", "DM(unMatch #tau)", 11, 0, 11);
 
     mu1Pt = newTH1D("mu1Pt", "p_{T}(#mu_{1}) [GeV]", 50, 5, 205);
     mu1Eta = newTH1D("mu1Eta", "#eta(#mu_{1})", 20, -2.1, 2.1);
@@ -111,6 +112,7 @@ Histomutau::Histomutau(){
     tauEta = newTH1D("tauEta", "#eta(#tau)", 20, -2.1, 2.1);
     tauPhi = newTH1D("tauPhi", "#phi(#tau)", 20, -2.5, 2.5);
     tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 20, 0, 20);
+    tauDecayMode = newTH1D("tauDecayMode", "DecayMode(#tau)", 11, 0, 11);
 
     dRMu1Mu3 = newTH1D("dRMu1Mu3", "#Delta R(#mu_{1}#mu_{3})", 25, 0, 5);
     dRMu1Tau = newTH1D("dRMu1Tau", "#Delta R(#mu_{1}#tau)", 25, 0, 5);

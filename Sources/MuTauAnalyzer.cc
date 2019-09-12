@@ -41,6 +41,7 @@ void MuTauAnalyzer::Loop()
       vector<float> Mu2Iso;
       vector<float> Mu3Iso;
       vector<float> TauIso;
+      vector<float> TauDM;
       vector<float> TauMediumIsoDisc;
 
       Mu1s.clear();
@@ -52,6 +53,7 @@ void MuTauAnalyzer::Loop()
       Mu2Iso.clear();
       Mu3Iso.clear();
       TauIso.clear();
+      TauDM.clear();
       TauMediumIsoDisc.clear();
       // ========================================================================
 
@@ -71,12 +73,14 @@ void MuTauAnalyzer::Loop()
 
       vector<float> unMatchedMuonIso;
       vector<float> unMatchedTauIso;
+      vector<float> unMatchedTauDM;
 
       unMatchedMus.clear();
       unMatchedTaus.clear();
 
       unMatchedMuonIso.clear();
       unMatchedTauIso.clear();
+      unMatchedTauDM.clear();
       // ============================================================================
 
       // ---- define varibles that will be used to be pushed into the above vectors ---
@@ -172,11 +176,13 @@ void MuTauAnalyzer::Loop()
               Mu3Iso.push_back(recoMuonIsolation->at(indexMu3));
               TauIso.push_back(recoTauIsoMVArawValue->at(iTau));
               TauMediumIsoDisc.push_back(recoTauIsoMVAMedium->at(iTau));
+              TauDM.push_back(recoTauDecayMode->at(iTau));
           } // end if findMu3
 
           else{
               unMatchedTaus.push_back(Tau);
               unMatchedTauIso.push_back(recoTauIsoMVArawValue->at(iTau));
+              unMatchedTauDM.push_back(recoTauDecayMode->at(iTau));
           } // end else findMu3
       } // end loop for tau
 
@@ -235,6 +241,7 @@ void MuTauAnalyzer::Loop()
 
                       Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau), weight);
                       TauIsoMVAMuTauPair->Fill(TauIso.at(iTau), weight);
+                      tauDecayMode->Fill(TauDM.at(iTau), weight);
 
                       mu3Pt->Fill(Mu3.Pt(), weight);
                       mu3Eta->Fill(Mu3.Eta(), weight);
@@ -282,6 +289,7 @@ void MuTauAnalyzer::Loop()
       for (unsigned int iTau=0; iTau<unMatchedTaus.size(); iTau++)
       {
           unMatchedTauIsoMVA->Fill(unMatchedTauIso.at(iTau), weight);
+          unMatchedTauDecayMode->Fill(unMatchedTauDM.at(iTau), weight);
       } // end loop for unMatched taus
 
    }// end loop for events
