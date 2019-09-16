@@ -109,5 +109,39 @@ int main(int argc, char **argv)
         } // end else
     } // end if DYJets
 
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+
+    if (doWhat == "WJETS" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana WJetsLumi(inputFile);
+            summedWeights = WJetsLumi.Loop();
+            MuMuAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true);
+            WJetsHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana WJetsLumi(fileName);
+                summedWeights += WJetsLumi.Loop();
+            } // end while loop on weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                MuMuAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true);
+                WJetsHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if WJets
+
     return 0;
 }

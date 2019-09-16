@@ -112,6 +112,41 @@ int main(int argc, char **argv)
     // --- always need to reinitialize the weight parameter for new sample -----
     summedWeights = 0;
 
+
+    if (doWhat == "WJETS" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana WJetsLumi(inputFile);
+            summedWeights = WJetsLumi.Loop();
+            MuTauAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true);
+            WJetsHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana WJetsLumi(fileName);
+                summedWeights += WJetsLumi.Loop();
+            }// end while loop for weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                MuTauAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true);
+                WJetsHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if WJets
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+
     if (doWhat == "H125AA5" || doWhat == "ALL")
     {
         if (inputFile.EndsWith(".root"))
