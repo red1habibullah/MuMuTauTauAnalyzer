@@ -56,6 +56,13 @@ void MuTauFlatTreelizer::Loop()
       TLorentzVector Tau;
       // ============================================================================
 
+      // ---- prepare event weight info ----
+      double weight = 1;
+      if (isMC == true)
+      {
+          weight *= genEventWeight; 
+      } // end if isMC == true
+
       // ---- start loop on muon candidates ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
@@ -164,6 +171,7 @@ void MuTauFlatTreelizer::Loop()
               if (passDR == true)
               {
                   invMassMuMu = Mu1Mu2.M();
+                  eventWeight = weight;
                   TreeMuMuTauTau->Fill();
                   break;
               } // end if passDR between mu-mu pair and mu-tau pair

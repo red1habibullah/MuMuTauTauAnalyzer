@@ -20,6 +20,7 @@ class TreeMuTau{
         double invMassMuMu;
         double invMassMuTau;
         double invMassMuMuTauTau;
+        double eventWeight;
 
 };
 
