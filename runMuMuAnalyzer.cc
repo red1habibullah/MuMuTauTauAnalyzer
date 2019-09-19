@@ -31,7 +31,7 @@ int main(int argc, char **argv)
                 getArg(currentArg, inputFile);
             }
 
-            if (currentArg.BeginsWith("outputDir="))
+            else if (currentArg.BeginsWith("outputDir="))
             {
                 getArg(currentArg, outputDir);
             }
@@ -45,6 +45,7 @@ int main(int argc, char **argv)
             {
                 getArg(currentArg, maxEvents);
             }
+
             else if (currentArg.BeginsWith("lumi="))
             {
                 getArg(currentArg, lumi);

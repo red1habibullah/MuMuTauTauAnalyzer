@@ -98,7 +98,7 @@ public :
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
 
-   MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC = false);
+   MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false);
    string createOutputFileName();
    virtual ~MuTauAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
