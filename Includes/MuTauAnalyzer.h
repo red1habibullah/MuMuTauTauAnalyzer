@@ -11,12 +11,12 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
-#include "Histomutau.h"
 #include <TString.h>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
+#include "Histomutau.h"
 
 class MuTauAnalyzer : public Histomutau {
 public :
@@ -97,8 +97,11 @@ public :
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
+   bool invertedMuIso;
+   bool invertedTauIso;
+   double MuIsoThreshold;
 
-   MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false);
+   MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMuIso_ = false, bool invertedTauIso_ = false, double MuIsoThreshold_ = 0.25);
    string createOutputFileName();
    virtual ~MuTauAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -113,7 +116,7 @@ public :
 #endif
 
 #ifdef MuTauAnalyzer_cxx
-MuTauAnalyzer::MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_) : Histomutau() 
+MuTauAnalyzer::MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMuIso_, bool invertedTauIso_, double MuIsoThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -121,6 +124,9 @@ MuTauAnalyzer::MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiSc
     summedWeights = summedWeights_;
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
+    invertedMuIso = invertedMuIso_;
+    invertedTauIso = invertedTauIso_;
+    MuIsoThreshold = MuIsoThreshold_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {

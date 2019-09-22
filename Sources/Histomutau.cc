@@ -83,6 +83,7 @@ Histomutau::Histomutau(){
 
     invMassMuMu = newTH1D("invMassMuMu", "M(#mu_{1}#mu_{2})[GeV]", 100, 0, 100);
     invMassMuTau = newTH1D("invMassMuTau", "M(#mu#tau)[GeV]", 100, 0, 100);
+    invMassMuMuTauTau = newTH1D("invMassMuMuTauTau", "M(#mu#mu#tau#tau)[GeV]", 100, 20, 300);
 
     dRMuMu = newTH1D("dRMuMu", "#Delta R(#mu_{1}#mu_{2})", 25, 0, 1.0);
     dRMuTau = newTH1D("dRMuTau", "#Delta R(#mu#tau)", 25, 0, 1.0);

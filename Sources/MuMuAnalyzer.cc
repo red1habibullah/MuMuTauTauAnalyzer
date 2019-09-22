@@ -193,6 +193,5 @@ void MuMuAnalyzer::Loop()
        delete histColl[j];
    } // end loop for deleting all the histograms
 
-   outputFile->Write();
    outputFile->Close();
 }

@@ -12,11 +12,14 @@ int main(int argc, char **argv)
     //--- Load configuration ---
     ConfigArg cfg;
 
-    TString inputFile  = cfg.getS("inputFile");
-    TString outputDir  = cfg.getS("outputDir");
-    TString doWhat     = cfg.getS("doWhat", "DYJETS");
-    Long_t maxEvents   = cfg.getL("maxEvents", -1);
-    double lumi        = cfg.getD("lumi", 1);
+    TString inputFile     = cfg.getS("inputFile");
+    TString outputDir     = cfg.getS("outputDir");
+    TString doWhat        = cfg.getS("doWhat", "DYJETS");
+    Long_t maxEvents      = cfg.getL("maxEvents", -1);
+    double lumi           = cfg.getD("lumi", 1);
+    bool invertedMuIso    = cfg.getB("invertedMuIso", false);
+    bool invertedTauIso   = cfg.getB("invertedTauIso", false);
+    double MuIsoThreshold = cfg.getD("MuIsoThreshold", 0.25);
 
     //--- Parse the arguments -----------------------------------------------------
     if (argc > 1)
@@ -50,6 +53,21 @@ int main(int argc, char **argv)
             {
                 getArg(currentArg, lumi);
             }
+
+            else if (currentArg.BeginsWith("invertedMuIso="))
+            {
+                getArg(currentArg, invertedMuIso);
+            }
+
+            else if (currentArg.BeginsWith("invertedTauIso="))
+            {
+                getArg(currentArg, invertedTauIso);
+            }
+
+            else if (currentArg.BeginsWith("MuIsoThreshold="))
+            {
+                getArg(currentArg, MuIsoThreshold);
+            }
         } // end for loop in argc
     } // end if argc > 1
     
@@ -60,7 +78,7 @@ int main(int argc, char **argv)
     {
         if (inputFile.EndsWith(".root"))
         {
-            MuTauAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false);
+            MuTauAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMuIso, invertedTauIso, MuIsoThreshold);
             DataHist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -70,7 +88,7 @@ int main(int argc, char **argv)
             string fileName;
             while (getline(finTree, fileName))
             {
-                MuTauAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false);
+                MuTauAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMuIso, invertedTauIso, MuIsoThreshold);
                 DataHist.Loop();
             } // end while loop on file list 
         } // end else inputFile.EndsWith(".root")
@@ -86,7 +104,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuTauAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true);
+            MuTauAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMuIso, invertedTauIso, MuIsoThreshold);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -104,7 +122,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuTauAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true);
+                MuTauAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMuIso, invertedTauIso, MuIsoThreshold);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -120,7 +138,7 @@ int main(int argc, char **argv)
         {
             lumiana WJetsLumi(inputFile);
             summedWeights = WJetsLumi.Loop();
-            MuTauAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true);
+            MuTauAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMuIso, invertedTauIso, MuIsoThreshold);
             WJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -138,7 +156,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuTauAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true);
+                MuTauAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMuIso, invertedTauIso, MuIsoThreshold);
                 WJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -154,7 +172,7 @@ int main(int argc, char **argv)
         {
             lumiana H125AA5Lumi(inputFile);
             summedWeights = H125AA5Lumi.Loop();
-            MuTauAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true);
+            MuTauAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMuIso, invertedTauIso, MuIsoThreshold);
             H125AA5Hist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -172,7 +190,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuTauAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true);
+                MuTauAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMuIso, invertedTauIso, MuIsoThreshold);
                 H125AA5Hist.Loop();
             } // end while loop on input file list
         } // end else 

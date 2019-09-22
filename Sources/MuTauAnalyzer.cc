@@ -100,7 +100,6 @@ void MuTauAnalyzer::Loop()
               if (iter != indexMu2s.end()) continue;
           } // end if there is any matched Mu2 candidiate
 
-          //cout << "******** Mu1 index: " << iMuon << endl;
           if (recoMuonIsolation->at(iMuon) > 0.25) continue;
           Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
           float smallestDR = 1.0; // dR cut between Mu1 and Mu2
@@ -112,8 +111,7 @@ void MuTauAnalyzer::Loop()
               std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon2);
               if (iter2 != indexMu2s.end()) continue;
 
-              //cout << "******** Mu2 index: " << iMuon2 << endl;
-              if (recoMuonIsolation->at(iMuon2) > 0.25) continue;
+              if ((invertedMuIso == false && recoMuonIsolation->at(iMuon2) > MuIsoThreshold) || (invertedMuIso == true && recoMuonIsolation->at(iMuon2) < MuIsoThreshold)) continue;
               TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
               Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
               if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
@@ -142,7 +140,7 @@ void MuTauAnalyzer::Loop()
       // ------- start loop on tau candidates -------
       for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
-          if (recoTauIsoMVAMedium->at(iTau) <= 0) continue;
+          if ((invertedTauIso == false && recoTauIsoMVAMedium->at(iTau) <= 0) || (invertedTauIso == true && recoTauIsoMVAMedium->at(iTau) > 0)) continue;
           Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
           float smallestDR = 0.8; // dR cut between Mu3 and tau
           bool findMu3 = false;
@@ -154,7 +152,6 @@ void MuTauAnalyzer::Loop()
               std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
               if (iter1 != indexMu1s.end() || iter2 != indexMu2s.end()) continue;
 
-              //cout << "******** Mu3 index: " << iMuon << endl;
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, tau) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               if ((Tau.DeltaR(Mu3Cand) < smallestDR) && (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))))
@@ -230,6 +227,7 @@ void MuTauAnalyzer::Loop()
                   Mu3 = Mu3s.at(iTau);
                   Tau = Taus.at(iTau);
                   TLorentzVector MuTau = Mu3 + Tau;
+                  TLorentzVector MuMuTauTau = Mu1Mu2 + MuTau;
 
                   if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Tau) > 0.8 && Mu2.DeltaR(Tau) > 0.8)
                   {
@@ -256,6 +254,8 @@ void MuTauAnalyzer::Loop()
                       dRMu1Tau->Fill(Mu1.DeltaR(Tau), weight);
                       dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
                       dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
+
+                      invMassMuMuTauTau->Fill(MuMuTauTau.M(), weight);
                       break;
                   } // end if dR between mu-mu pair and mu-tau pair
               } // end loop for mu-tau pairs
@@ -306,6 +306,5 @@ void MuTauAnalyzer::Loop()
        delete histColl[j];
    } // end loop for deleting all the histograms
 
-   outputFile->Write();
    outputFile->Close();
 }
