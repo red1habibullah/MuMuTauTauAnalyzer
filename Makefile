@@ -12,14 +12,14 @@ CXX           = g++ -std=c++11
 CXXFLAGS      = -g -Wall -fPIC   	
 CXXFLAGS      += $(ROOTCFLAGS) 
 
-SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuTauAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc
+SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuTauAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc FakeTauAnalyzer.cc
 
 SRCLIST = $(addprefix $(SRCDIR), $(SOURCES))
 OBJLIST = $(SRCLIST:.cc=.o)
 
 .PHONY: all clean
 
-all: runMuMuAnalyzer runMuTauAnalyzer runMuTauFlatTreelizer
+all: runMuMuAnalyzer runMuTauAnalyzer runMuTauFlatTreelizer runFakeTauAnalyzer
 
 # ===========================================================================
 .cc.o:
@@ -41,6 +41,12 @@ runMuTauFlatTreelizer: $(OBJLIST) runMuTauFlatTreelizer.o
 	$(CXX) -o runMuTauFlatTreelizer $^ $(ROOTGLIBS)
 
 runMuTauFlatTreelizer.o: runMuTauFlatTreelizer.cc
+	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+
+runFakeTauAnalyzer: $(OBJLIST) runFakeTauAnalyzer.o 
+	$(CXX) -o runFakeTauAnalyzer $^ $(ROOTGLIBS)
+
+runFakeTauAnalyzer.o: runFakeTauAnalyzer.cc
 	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
 
 # =========================================================================== 

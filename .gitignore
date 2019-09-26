@@ -15,4 +15,5 @@
 runMuMuAnalyzer
 runMuTauAnalyzer
 runMuTauFlatTreelizer
+runFakeTauAnalyzer
 mumutautau.cfg
