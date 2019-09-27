@@ -156,6 +156,7 @@ void MuMuAnalyzer::Loop()
 
               dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
               invMassMuMu->Fill(Mu1Mu2.M(), weight);
+              ptMuMu->Fill(Mu1Mu2.Pt(), weight);
               dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
 
               Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon), weight);

@@ -37,6 +37,9 @@ class Histomutau{
         TH1D* invMassMuMu;
         TH1D* invMassMuTau;
         TH1D* invMassMuMuTauTau;
+        TH1D* ptMuMu;
+        TH1D* ptMuTau;
+        TH1D* ptMuMuTauTau;
 
         TH1D* Mu1IsoMuMuPair;
         TH1D* Mu2IsoMuMuPair;

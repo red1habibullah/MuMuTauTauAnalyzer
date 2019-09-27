@@ -32,6 +32,7 @@ class HistoZmumu{
 
         TH1D* dRMuMu;
         TH1D* invMassMuMu;
+        TH1D* ptMuMu;
 
         TH1D* Mu1IsoMuMuPair;
         TH1D* Mu2IsoMuMuPair;
@@ -48,6 +49,15 @@ class HistoZmumu{
         TH1D* unMatchedMuPt;
         TH1D* unMatchedMuEta;
         TH1D* unMatchedMuPhi;
+
+        TH1D* tauPt;
+        TH1D* tauEta;
+        TH1D* tauPhi;
+        TH1D* tauMass;
+        TH1D* tauDecayMode;
+
+        TH1D* dRMu1Tau;
+        TH1D* dRMu2Tau;
 
         TH2D* dRInvMassMuMu;
 };

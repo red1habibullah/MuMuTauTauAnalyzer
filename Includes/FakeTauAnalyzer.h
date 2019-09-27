@@ -16,9 +16,9 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "Histomutau.h"
+#include "HistoZmumu.h"
 
-class FakeTauAnalyzer : public Histomutau {
+class FakeTauAnalyzer : public HistoZmumu {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -116,7 +116,7 @@ public :
 #endif
 
 #ifdef FakeTauAnalyzer_cxx
-FakeTauAnalyzer::FakeTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_) : Histomutau() 
+FakeTauAnalyzer::FakeTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
