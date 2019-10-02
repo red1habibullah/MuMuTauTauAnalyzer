@@ -31,9 +31,10 @@ void FakeTauAnalyzer::Loop()
       nb = fChain->GetEntry(jentry);
       nbytes += nb;
 
-      // ---- prepare for the vector of matched muon pairs and a tau candidate ---
+      // ---- prepare for the vector of matched muon pairs and a muon & tau candidate ---
       vector<TLorentzVector> Mu1s;
       vector<TLorentzVector> Mu2s;
+      vector<TLorentzVector> Mu3s;
       vector<TLorentzVector> Taus;
 
       vector<float> TauIso;
@@ -41,6 +42,7 @@ void FakeTauAnalyzer::Loop()
 
       Mu1s.clear();
       Mu2s.clear();
+      Mu3s.clear();
       Taus.clear();
 
       TauIso.clear();
@@ -50,12 +52,14 @@ void FakeTauAnalyzer::Loop()
       // ---- these vectors containing the rank of each matched muon to avoid double counting ---
       vector<int> indexMu1s;
       vector<int> indexMu2s;
+      vector<int> indexMu3s;
 
       indexMu1s.clear();
       indexMu2s.clear();
+      indexMu3s.clear();
       // =============================================================================
 
-      // ---- these vectors containing the muons that are not matched into pairs --- 
+      // ---- these vectors containing the muons that are not matched into pairs and third muon --- 
       vector<TLorentzVector> unMatchedMus;
       unMatchedMus.clear();
       // ============================================================================
@@ -63,6 +67,7 @@ void FakeTauAnalyzer::Loop()
       // ---- define varibles that will be used to be pushed into the above vectors ---
       TLorentzVector Mu1;
       TLorentzVector Mu2;
+      TLorentzVector Mu3;
       TLorentzVector Tau;
       TLorentzVector unMatchedMu;
       // ============================================================================
@@ -114,8 +119,8 @@ void FakeTauAnalyzer::Loop()
           } // end if findMu2 
       } // end loop for mu1
 
-      // ---- search for an additional tau for fake rate study ----
-      if (recoTauPt->size()>0)
+      // ---- search for an additional muon and tau for fake rate study ----
+      if (recoMuonPt->size()>2 && recoTauPt->size()>0)
       {
           for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
           {
@@ -129,23 +134,49 @@ void FakeTauAnalyzer::Loop()
                  (tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVTIGHT" && recoTauIsoMVAVVTight->at(iTau)>0))
               {
                   Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
-                  Taus.push_back(Tau);
-                  TauIso.push_back(recoTauIsoMVArawValue->at(iTau));
-                  TauDM.push_back(recoTauDecayMode->at(iTau));
+                  bool findMu3 = false;
+                  int indexMu3 = 0;
+
+                  for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+                  {
+                      std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
+                      std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
+                      if (iter1 != indexMu1s.end() || iter2 != indexMu2s.end()) continue;
+
+                      TLorentzVector Mu3Cand;
+                      Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+                      if (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)))
+                      {
+                          Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+                          findMu3 = true;
+                          indexMu3 = iMuon;
+                      } // end if find mu3 with opposite charge
+                  } // end for loop on additional muons
+
+                  if (findMu3 == true)
+                  {
+                      Mu3s.push_back(Mu3);
+                      indexMu3s.push_back(indexMu3);
+
+                      Taus.push_back(Tau);
+                      TauIso.push_back(recoTauIsoMVArawValue->at(iTau));
+                      TauDM.push_back(recoTauDecayMode->at(iTau));
+                  } // end if findMu3
               } // end if a tau candidate passes the requirement
               else{
                   continue;
               } // end else a tau candidate passes the requirement
           } // end for loop on tau candidates
-      } // end if tau cluster size > 0
+      } // end if tau cluster size > 0 && muon cluster > 2
 
       // ---- search for unMatched muon candidates ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
           std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
+          std::vector<int>::iterator iter3 = std::find(indexMu3s.begin(), indexMu3s.end(), iMuon);
 
-          if (iter1 == indexMu1s.end() && iter2 == indexMu2s.end())
+          if (iter1 == indexMu1s.end() && iter2 == indexMu2s.end() && iter3 == indexMu3s.end())
           {
               unMatchedMu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               unMatchedMus.push_back(unMatchedMu);
@@ -175,11 +206,23 @@ void FakeTauAnalyzer::Loop()
 
               for (unsigned int iTau=0; iTau<Taus.size(); iTau++)
               {
+                  Mu3 = Mu3s.at(iTau);
                   Tau = Taus.at(iTau);
+                  TLorentzVector MuTau = Mu3 + Tau;
+                  TLorentzVector MuMuTauTau = Mu1Mu2 + MuTau;
 
-                  if (Mu1.DeltaR(Tau) > 0.8 && Mu2.DeltaR(Tau) > 0.8)
+                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Tau) > 0.8 && Mu2.DeltaR(Tau) > 0.8)
                   {
                       passDR = true;
+
+                      ptMuTau->Fill(MuTau.Pt(), weight);
+                      dRMuTau->Fill(Mu3.DeltaR(Tau), weight);
+                      invMassMuTau->Fill(MuTau.M(), weight);
+                      dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M(), weight);
+
+                      mu3Pt->Fill(Mu3.Pt(), weight);
+                      mu3Eta->Fill(Mu3.Eta(), weight);
+                      mu3Phi->Fill(Mu3.Phi(), weight);
 
                       tauPt->Fill(Tau.Pt(), weight);
                       tauEta->Fill(Tau.Eta(), weight);
@@ -187,17 +230,22 @@ void FakeTauAnalyzer::Loop()
                       tauMass->Fill(Tau.M(), weight);
                       tauDecayMode->Fill(TauDM.at(iTau), weight);
 
+                      dRMu1Mu3->Fill(Mu1.DeltaR(Mu3), weight);
                       dRMu1Tau->Fill(Mu1.DeltaR(Tau), weight);
+                      dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
                       dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
+
+                      ptMuMuTauTau->Fill(MuMuTauTau.Pt(), weight);
+                      invMassMuMuTauTau->Fill(MuMuTauTau.M(), weight);
                       break;
                   } // end if dR between mu-mu pair and tau
               } // end for loop on taus
 
               if (passDR == true)
               {
+                  ptMuMu->Fill(Mu1Mu2.Pt(), weight);
                   dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
                   invMassMuMu->Fill(Mu1Mu2.M(), weight);
-                  ptMuMu->Fill(Mu1Mu2.Pt(), weight);
                   dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
 
                   mu1Pt->Fill(Mu1.Pt(), weight);
@@ -208,7 +256,7 @@ void FakeTauAnalyzer::Loop()
                   mu2Eta->Fill(Mu2.Eta(), weight);
                   mu2Phi->Fill(Mu2.Phi(), weight);
                   break;
-              } // end if passDR between mu-mu pair and tau
+              } // end if passDR between mu-mu pair and tau and additional muon
           } // end loop for mu-mu pairs
       } // end if mu-mu pairs
 

@@ -233,6 +233,7 @@ void MuTauAnalyzer::Loop()
                   {
                       passDR = true;
 
+                      ptMuTau->Fill(MuTau.Pt(), weight);
                       dRMuTau->Fill(Mu3.DeltaR(Tau), weight);
                       invMassMuTau->Fill(MuTau.M(), weight);
                       dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M(), weight);
@@ -255,6 +256,7 @@ void MuTauAnalyzer::Loop()
                       dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
                       dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
 
+                      ptMuMuTauTau->Fill(MuMuTauTau.Pt(), weight);
                       invMassMuMuTauTau->Fill(MuMuTauTau.M(), weight);
                       break;
                   } // end if dR between mu-mu pair and mu-tau pair
@@ -262,6 +264,7 @@ void MuTauAnalyzer::Loop()
               
               if (passDR == true)
               {
+                  ptMuMu->Fill(Mu1Mu2.Pt(), weight);
                   dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
                   invMassMuMu->Fill(Mu1Mu2.M(), weight);
                   dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
