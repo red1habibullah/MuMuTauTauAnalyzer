@@ -97,7 +97,7 @@ HistoZmumu::HistoZmumu(){
 
     invMassMuMu = newTH1D("invMassMuMu", "M(#mu_{1}#mu_{2})[GeV]", 60, 60, 120);
     invMassMuTau = newTH1D("invMassMuTau", "M(#mu#tau)[GeV]", 50, 0, 100);
-    invMassMuMuTauTau = newTH1D("invMassMuMuTauTau", "M(#mu#mu#mu#tau)[GeV]", 70, 20, 300);
+    invMassMuMuTauTau = newTH1D("invMassMuMuTauTau", "M(#mu#mu#mu#tau)[GeV]", 40, 60, 400);
 
     ptMuMu = newTH1D("ptMuMu", "p_{T}(#mu_{1}#mu_{2})[GeV]", NBinsMu1Mu2Pt, Mu1Mu2PtBin);
     ptMuTau = newTH1D("ptMuTau", "p_{T}(#mu#tau)[GeV]", NBinsMu3TauPt, Mu3TauPtBin);

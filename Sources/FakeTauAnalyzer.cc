@@ -211,7 +211,7 @@ void FakeTauAnalyzer::Loop()
                   TLorentzVector MuTau = Mu3 + Tau;
                   TLorentzVector MuMuTauTau = Mu1Mu2 + MuTau;
 
-                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Tau) > 0.8 && Mu2.DeltaR(Tau) > 0.8)
+                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Tau) > 0.8 && Mu2.DeltaR(Tau) > 0.8 && Mu3.DeltaR(Tau) > 0.05)
                   {
                       passDR = true;
 
