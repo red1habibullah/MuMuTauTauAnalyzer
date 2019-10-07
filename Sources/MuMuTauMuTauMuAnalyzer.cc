@@ -1,5 +1,5 @@
-#define MuTauAnalyzer_cxx
-#include "MuTauAnalyzer.h"
+#define MuMuTauMuTauMuAnalyzer_cxx
+#include "MuMuTauMuTauMuAnalyzer.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
@@ -11,7 +11,7 @@
 #include <math.h>
 using namespace std;
 
-void MuTauAnalyzer::Loop()
+void MuMuTauMuTauMuAnalyzer::Loop()
 {
    TString outputfileName = createOutputFileName();
    TFile* outputFile = new TFile(outputfileName, "RECREATE");
@@ -31,63 +31,53 @@ void MuTauAnalyzer::Loop()
       nb = fChain->GetEntry(jentry);
       nbytes += nb;
 
-      // ---- prepare for the vector of matched muon pairs and muon-tau pairs ---
+      // ---- prepare for the vector of matched muon pairs and muon-muon pairs ---
       vector<TLorentzVector> Mu1s;
       vector<TLorentzVector> Mu2s;
       vector<TLorentzVector> Mu3s;
-      vector<TLorentzVector> Taus;
+      vector<TLorentzVector> Mu4s;
 
       vector<float> Mu1Iso;
       vector<float> Mu2Iso;
       vector<float> Mu3Iso;
-      vector<float> TauIso;
-      vector<float> TauDM;
-      vector<float> TauMediumIsoDisc;
+      vector<float> Mu4Iso;
 
       Mu1s.clear();
       Mu2s.clear();
       Mu3s.clear();
-      Taus.clear();
+      Mu4s.clear();
 
       Mu1Iso.clear();
       Mu2Iso.clear();
       Mu3Iso.clear();
-      TauIso.clear();
-      TauDM.clear();
-      TauMediumIsoDisc.clear();
+      Mu4Iso.clear();
       // ========================================================================
 
       // ---- these vectors containing the rank of each matched muon to avoid double counting ---
       vector<int> indexMu1s;
       vector<int> indexMu2s;
       vector<int> indexMu3s;
+      vector<int> indexMu4s;
 
       indexMu1s.clear();
       indexMu2s.clear();
       indexMu3s.clear();
+      indexMu4s.clear();
       // =============================================================================
 
-      // ---- these vectors containing the muons and taus that are not matched into pairs --- 
+      // ---- these vectors containing the muons that are not matched into pairs --- 
       vector<TLorentzVector> unMatchedMus;
-      vector<TLorentzVector> unMatchedTaus;
-
       vector<float> unMatchedMuonIso;
-      vector<float> unMatchedTauIso;
-      vector<float> unMatchedTauDM;
 
       unMatchedMus.clear();
-      unMatchedTaus.clear();
-
       unMatchedMuonIso.clear();
-      unMatchedTauIso.clear();
-      unMatchedTauDM.clear();
       // ============================================================================
 
       // ---- define varibles that will be used to be pushed into the above vectors ---
       TLorentzVector Mu1;
       TLorentzVector Mu2;
       TLorentzVector Mu3;
-      TLorentzVector Tau;
+      TLorentzVector Mu4;
       TLorentzVector unMatchedMu;
       // ============================================================================
 
@@ -111,7 +101,7 @@ void MuTauAnalyzer::Loop()
               std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon2);
               if (iter2 != indexMu2s.end()) continue;
 
-              if ((invertedMuIso == false && recoMuonIsolation->at(iMuon2) > MuIsoThreshold) || (invertedMuIso == true && recoMuonIsolation->at(iMuon2) < MuIsoThreshold)) continue;
+              if ((invertedMu2Iso == false && recoMuonIsolation->at(iMuon2) > Mu2IsoThreshold) || (invertedMu2Iso == true && recoMuonIsolation->at(iMuon2) < Mu2IsoThreshold)) continue;
               TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
               Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
               if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
@@ -137,66 +127,52 @@ void MuTauAnalyzer::Loop()
 
       } // end loop for mu1
 
-      // ------- start loop on tau candidates -------
-      for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
+      // ------- start loop on the second muon pair candidates -------
+      for (unsigned int iMuon4=0; iMuon4<recoMuonPt->size(); iMuon4++)
       {
-          if ((invertedTauIso == false && recoTauIsoMVAMedium->at(iTau) <= 0) || (invertedTauIso == true && recoTauIsoMVAMedium->at(iTau) > 0)) continue;
-          Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
-          float smallestDR = 0.8; // dR cut between Mu3 and tau
+          std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon4);
+          std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon4);
+          if (iter1 != indexMu1s.end() || iter2 != indexMu2s.end()) continue;
+
+          if ((invertedMu4Iso == false && recoMuonIsolation->at(iMuon4) > Mu4IsoThreshold) || (invertedMu4Iso == true && recoMuonIsolation->at(iMuon4) < Mu4IsoThreshold)) continue;
+          Mu4.SetPtEtaPhiE(recoMuonPt->at(iMuon4), recoMuonEta->at(iMuon4), recoMuonPhi->at(iMuon4), recoMuonEnergy->at(iMuon4));
+          float smallestDR = 0.8; // dR cut between Mu3 and Mu4
           bool findMu3 = false;
           int indexMu3 = 0;
 
-          for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+          for (unsigned int iMuon3=iMuon4+1; iMuon3<recoMuonPt->size(); iMuon3++)
           {
-              std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
-              std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
-              if (iter1 != indexMu1s.end() || iter2 != indexMu2s.end()) continue;
+              std::vector<int>::iterator iter3 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon3);
+              std::vector<int>::iterator iter4 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon3);
+              if (iter3 != indexMu1s.end() || iter4 != indexMu2s.end()) continue;
 
-              TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, tau) implementation
-              Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-              if ((Tau.DeltaR(Mu3Cand) < smallestDR) && (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))))
+              TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, Mu4) implementation
+              Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
+              if ((Mu4.DeltaR(Mu3Cand) < smallestDR) && (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon4)))
               {
-                  Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-                  smallestDR = Tau.DeltaR(Mu3);
+                  Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
+                  smallestDR = Mu4.DeltaR(Mu3);
                   findMu3 = true;
-                  indexMu3 = iMuon;
-              } // end if find mu3 with tau matched
+                  indexMu3 = iMuon3;
+              } // end if find mu3 with mu4 matched
           } // end loop for mu3
 
           if (findMu3 == true)
           {
               Mu3s.push_back(Mu3);
-              Taus.push_back(Tau);
+              Mu4s.push_back(Mu4);
 
               indexMu3s.push_back(indexMu3);
 
               Mu3Iso.push_back(recoMuonIsolation->at(indexMu3));
-              TauIso.push_back(recoTauIsoMVArawValue->at(iTau));
-              TauMediumIsoDisc.push_back(recoTauIsoMVAMedium->at(iTau));
-              TauDM.push_back(recoTauDecayMode->at(iTau));
+              Mu4Iso.push_back(recoMuonIsolation->at(iMuon4));
           } // end if findMu3
 
           else{
-              unMatchedTaus.push_back(Tau);
-              unMatchedTauIso.push_back(recoTauIsoMVArawValue->at(iTau));
-              unMatchedTauDM.push_back(recoTauDecayMode->at(iTau));
+              unMatchedMus.push_back(Mu4);
+              unMatchedMuonIso.push_back(recoMuonIsolation->at(iMuon4));
           } // end else findMu3
-      } // end loop for tau
-
-      // ---- search for unMatched muon candidates ----
-      for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
-      {
-          std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
-          std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
-          std::vector<int>::iterator iter3 = std::find(indexMu3s.begin(), indexMu3s.end(), iMuon);
-
-          if (iter1 == indexMu1s.end() && iter2 == indexMu2s.end() && iter3 == indexMu3s.end())
-          {
-              unMatchedMu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-              unMatchedMus.push_back(unMatchedMu);
-              unMatchedMuonIso.push_back(recoMuonIsolation->at(iMuon));
-          } // end if find unMatched Mu
-      } // end loop for unMatched muon candidates
+      } // end loop for Mu4
 
       // ---- prepare event weight info ----
       double weight = 1;
@@ -207,70 +183,67 @@ void MuTauAnalyzer::Loop()
 
       // ---- fill histograms ----
       nMatchedMuPair->Fill(Mu1s.size(), weight);
-      nMatchedMuTauPair->Fill(Taus.size(), weight);
+      nMatchedMuMuPair->Fill(Mu4s.size(), weight);
       nUnMatchedMu->Fill(unMatchedMus.size(), weight);
-      nUnMatchedTau->Fill(unMatchedTaus.size(), weight);
-      nMatchedMuPairNMatchedMuTauPair->Fill(Mu1s.size(), Taus.size(), weight);
+      nMatchedMuPairNMatchedMuMuPair->Fill(Mu1s.size(), Mu4s.size(), weight);
 
-      if (Mu1s.size() >0 && Taus.size() >0)
+      if (Mu1s.size() >0 && Mu4s.size() >0)
       {
-          // --- filling histograms of four-body of mu-mu-mu-tau ---
+          // --- filling histograms of four-body of mu-mu-mu-mu ---
           for (unsigned int iMuon=0; iMuon<Mu1s.size(); iMuon++)
           {
               Mu1 = Mu1s.at(iMuon);
               Mu2 = Mu2s.at(iMuon);
               TLorentzVector Mu1Mu2 = Mu1 + Mu2;
-              bool passDR = false; // dR between mu-mu pair and mu-tau pair
+              bool passDR = false; // dR between mu-mu pair and mu-mu pair
 
-              for (unsigned int iTau=0; iTau<Taus.size(); iTau++)
+              for (unsigned int iMuon4=0; iMuon4<Mu4s.size(); iMuon4++)
               {
-                  Mu3 = Mu3s.at(iTau);
-                  Tau = Taus.at(iTau);
-                  TLorentzVector MuTau = Mu3 + Tau;
-                  TLorentzVector MuMuTauTau = Mu1Mu2 + MuTau;
+                  Mu3 = Mu3s.at(iMuon4);
+                  Mu4 = Mu4s.at(iMuon4);
+                  TLorentzVector Mu3Mu4 = Mu3 + Mu4;
+                  TLorentzVector MuMuMuMu = Mu1Mu2 + Mu3Mu4;
 
-                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Tau) > 0.8 && Mu2.DeltaR(Tau) > 0.8)
+                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Mu4) > 0.8 && Mu2.DeltaR(Mu4) > 0.8)
                   {
                       passDR = true;
 
-                      ptMuTau->Fill(MuTau.Pt(), weight);
-                      dRMuTau->Fill(Mu3.DeltaR(Tau), weight);
-                      invMassMuTau->Fill(MuTau.M(), weight);
-                      dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M(), weight);
+                      ptMu3Mu4->Fill(Mu3Mu4.Pt(), weight);
+                      dRMu3Mu4->Fill(Mu3.DeltaR(Mu4), weight);
+                      invMassMu3Mu4->Fill(Mu3Mu4.M(), weight);
+                      dRInvMassMu3Mu4->Fill(Mu3.DeltaR(Mu4), Mu3Mu4.M(), weight);
 
-                      Mu3IsoMuTauPair->Fill(Mu3Iso.at(iTau), weight);
-                      TauIsoMVAMuTauPair->Fill(TauIso.at(iTau), weight);
-                      tauDecayMode->Fill(TauDM.at(iTau), weight);
+                      mu3Iso->Fill(Mu3Iso.at(iMuon4), weight);
+                      mu4Iso->Fill(Mu4Iso.at(iMuon4), weight);
 
                       mu3Pt->Fill(Mu3.Pt(), weight);
                       mu3Eta->Fill(Mu3.Eta(), weight);
                       mu3Phi->Fill(Mu3.Phi(), weight);
 
-                      tauPt->Fill(Tau.Pt(), weight);
-                      tauEta->Fill(Tau.Eta(), weight);
-                      tauPhi->Fill(Tau.Phi(), weight);
-                      tauMass->Fill(Tau.M(), weight);
+                      mu4Pt->Fill(Mu4.Pt(), weight);
+                      mu4Eta->Fill(Mu4.Eta(), weight);
+                      mu4Phi->Fill(Mu4.Phi(), weight);
 
                       dRMu1Mu3->Fill(Mu1.DeltaR(Mu3), weight);
-                      dRMu1Tau->Fill(Mu1.DeltaR(Tau), weight);
+                      dRMu1Mu4->Fill(Mu1.DeltaR(Mu4), weight);
                       dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
-                      dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
+                      dRMu2Mu4->Fill(Mu2.DeltaR(Mu4), weight);
 
-                      ptMuMuTauTau->Fill(MuMuTauTau.Pt(), weight);
-                      invMassMuMuTauTau->Fill(MuMuTauTau.M(), weight);
+                      ptMuMuTauMuTauMu->Fill(MuMuMuMu.Pt(), weight);
+                      invMassMuMuTauMuTauMu->Fill(MuMuMuMu.M(), weight);
                       break;
-                  } // end if dR between mu-mu pair and mu-tau pair
-              } // end loop for mu-tau pairs
+                  } // end if dR between mu-mu pair and mu3-mu4 pair
+              } // end loop for mu3-mu4 pairs
               
               if (passDR == true)
               {
-                  ptMuMu->Fill(Mu1Mu2.Pt(), weight);
-                  dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
-                  invMassMuMu->Fill(Mu1Mu2.M(), weight);
-                  dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
+                  ptMu1Mu2->Fill(Mu1Mu2.Pt(), weight);
+                  dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
+                  invMassMu1Mu2->Fill(Mu1Mu2.M(), weight);
+                  dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
 
-                  Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon), weight);
-                  Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon), weight);
+                  mu1Iso->Fill(Mu1Iso.at(iMuon), weight);
+                  mu2Iso->Fill(Mu2Iso.at(iMuon), weight);
 
                   mu1Pt->Fill(Mu1.Pt(), weight);
                   mu1Eta->Fill(Mu1.Eta(), weight);
@@ -280,21 +253,14 @@ void MuTauAnalyzer::Loop()
                   mu2Eta->Fill(Mu2.Eta(), weight);
                   mu2Phi->Fill(Mu2.Phi(), weight);
                   break;
-              } // end if passDR between mu-mu pair and mu-tau pair
+              } // end if passDR between mu-mu pair and mu3-mu4 pair
           } // end loop for mu-mu pairs
-      } // end if mu-mu & mu-tau pairs
+      } // end if mu-mu & mu3-mu4 pairs
 
       for (unsigned int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
           unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon), weight);
       } // end loop for unMatched muons
-
-      for (unsigned int iTau=0; iTau<unMatchedTaus.size(); iTau++)
-      {
-          unMatchedTauIsoMVA->Fill(unMatchedTauIso.at(iTau), weight);
-          unMatchedTauDecayMode->Fill(unMatchedTauDM.at(iTau), weight);
-      } // end loop for unMatched taus
-
    }// end loop for events
 
    outputFile->cd();

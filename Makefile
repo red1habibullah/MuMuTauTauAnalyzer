@@ -12,14 +12,14 @@ CXX           = g++ -std=c++11
 CXXFLAGS      = -g -Wall -fPIC   	
 CXXFLAGS      += $(ROOTCFLAGS) 
 
-SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuTauAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc FakeTauAnalyzer.cc
+SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuMuTauMuTauHadAnalyzer.cc MuMuTauMuTauMuAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc FakeTauAnalyzer.cc
 
 SRCLIST = $(addprefix $(SRCDIR), $(SOURCES))
 OBJLIST = $(SRCLIST:.cc=.o)
 
 .PHONY: all clean
 
-all: runMuMuAnalyzer runMuTauAnalyzer runMuTauFlatTreelizer runFakeTauAnalyzer
+all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuTauFlatTreelizer runFakeTauAnalyzer
 
 # ===========================================================================
 .cc.o:
@@ -31,10 +31,16 @@ runMuMuAnalyzer: $(OBJLIST) runMuMuAnalyzer.o
 runMuMuAnalyzer.o: runMuMuAnalyzer.cc
 	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
 
-runMuTauAnalyzer: $(OBJLIST) runMuTauAnalyzer.o 
-	$(CXX) -o runMuTauAnalyzer $^ $(ROOTGLIBS)
+runMuMuTauMuTauHadAnalyzer: $(OBJLIST) runMuMuTauMuTauHadAnalyzer.o 
+	$(CXX) -o runMuMuTauMuTauHadAnalyzer $^ $(ROOTGLIBS)
 
-runMuTauAnalyzer.o: runMuTauAnalyzer.cc
+runMuMuTauMuTauHadAnalyzer.o: runMuMuTauMuTauHadAnalyzer.cc
+	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+
+runMuMuTauMuTauMuAnalyzer: $(OBJLIST) runMuMuTauMuTauMuAnalyzer.o 
+	$(CXX) -o runMuMuTauMuTauMuAnalyzer $^ $(ROOTGLIBS)
+
+runMuMuTauMuTauMuAnalyzer.o: runMuMuTauMuTauMuAnalyzer.cc
 	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
 
 runMuTauFlatTreelizer: $(OBJLIST) runMuTauFlatTreelizer.o 

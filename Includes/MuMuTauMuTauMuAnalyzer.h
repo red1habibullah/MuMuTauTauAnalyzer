@@ -5,8 +5,8 @@
 // found on file: MuMuTauTauTreelization.root
 //////////////////////////////////////////////////////////
 
-#ifndef MuTauAnalyzer_h
-#define MuTauAnalyzer_h
+#ifndef MuMuTauMuTauMuAnalyzer_h
+#define MuMuTauMuTauMuAnalyzer_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -18,7 +18,7 @@
 #include <vector>
 #include "Histomutau.h"
 
-class MuTauAnalyzer : public Histomutau {
+class MuMuTauMuTauMuAnalyzer : public Histomutau {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -32,20 +32,6 @@ public :
    vector<float>   *recoMuonEnergy;
    vector<int>     *recoMuonPDGId;
    vector<float>   *recoMuonIsolation;
-   vector<float>   *recoTauPt;
-   vector<float>   *recoTauEta;
-   vector<float>   *recoTauPhi;
-   vector<float>   *recoTauEnergy;
-   vector<int>     *recoTauPDGId;
-   vector<float>   *recoTauDecayMode;
-   vector<float>   *recoTauIsoMVArawValue;
-   vector<float>   *recoTauIsoMVAVVLoose;
-   vector<float>   *recoTauIsoMVAVLoose;
-   vector<float>   *recoTauIsoMVALoose;
-   vector<float>   *recoTauIsoMVAMedium;
-   vector<float>   *recoTauIsoMVATight;
-   vector<float>   *recoTauIsoMVAVTight;
-   vector<float>   *recoTauIsoMVAVVTight;
    vector<float>   *recoJetPt;
    vector<float>   *recoJetEta;
    vector<float>   *recoJetPhi;
@@ -65,20 +51,6 @@ public :
    TBranch        *b_recoMuonEnergy;   //!
    TBranch        *b_recoMuonPDGId;   //!
    TBranch        *b_recoMuonIsolation;   //!
-   TBranch        *b_recoTauPt;   //!
-   TBranch        *b_recoTauEta;   //!
-   TBranch        *b_recoTauPhi;   //!
-   TBranch        *b_recoTauEnergy;   //!
-   TBranch        *b_recoTauPDGId;   //!
-   TBranch        *b_recoTauDecayMode;   //!
-   TBranch        *b_recoTauIsoMVArawValue;   //!
-   TBranch        *b_recoTauIsoMVAVVLoose;   //!
-   TBranch        *b_recoTauIsoMVAVLoose;   //!
-   TBranch        *b_recoTauIsoMVALoose;   //!
-   TBranch        *b_recoTauIsoMVAMedium;   //!
-   TBranch        *b_recoTauIsoMVATight;   //!
-   TBranch        *b_recoTauIsoMVAVTight;   //!
-   TBranch        *b_recoTauIsoMVAVVTight;   //!
    TBranch        *b_recoJetPt;   //!
    TBranch        *b_recoJetEta;   //!
    TBranch        *b_recoJetPhi;   //!
@@ -97,13 +69,14 @@ public :
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
-   bool invertedMuIso;
-   bool invertedTauIso;
-   double MuIsoThreshold;
+   bool invertedMu2Iso;
+   bool invertedMu4Iso;
+   double Mu2IsoThreshold;
+   double Mu4IsoThreshold;
 
-   MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMuIso_ = false, bool invertedTauIso_ = false, double MuIsoThreshold_ = 0.25);
+   MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu4Iso_ = false, double Mu2IsoThreshold_ = 0.25, double Mu4IsoThreshold_ = 0.25);
    string createOutputFileName();
-   virtual ~MuTauAnalyzer();
+   virtual ~MuMuTauMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
@@ -115,8 +88,8 @@ public :
 
 #endif
 
-#ifdef MuTauAnalyzer_cxx
-MuTauAnalyzer::MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMuIso_, bool invertedTauIso_, double MuIsoThreshold_) : Histomutau() 
+#ifdef MuMuTauMuTauMuAnalyzer_cxx
+MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu4Iso_, double Mu2IsoThreshold_, double Mu4IsoThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -124,9 +97,10 @@ MuTauAnalyzer::MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiSc
     summedWeights = summedWeights_;
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
-    invertedMuIso = invertedMuIso_;
-    invertedTauIso = invertedTauIso_;
-    MuIsoThreshold = MuIsoThreshold_;
+    invertedMu2Iso = invertedMu2Iso_;
+    invertedMu4Iso = invertedMu4Iso_;
+    Mu2IsoThreshold = Mu2IsoThreshold_;
+    Mu4IsoThreshold = Mu4IsoThreshold_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
@@ -139,13 +113,13 @@ MuTauAnalyzer::MuTauAnalyzer(TString fileName_, TString outputDir_, float lumiSc
     system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + "/MuMuTauMuTauHadAnalyzer/objectTree";
+    TString treePath = fileName + "/MuMuTauMuTauMuAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
 }
 
-string MuTauAnalyzer::createOutputFileName()
+string MuMuTauMuTauMuAnalyzer::createOutputFileName()
 {
     ostringstream outputName;
     fileName.Replace(0, fileName.Last('/'), "");
@@ -158,19 +132,19 @@ string MuTauAnalyzer::createOutputFileName()
     return outputName.str();
 }
 
-MuTauAnalyzer::~MuTauAnalyzer()
+MuMuTauMuTauMuAnalyzer::~MuMuTauMuTauMuAnalyzer()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t MuTauAnalyzer::GetEntry(Long64_t entry)
+Int_t MuMuTauMuTauMuAnalyzer::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t MuTauAnalyzer::LoadTree(Long64_t entry)
+Long64_t MuMuTauMuTauMuAnalyzer::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -183,7 +157,7 @@ Long64_t MuTauAnalyzer::LoadTree(Long64_t entry)
    return centry;
 }
 
-void MuTauAnalyzer::Init()
+void MuMuTauMuTauMuAnalyzer::Init()
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -200,20 +174,6 @@ void MuTauAnalyzer::Init()
    recoMuonEnergy = 0;
    recoMuonPDGId = 0;
    recoMuonIsolation = 0;
-   recoTauPt = 0;
-   recoTauEta = 0;
-   recoTauPhi = 0;
-   recoTauEnergy = 0;
-   recoTauPDGId = 0;
-   recoTauDecayMode = 0;
-   recoTauIsoMVArawValue = 0;
-   recoTauIsoMVAVVLoose = 0;
-   recoTauIsoMVAVLoose = 0;
-   recoTauIsoMVALoose = 0;
-   recoTauIsoMVAMedium = 0;
-   recoTauIsoMVATight = 0;
-   recoTauIsoMVAVTight = 0;
-   recoTauIsoMVAVVTight = 0;
    recoJetPt = 0;
    recoJetEta = 0;
    recoJetPhi = 0;
@@ -231,20 +191,6 @@ void MuTauAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonEnergy", &recoMuonEnergy, &b_recoMuonEnergy);
    fChain->SetBranchAddress("recoMuonPDGId", &recoMuonPDGId, &b_recoMuonPDGId);
    fChain->SetBranchAddress("recoMuonIsolation", &recoMuonIsolation, &b_recoMuonIsolation);
-   fChain->SetBranchAddress("recoTauPt", &recoTauPt, &b_recoTauPt);
-   fChain->SetBranchAddress("recoTauEta", &recoTauEta, &b_recoTauEta);
-   fChain->SetBranchAddress("recoTauPhi", &recoTauPhi, &b_recoTauPhi);
-   fChain->SetBranchAddress("recoTauEnergy", &recoTauEnergy, &b_recoTauEnergy);
-   fChain->SetBranchAddress("recoTauPDGId", &recoTauPDGId, &b_recoTauPDGId);
-   fChain->SetBranchAddress("recoTauDecayMode", &recoTauDecayMode, &b_recoTauDecayMode);
-   fChain->SetBranchAddress("recoTauIsoMVArawValue", &recoTauIsoMVArawValue, &b_recoTauIsoMVArawValue);
-   fChain->SetBranchAddress("recoTauIsoMVAVVLoose", &recoTauIsoMVAVVLoose, &b_recoTauIsoMVAVVLoose);
-   fChain->SetBranchAddress("recoTauIsoMVAVLoose", &recoTauIsoMVAVLoose, &b_recoTauIsoMVAVLoose);
-   fChain->SetBranchAddress("recoTauIsoMVALoose", &recoTauIsoMVALoose, &b_recoTauIsoMVALoose);
-   fChain->SetBranchAddress("recoTauIsoMVAMedium", &recoTauIsoMVAMedium, &b_recoTauIsoMVAMedium);
-   fChain->SetBranchAddress("recoTauIsoMVATight", &recoTauIsoMVATight, &b_recoTauIsoMVATight);
-   fChain->SetBranchAddress("recoTauIsoMVAVTight", &recoTauIsoMVAVTight, &b_recoTauIsoMVAVTight);
-   fChain->SetBranchAddress("recoTauIsoMVAVVTight", &recoTauIsoMVAVVTight, &b_recoTauIsoMVAVVTight);
    fChain->SetBranchAddress("recoJetPt", &recoJetPt, &b_recoJetPt);
    fChain->SetBranchAddress("recoJetEta", &recoJetEta, &b_recoJetEta);
    fChain->SetBranchAddress("recoJetPhi", &recoJetPhi, &b_recoJetPhi);
@@ -262,7 +208,7 @@ void MuTauAnalyzer::Init()
    Notify();
 }
 
-Bool_t MuTauAnalyzer::Notify()
+Bool_t MuMuTauMuTauMuAnalyzer::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -273,18 +219,18 @@ Bool_t MuTauAnalyzer::Notify()
    return kTRUE;
 }
 
-void MuTauAnalyzer::Show(Long64_t entry)
+void MuMuTauMuTauMuAnalyzer::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t MuTauAnalyzer::Cut(Long64_t entry)
+Int_t MuMuTauMuTauMuAnalyzer::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef MuTauAnalyzer_cxx
+#endif // #ifdef MuMuTauMuTauMuAnalyzer_cxx
