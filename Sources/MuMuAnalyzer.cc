@@ -154,13 +154,13 @@ void MuMuAnalyzer::Loop()
               Mu2 = Mu2s.at(iMuon);
               TLorentzVector Mu1Mu2 = Mu1 + Mu2;
 
-              dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
-              invMassMuMu->Fill(Mu1Mu2.M(), weight);
-              ptMuMu->Fill(Mu1Mu2.Pt(), weight);
-              dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
+              dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
+              invMassMu1Mu2->Fill(Mu1Mu2.M(), weight);
+              ptMu1Mu2->Fill(Mu1Mu2.Pt(), weight);
+              dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
 
-              Mu1IsoMuMuPair->Fill(Mu1Iso.at(iMuon), weight);
-              Mu2IsoMuMuPair->Fill(Mu2Iso.at(iMuon), weight);
+              mu1Iso->Fill(Mu1Iso.at(iMuon), weight);
+              mu2Iso->Fill(Mu2Iso.at(iMuon), weight);
 
               mu1Pt->Fill(Mu1.Pt(), weight);
               mu1Eta->Fill(Mu1.Eta(), weight);

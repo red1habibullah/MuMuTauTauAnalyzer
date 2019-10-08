@@ -5,8 +5,8 @@
 // found on file: MuMuTreelization.root
 //////////////////////////////////////////////////////////
 
-#ifndef FakeTauAnalyzer_h
-#define FakeTauAnalyzer_h
+#ifndef FakeMuMuTauMuTauHadAnalyzer_h
+#define FakeMuMuTauMuTauHadAnalyzer_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -18,7 +18,7 @@
 #include <vector>
 #include "HistoZmumu.h"
 
-class FakeTauAnalyzer : public HistoZmumu {
+class FakeMuMuTauMuTauHadAnalyzer : public HistoZmumu {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -101,9 +101,9 @@ public :
    double tauMVAIsoRawThreshold;
    TString tauMVAIsoWP;
 
-   FakeTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP = false, double tauMVAIsoRawThreshold = -0.5, TString tauMVAIsoWP = "MEDIUM");
+   FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP = false, double tauMVAIsoRawThreshold = -0.5, TString tauMVAIsoWP = "MEDIUM");
    string createOutputFileName();
-   virtual ~FakeTauAnalyzer();
+   virtual ~FakeMuMuTauMuTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
@@ -115,8 +115,8 @@ public :
 
 #endif
 
-#ifdef FakeTauAnalyzer_cxx
-FakeTauAnalyzer::FakeTauAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_) : HistoZmumu() 
+#ifdef FakeMuMuTauMuTauHadAnalyzer_cxx
+FakeMuMuTauMuTauHadAnalyzer::FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -145,7 +145,7 @@ FakeTauAnalyzer::FakeTauAnalyzer(TString fileName_, TString outputDir_, float lu
     Init();
 }
 
-string FakeTauAnalyzer::createOutputFileName()
+string FakeMuMuTauMuTauHadAnalyzer::createOutputFileName()
 {
     ostringstream outputName;
     fileName.Replace(0, fileName.Last('/'), "");
@@ -158,19 +158,19 @@ string FakeTauAnalyzer::createOutputFileName()
     return outputName.str();
 }
 
-FakeTauAnalyzer::~FakeTauAnalyzer()
+FakeMuMuTauMuTauHadAnalyzer::~FakeMuMuTauMuTauHadAnalyzer()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t FakeTauAnalyzer::GetEntry(Long64_t entry)
+Int_t FakeMuMuTauMuTauHadAnalyzer::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t FakeTauAnalyzer::LoadTree(Long64_t entry)
+Long64_t FakeMuMuTauMuTauHadAnalyzer::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -183,7 +183,7 @@ Long64_t FakeTauAnalyzer::LoadTree(Long64_t entry)
    return centry;
 }
 
-void FakeTauAnalyzer::Init()
+void FakeMuMuTauMuTauHadAnalyzer::Init()
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -262,7 +262,7 @@ void FakeTauAnalyzer::Init()
    Notify();
 }
 
-Bool_t FakeTauAnalyzer::Notify()
+Bool_t FakeMuMuTauMuTauHadAnalyzer::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -273,18 +273,18 @@ Bool_t FakeTauAnalyzer::Notify()
    return kTRUE;
 }
 
-void FakeTauAnalyzer::Show(Long64_t entry)
+void FakeMuMuTauMuTauHadAnalyzer::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t FakeTauAnalyzer::Cut(Long64_t entry)
+Int_t FakeMuMuTauMuTauHadAnalyzer::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef FakeTauAnalyzer_cxx
+#endif // #ifdef FakeMuMuTauMuTauHadAnalyzer_cxx

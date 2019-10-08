@@ -43,11 +43,11 @@ class Histomutau{
 
         TH1D* invMassMuMuTauMuTauMu;
         TH1D* invMassMuMuTauMuTauHad;
-        
+
         TH1D* ptMu1Mu2;
         TH1D* ptMu3Mu4;
         TH1D* ptMu3Tau;
-        
+
         TH1D* ptMuMuTauMuTauMu;
         TH1D* ptMuMuTauMuTauHad;
 
@@ -90,7 +90,7 @@ class Histomutau{
         TH1D* dRMu1Mu3;
         TH1D* dRMu1Mu4;
         TH1D* dRMu1Tau;
-        
+
         TH1D* dRMu2Mu3;
         TH1D* dRMu2Mu4;
         TH1D* dRMu2Tau;

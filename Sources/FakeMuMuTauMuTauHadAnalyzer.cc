@@ -1,5 +1,5 @@
-#define FakeTauAnalyzer_cxx
-#include "FakeTauAnalyzer.h"
+#define FakeMuMuTauMuTauHadAnalyzer_cxx
+#include "FakeMuMuTauMuTauHadAnalyzer.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
@@ -11,7 +11,7 @@
 #include <math.h>
 using namespace std;
 
-void FakeTauAnalyzer::Loop()
+void FakeMuMuTauMuTauHadAnalyzer::Loop()
 {
    TString outputfileName = createOutputFileName();
    TFile* outputFile = new TFile(outputfileName, "RECREATE");
@@ -215,10 +215,10 @@ void FakeTauAnalyzer::Loop()
                   {
                       passDR = true;
 
-                      ptMuTau->Fill(MuTau.Pt(), weight);
-                      dRMuTau->Fill(Mu3.DeltaR(Tau), weight);
-                      invMassMuTau->Fill(MuTau.M(), weight);
-                      dRInvMassMuTau->Fill(Mu3.DeltaR(Tau), MuTau.M(), weight);
+                      ptMu3Tau->Fill(MuTau.Pt(), weight);
+                      dRMu3Tau->Fill(Mu3.DeltaR(Tau), weight);
+                      invMassMu3Tau->Fill(MuTau.M(), weight);
+                      dRInvMassMu3Tau->Fill(Mu3.DeltaR(Tau), MuTau.M(), weight);
 
                       mu3Pt->Fill(Mu3.Pt(), weight);
                       mu3Eta->Fill(Mu3.Eta(), weight);
@@ -235,18 +235,18 @@ void FakeTauAnalyzer::Loop()
                       dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
                       dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
 
-                      ptMuMuTauTau->Fill(MuMuTauTau.Pt(), weight);
-                      invMassMuMuTauTau->Fill(MuMuTauTau.M(), weight);
+                      ptMuMuTauMuTauHad->Fill(MuMuTauTau.Pt(), weight);
+                      invMassMuMuTauMuTauHad->Fill(MuMuTauTau.M(), weight);
                       break;
                   } // end if dR between mu-mu pair and tau
               } // end for loop on taus
 
               if (passDR == true)
               {
-                  ptMuMu->Fill(Mu1Mu2.Pt(), weight);
-                  dRMuMu->Fill(Mu1.DeltaR(Mu2), weight);
-                  invMassMuMu->Fill(Mu1Mu2.M(), weight);
-                  dRInvMassMuMu->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
+                  ptMu1Mu2->Fill(Mu1Mu2.Pt(), weight);
+                  dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
+                  invMassMu1Mu2->Fill(Mu1Mu2.M(), weight);
+                  dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
 
                   mu1Pt->Fill(Mu1.Pt(), weight);
                   mu1Eta->Fill(Mu1.Eta(), weight);

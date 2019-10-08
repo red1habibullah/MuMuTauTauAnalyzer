@@ -133,6 +133,7 @@ void MuMuTauMuTauHadAnalyzer::Loop()
 
               Mu1Iso.push_back(recoMuonIsolation->at(iMuon));
               Mu2Iso.push_back(recoMuonIsolation->at(indexMu2));
+              break;
           } // end if findMu2 
 
       } // end loop for mu1

@@ -123,6 +123,7 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
               Mu1Iso.push_back(recoMuonIsolation->at(iMuon));
               Mu2Iso.push_back(recoMuonIsolation->at(indexMu2));
+              break; // only select one pair of Mu1Mu2 and give the others to Mu3Mu4 candidates, otherwise some events may be lost (multiple Mu1Mu2 pair but no Mu3Mu4 pair due to Mu1Mu2 vector takes potential Mu3Mu4 pair!)
           } // end if findMu2 
 
       } // end loop for mu1
