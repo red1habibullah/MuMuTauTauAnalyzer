@@ -1,5 +1,5 @@
-#define MuMuTauMuTauMuAnalyzer_cxx
-#include "MuMuTauMuTauMuAnalyzer.h"
+#define FakeMuMuTauMuTauMuAnalyzer_cxx
+#include "FakeMuMuTauMuTauMuAnalyzer.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
@@ -11,7 +11,7 @@
 #include <math.h>
 using namespace std;
 
-void MuMuTauMuTauMuAnalyzer::Loop()
+void FakeMuMuTauMuTauMuAnalyzer::Loop()
 {
    TString outputfileName = createOutputFileName();
    TFile* outputFile = new TFile(outputfileName, "RECREATE");
@@ -31,14 +31,12 @@ void MuMuTauMuTauMuAnalyzer::Loop()
       nb = fChain->GetEntry(jentry);
       nbytes += nb;
 
-      // ---- prepare for the vector of matched muon pairs and muon-muon pairs ---
+      // ---- prepare for the vector of matched muon pairs and an additional muon pair candidate ---
       vector<TLorentzVector> Mu1s;
       vector<TLorentzVector> Mu2s;
       vector<TLorentzVector> Mu3s;
       vector<TLorentzVector> Mu4s;
 
-      vector<float> Mu1Iso;
-      vector<float> Mu2Iso;
       vector<float> Mu3Iso;
       vector<float> Mu4Iso;
 
@@ -47,8 +45,6 @@ void MuMuTauMuTauMuAnalyzer::Loop()
       Mu3s.clear();
       Mu4s.clear();
 
-      Mu1Iso.clear();
-      Mu2Iso.clear();
       Mu3Iso.clear();
       Mu4Iso.clear();
       // ========================================================================
@@ -61,12 +57,9 @@ void MuMuTauMuTauMuAnalyzer::Loop()
       indexMu2s.clear();
       // =============================================================================
 
-      // ---- these vectors containing the muons that are not matched into pairs --- 
+      // ---- these vectors containing the muons that are not matched into pairs and third muon --- 
       vector<TLorentzVector> unMatchedMus;
-      vector<float> unMatchedMuonIso;
-
       unMatchedMus.clear();
-      unMatchedMuonIso.clear();
       // ============================================================================
 
       // ---- define varibles that will be used to be pushed into the above vectors ---
@@ -88,7 +81,10 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
           if (recoMuonIsolation->at(iMuon) > 0.25) continue;
           Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-          float smallestDR = 1.0; // dR cut between Mu1 and Mu2
+          float dRCut = 0.3; // dR cut between Mu1 and Mu2
+          float highestPt = 0;
+          float invMassLowThre = 60.0;
+          float invMassHighThre = 120.0;
           bool findMu2 = false;
           int indexMu2 = 0;
 
@@ -97,13 +93,15 @@ void MuMuTauMuTauMuAnalyzer::Loop()
               std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon2);
               if (iter2 != indexMu2s.end()) continue;
 
-              if ((invertedMu2Iso == false && recoMuonIsolation->at(iMuon2) > Mu2IsoThreshold) || (invertedMu2Iso == true && recoMuonIsolation->at(iMuon2) < Mu2IsoThreshold)) continue;
+              if (recoMuonIsolation->at(iMuon2) > 0.25) continue;
               TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
               Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
-              if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
+              if((Mu1.DeltaR(Mu2Cand) > dRCut) && (Mu2Cand.Pt() > highestPt) 
+                      && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
+                      && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
               {
                   Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
-                  smallestDR = Mu1.DeltaR(Mu2);
+                  highestPt = Mu2Cand.Pt();
                   findMu2 = true;
                   indexMu2 = iMuon2;
               } // end if pair candidates
@@ -116,14 +114,11 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
               indexMu1s.push_back(iMuon);
               indexMu2s.push_back(indexMu2);
-
-              Mu1Iso.push_back(recoMuonIsolation->at(iMuon));
-              Mu2Iso.push_back(recoMuonIsolation->at(indexMu2));
-              break; // only select one pair of Mu1Mu2 and give the others to Mu3Mu4 candidates, otherwise some events may be lost (multiple Mu1Mu2 pair but no Mu3Mu4 pair due to Mu1Mu2 vector takes potential Mu3Mu4 pair!)
+              break;
           } // end if findMu2 
       } // end loop for mu1
 
-      // ------- start loop on the second muon pair candidates -------
+      // ---- search for an additional muon pair for fake rate study ----
       for (unsigned int iMuon4=0; iMuon4<recoMuonPt->size(); iMuon4++)
       {
           std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon4);
@@ -132,7 +127,6 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
           if ((invertedMu4Iso == false && recoMuonIsolation->at(iMuon4) > Mu4IsoThreshold) || (invertedMu4Iso == true && recoMuonIsolation->at(iMuon4) < Mu4IsoThreshold)) continue;
           Mu4.SetPtEtaPhiE(recoMuonPt->at(iMuon4), recoMuonEta->at(iMuon4), recoMuonPhi->at(iMuon4), recoMuonEnergy->at(iMuon4));
-          float smallestDR = 0.8; // dR cut between Mu3 and Mu4
           bool findMu3 = false;
           int indexMu3 = 0;
 
@@ -144,10 +138,9 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, Mu4) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
-              if ((Mu4.DeltaR(Mu3Cand) < smallestDR) && (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon4)))
+              if (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon4))
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
-                  smallestDR = Mu4.DeltaR(Mu3);
                   findMu3 = true;
                   indexMu3 = iMuon3;
               } // end if find mu3 with mu4 matched
@@ -164,7 +157,6 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
           else{
               unMatchedMus.push_back(Mu4);
-              unMatchedMuonIso.push_back(recoMuonIsolation->at(iMuon4));
           } // end else findMu3
       } // end loop for Mu4
 
@@ -177,19 +169,17 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
       // ---- fill histograms ----
       nMatchedMuPair->Fill(Mu1s.size(), weight);
-      nMatchedMuMuPair->Fill(Mu4s.size(), weight);
       nUnMatchedMu->Fill(unMatchedMus.size(), weight);
-      nMatchedMuPairNMatchedMuMuPair->Fill(Mu1s.size(), Mu4s.size(), weight);
-
+      
       if (Mu1s.size() >0 && Mu4s.size() >0)
       {
-          // --- filling histograms of four-body of mu-mu-mu-mu ---
+          // --- filling histograms of mu-mu ---
           for (unsigned int iMuon=0; iMuon<Mu1s.size(); iMuon++)
           {
               Mu1 = Mu1s.at(iMuon);
               Mu2 = Mu2s.at(iMuon);
               TLorentzVector Mu1Mu2 = Mu1 + Mu2;
-              bool passDR = false; // dR between mu-mu pair and mu-mu pair
+              bool passDR = false; // dR between mu-mu pair and mu3-mu4 pair
 
               for (unsigned int iMuon4=0; iMuon4<Mu4s.size(); iMuon4++)
               {
@@ -198,7 +188,7 @@ void MuMuTauMuTauMuAnalyzer::Loop()
                   TLorentzVector Mu3Mu4 = Mu3 + Mu4;
                   TLorentzVector MuMuMuMu = Mu1Mu2 + Mu3Mu4;
 
-                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Mu4) > 0.8 && Mu2.DeltaR(Mu4) > 0.8)
+                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Mu4) > 0.8 && Mu2.DeltaR(Mu4) > 0.8 && Mu3.DeltaR(Mu4) > 0.05)
                   {
                       passDR = true;
 
@@ -206,9 +196,6 @@ void MuMuTauMuTauMuAnalyzer::Loop()
                       dRMu3Mu4->Fill(Mu3.DeltaR(Mu4), weight);
                       invMassMu3Mu4->Fill(Mu3Mu4.M(), weight);
                       dRInvMassMu3Mu4->Fill(Mu3.DeltaR(Mu4), Mu3Mu4.M(), weight);
-
-                      mu3Iso->Fill(Mu3Iso.at(iMuon4), weight);
-                      mu4Iso->Fill(Mu4Iso.at(iMuon4), weight);
 
                       mu3Pt->Fill(Mu3.Pt(), weight);
                       mu3Eta->Fill(Mu3.Eta(), weight);
@@ -227,17 +214,14 @@ void MuMuTauMuTauMuAnalyzer::Loop()
                       invMassMuMuTauMuTauMu->Fill(MuMuMuMu.M(), weight);
                       break;
                   } // end if dR between mu-mu pair and mu3-mu4 pair
-              } // end loop for mu3-mu4 pairs
-              
+              } // end for loop on Mu4
+
               if (passDR == true)
               {
                   ptMu1Mu2->Fill(Mu1Mu2.Pt(), weight);
                   dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
                   invMassMu1Mu2->Fill(Mu1Mu2.M(), weight);
                   dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
-
-                  mu1Iso->Fill(Mu1Iso.at(iMuon), weight);
-                  mu2Iso->Fill(Mu2Iso.at(iMuon), weight);
 
                   mu1Pt->Fill(Mu1.Pt(), weight);
                   mu1Eta->Fill(Mu1.Eta(), weight);
@@ -249,11 +233,13 @@ void MuMuTauMuTauMuAnalyzer::Loop()
                   break;
               } // end if passDR between mu-mu pair and mu3-mu4 pair
           } // end loop for mu-mu pairs
-      } // end if mu-mu & mu3-mu4 pairs
+      } // end if mu-mu pairs
 
       for (unsigned int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
       {
-          unMatchedMuIso->Fill(unMatchedMuonIso.at(iMuon), weight);
+          unMatchedMuPt->Fill(unMatchedMus.at(iMuon).Pt(), weight);
+          unMatchedMuEta->Fill(unMatchedMus.at(iMuon).Eta(), weight);
+          unMatchedMuPhi->Fill(unMatchedMus.at(iMuon).Phi(), weight);
       } // end loop for unMatched muons
    }// end loop for events
 

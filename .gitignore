@@ -13,8 +13,9 @@
 *.err
 *.out
 runMuMuAnalyzer
-runMuMuTauMuTauHadAnalyzer
 runMuMuTauMuTauMuAnalyzer
+runMuMuTauMuTauHadAnalyzer
 runMuTauFlatTreelizer
+runFakeMuMuTauMuTauMuAnalyzer
 runFakeMuMuTauMuTauHadAnalyzer
 mumutautau.cfg
