@@ -23,11 +23,13 @@ also customized in the command line for instance when executing the analyzer, fo
 
 $ ./runMuMuAnalyzer doWhat=DYJets maxEvents=1000 ###### for producing histograms of the dimuon channel (control region)
 
-$ ./runMuTauAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_had channel
+$ ./runMuMuTauMuTauHadAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_had channel
 
 $ ./runMuTauFlatTreelizer doWhat=Data maxEvents=3000 ###### for producing the flat trees of the tau_mu + tau_had channel
 
-$ ./runFakeTauAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_had channel (control region for jet faking tau study) 
+$ ./runFakeMuMuTauMuTauHadAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_had channel (control region for jet faking tau study) 
+
+$ ./runFakeMuMuTauMuTauMuAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_mu channel (control region for jet faking muon study) 
 
 NOTE: If the parameters are customized in the command line, their default values in "mumutautau.cfg" will be ignored.
 
