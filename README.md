@@ -23,6 +23,10 @@ also customized in the command line for instance when executing the analyzer, fo
 
 $ ./runMuMuAnalyzer doWhat=DYJets maxEvents=1000 ###### for producing histograms of the dimuon channel (control region)
 
+$ ./runMuMuTauMuTauMuAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_mu channel
+
+$ ./runMuMuTauMuTauEAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_e channel
+
 $ ./runMuMuTauMuTauHadAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_had channel
 
 $ ./runMuTauFlatTreelizer doWhat=Data maxEvents=3000 ###### for producing the flat trees of the tau_mu + tau_had channel
