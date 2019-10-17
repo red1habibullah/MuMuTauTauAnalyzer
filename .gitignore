@@ -15,6 +15,7 @@
 runMuMuAnalyzer
 runMuMuTauMuTauMuAnalyzer
 runMuMuTauMuTauEAnalyzer
+runMuMuTauETauEAnalyzer
 runMuMuTauMuTauHadAnalyzer
 runMuTauFlatTreelizer
 runFakeMuMuTauMuTauMuAnalyzer

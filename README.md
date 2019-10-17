@@ -27,6 +27,8 @@ $ ./runMuMuTauMuTauMuAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing
 
 $ ./runMuMuTauMuTauEAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_e channel
 
+$ ./runMuMuTauETauEAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_e + tau_e channel
+
 $ ./runMuMuTauMuTauHadAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_had channel
 
 $ ./runMuTauFlatTreelizer doWhat=Data maxEvents=3000 ###### for producing the flat trees of the tau_mu + tau_had channel

@@ -30,6 +30,7 @@ class Histomutau{
         TH1D* nMatchedMuPair;
         TH1D* nMatchedMuMuPair;
         TH1D* nMatchedMuElePair;
+        TH1D* nMatchedEleElePair;
         TH1D* nMatchedMuTauPair;
         TH1D* nUnMatchedMu;
         TH1D* nUnMatchedEle;
@@ -38,24 +39,29 @@ class Histomutau{
         TH1D* dRMu1Mu2;
         TH1D* dRMu3Mu4;
         TH1D* dRMu3Ele;
+        TH1D* dREleEle;
         TH1D* dRMu3Tau;
 
         TH1D* invMassMu1Mu2;
         TH1D* invMassMu3Mu4;
         TH1D* invMassMu3Ele;
+        TH1D* invMassEleEle;
         TH1D* invMassMu3Tau;
 
         TH1D* invMassMuMuTauMuTauMu;
         TH1D* invMassMuMuTauMuTauEle;
+        TH1D* invMassMuMuTauEleTauEle;
         TH1D* invMassMuMuTauMuTauHad;
 
         TH1D* ptMu1Mu2;
         TH1D* ptMu3Mu4;
         TH1D* ptMu3Ele;
+        TH1D* ptEleEle;
         TH1D* ptMu3Tau;
 
         TH1D* ptMuMuTauMuTauMu;
         TH1D* ptMuMuTauMuTauEle;
+        TH1D* ptMuMuTauEleTauEle;
         TH1D* ptMuMuTauMuTauHad;
 
         TH1D* mu1Iso;
@@ -63,6 +69,7 @@ class Histomutau{
         TH1D* mu3Iso;
         TH1D* mu4Iso;
         TH1D* ele1Iso;
+        TH1D* ele2Iso;
         TH1D* tauIsoMVA;
 
         TH1D* unMatchedMuIso;
@@ -98,6 +105,10 @@ class Histomutau{
         TH1D* ele1Eta;
         TH1D* ele1Phi;
 
+        TH1D* ele2Pt;
+        TH1D* ele2Eta;
+        TH1D* ele2Phi;
+
         TH1D* tauPt;
         TH1D* tauEta;
         TH1D* tauPhi;
@@ -107,20 +118,24 @@ class Histomutau{
         TH1D* dRMu1Mu3;
         TH1D* dRMu1Mu4;
         TH1D* dRMu1Ele1;
+        TH1D* dRMu1Ele2;
         TH1D* dRMu1Tau;
 
         TH1D* dRMu2Mu3;
         TH1D* dRMu2Mu4;
         TH1D* dRMu2Ele1;
+        TH1D* dRMu2Ele2;
         TH1D* dRMu2Tau;
 
         TH2D* dRInvMassMu1Mu2;
         TH2D* dRInvMassMu3Mu4;
         TH2D* dRInvMassMu3Ele;
+        TH2D* dRInvMassEleEle;
         TH2D* dRInvMassMu3Tau;
         
         TH2D* nMatchedMuPairNMatchedMuMuPair;
         TH2D* nMatchedMuPairNMatchedMuElePair;
+        TH2D* nMatchedMuPairNMatchedEleElePair;
         TH2D* nMatchedMuPairNMatchedMuTauPair;
 };
 
