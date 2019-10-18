@@ -81,7 +81,6 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
 
           if (recoMuonIsolation->at(iMuon) > 0.25) continue;
           Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-          float dRCut = 0.3; // dR cut between Mu1 and Mu2
           float highestPt = 0;
           float invMassLowThre = 60.0;
           float invMassHighThre = 120.0;
@@ -96,7 +95,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
               if (recoMuonIsolation->at(iMuon2) > 0.25) continue;
               TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
               Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
-              if((Mu1.DeltaR(Mu2Cand) > dRCut) && (Mu2Cand.Pt() > highestPt) 
+              if((Mu2Cand.Pt() > highestPt) 
                       && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
                       && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
               {

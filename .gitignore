@@ -19,5 +19,6 @@ runMuMuTauETauEAnalyzer
 runMuMuTauMuTauHadAnalyzer
 runMuTauFlatTreelizer
 runFakeMuMuTauMuTauMuAnalyzer
+runFakeMuMuTauMuTauEAnalyzer
 runFakeMuMuTauMuTauHadAnalyzer
 mumutautau.cfg
