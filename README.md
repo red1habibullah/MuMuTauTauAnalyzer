@@ -31,11 +31,15 @@ $ ./runMuMuTauETauEAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing h
 
 $ ./runMuMuTauMuTauHadAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for producing histograms of the tau_mu + tau_had channel
 
+$ ./runFakeMuMuTauMuTauMuAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_mu + tau_mu channel (control region for jet faking muon study) 
+
+$ ./runFakeMuMuTauMuTauEAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_mu + tau_e channel (control region for jet faking muon study) 
+
+$ ./runFakeMuMuTauMuTauHadAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_mu + tau_had channel (control region for jet faking tau study) 
+
+$ ./runFakeMuMuTauETauEAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_e + tau_e channel (control region for jet faking muon study) 
+
 $ ./runMuTauFlatTreelizer doWhat=Data maxEvents=3000 ###### for producing the flat trees of the tau_mu + tau_had channel
-
-$ ./runFakeMuMuTauMuTauHadAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_had channel (control region for jet faking tau study) 
-
-$ ./runFakeMuMuTauMuTauMuAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_mu channel (control region for jet faking muon study) 
 
 NOTE: If the parameters are customized in the command line, their default values in "mumutautau.cfg" will be ignored.
 
