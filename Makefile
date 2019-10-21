@@ -12,14 +12,14 @@ CXX           = g++ -std=c++11
 CXXFLAGS      = -g -Wall -fPIC   	
 CXXFLAGS      += $(ROOTCFLAGS) 
 
-SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuMuTauMuTauHadAnalyzer.cc MuMuTauMuTauMuAnalyzer.cc MuMuTauMuTauEAnalyzer.cc MuMuTauETauEAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc FakeMuMuTauMuTauHadAnalyzer.cc FakeMuMuTauMuTauMuAnalyzer.cc FakeMuMuTauMuTauEAnalyzer.cc FakeMuMuTauETauEAnalyzer.cc
+SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuMuTauMuTauHadAnalyzer.cc MuMuTauMuTauMuAnalyzer.cc MuMuTauMuTauEAnalyzer.cc MuMuTauETauEAnalyzer.cc MuMuTauETauHadAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc FakeMuMuTauMuTauHadAnalyzer.cc FakeMuMuTauMuTauMuAnalyzer.cc FakeMuMuTauMuTauEAnalyzer.cc FakeMuMuTauETauEAnalyzer.cc
 
 SRCLIST = $(addprefix $(SRCDIR), $(SOURCES))
 OBJLIST = $(SRCLIST:.cc=.o)
 
 .PHONY: all clean
 
-all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuMuTauMuTauEAnalyzer runMuMuTauETauEAnalyzer runMuTauFlatTreelizer runFakeMuMuTauMuTauHadAnalyzer runFakeMuMuTauMuTauMuAnalyzer runFakeMuMuTauMuTauEAnalyzer runFakeMuMuTauETauEAnalyzer
+all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuMuTauMuTauEAnalyzer runMuMuTauETauEAnalyzer runMuMuTauETauHadAnalyzer runMuTauFlatTreelizer runFakeMuMuTauMuTauHadAnalyzer runFakeMuMuTauMuTauMuAnalyzer runFakeMuMuTauMuTauEAnalyzer runFakeMuMuTauETauEAnalyzer
 
 # ===========================================================================
 .cc.o:
@@ -53,6 +53,12 @@ runMuMuTauETauEAnalyzer: $(OBJLIST) runMuMuTauETauEAnalyzer.o
 	$(CXX) -o runMuMuTauETauEAnalyzer $^ $(ROOTGLIBS)
 
 runMuMuTauETauEAnalyzer.o: runMuMuTauETauEAnalyzer.cc
+	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+
+runMuMuTauETauHadAnalyzer: $(OBJLIST) runMuMuTauETauHadAnalyzer.o 
+	$(CXX) -o runMuMuTauETauHadAnalyzer $^ $(ROOTGLIBS)
+
+runMuMuTauETauHadAnalyzer.o: runMuMuTauETauHadAnalyzer.cc
 	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
 
 runMuTauFlatTreelizer: $(OBJLIST) runMuTauFlatTreelizer.o 
