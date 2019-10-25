@@ -26,70 +26,70 @@ all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuM
 	$(CXX) -c $< -o $@ $(CXXFLAGS) $(INCDIR)
 
 runMuMuAnalyzer: $(OBJLIST) runMuMuAnalyzer.o 
-	$(CXX) -o runMuMuAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runMuMuAnalyzer.o: runMuMuAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runMuMuTauMuTauHadAnalyzer: $(OBJLIST) runMuMuTauMuTauHadAnalyzer.o 
-	$(CXX) -o runMuMuTauMuTauHadAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runMuMuTauMuTauHadAnalyzer.o: runMuMuTauMuTauHadAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runMuMuTauMuTauMuAnalyzer: $(OBJLIST) runMuMuTauMuTauMuAnalyzer.o 
-	$(CXX) -o runMuMuTauMuTauMuAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runMuMuTauMuTauMuAnalyzer.o: runMuMuTauMuTauMuAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runMuMuTauMuTauEAnalyzer: $(OBJLIST) runMuMuTauMuTauEAnalyzer.o 
-	$(CXX) -o runMuMuTauMuTauEAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runMuMuTauMuTauEAnalyzer.o: runMuMuTauMuTauEAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runMuMuTauETauEAnalyzer: $(OBJLIST) runMuMuTauETauEAnalyzer.o 
-	$(CXX) -o runMuMuTauETauEAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runMuMuTauETauEAnalyzer.o: runMuMuTauETauEAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runMuMuTauETauHadAnalyzer: $(OBJLIST) runMuMuTauETauHadAnalyzer.o 
-	$(CXX) -o runMuMuTauETauHadAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runMuMuTauETauHadAnalyzer.o: runMuMuTauETauHadAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runMuTauFlatTreelizer: $(OBJLIST) runMuTauFlatTreelizer.o 
-	$(CXX) -o runMuTauFlatTreelizer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runMuTauFlatTreelizer.o: runMuTauFlatTreelizer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runFakeMuMuTauMuTauHadAnalyzer: $(OBJLIST) runFakeMuMuTauMuTauHadAnalyzer.o 
-	$(CXX) -o runFakeMuMuTauMuTauHadAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runFakeMuMuTauMuTauHadAnalyzer.o: runFakeMuMuTauMuTauHadAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runFakeMuMuTauMuTauMuAnalyzer: $(OBJLIST) runFakeMuMuTauMuTauMuAnalyzer.o 
-	$(CXX) -o runFakeMuMuTauMuTauMuAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runFakeMuMuTauMuTauMuAnalyzer.o: runFakeMuMuTauMuTauMuAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runFakeMuMuTauMuTauEAnalyzer: $(OBJLIST) runFakeMuMuTauMuTauEAnalyzer.o 
-	$(CXX) -o runFakeMuMuTauMuTauEAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runFakeMuMuTauMuTauEAnalyzer.o: runFakeMuMuTauMuTauEAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runFakeMuMuTauETauEAnalyzer: $(OBJLIST) runFakeMuMuTauETauEAnalyzer.o 
-	$(CXX) -o runFakeMuMuTauETauEAnalyzer $^ $(ROOTGLIBS)
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runFakeMuMuTauETauEAnalyzer.o: runFakeMuMuTauETauEAnalyzer.cc
-	$(CXX) -o $@ -c -IIncludes $< $(CXXFLAGS) $(INCDIR)
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 # =========================================================================== 
 clean: 
 	rm -f *.o Sources/*.o 
