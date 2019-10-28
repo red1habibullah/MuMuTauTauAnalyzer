@@ -12,14 +12,14 @@ CXX           = g++ -std=c++11
 CXXFLAGS      = -g -Wall -fPIC   	
 CXXFLAGS      += $(ROOTCFLAGS) 
 
-SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuMuTauMuTauHadAnalyzer.cc MuMuTauMuTauMuAnalyzer.cc MuMuTauMuTauEAnalyzer.cc MuMuTauETauEAnalyzer.cc MuMuTauETauHadAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc FakeMuMuTauMuTauHadAnalyzer.cc FakeMuMuTauMuTauMuAnalyzer.cc FakeMuMuTauMuTauEAnalyzer.cc FakeMuMuTauETauEAnalyzer.cc
+SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc MuMuTauMuTauHadAnalyzer.cc MuMuTauMuTauMuAnalyzer.cc MuMuTauMuTauEAnalyzer.cc MuMuTauETauEAnalyzer.cc MuMuTauETauHadAnalyzer.cc lumiana.cc ArgParser.cc ConfigArg.cc TreeMuTau.cc MuTauFlatTreelizer.cc FakeMuMuTauMuTauHadAnalyzer.cc FakeMuMuTauMuTauMuAnalyzer.cc FakeMuMuTauMuTauEAnalyzer.cc FakeMuMuTauETauEAnalyzer.cc FakeMuMuTauETauHadAnalyzer.cc
 
 SRCLIST = $(addprefix $(SRCDIR), $(SOURCES))
 OBJLIST = $(SRCLIST:.cc=.o)
 
 .PHONY: all clean
 
-all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuMuTauMuTauEAnalyzer runMuMuTauETauEAnalyzer runMuMuTauETauHadAnalyzer runMuTauFlatTreelizer runFakeMuMuTauMuTauHadAnalyzer runFakeMuMuTauMuTauMuAnalyzer runFakeMuMuTauMuTauEAnalyzer runFakeMuMuTauETauEAnalyzer
+all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuMuTauMuTauEAnalyzer runMuMuTauETauEAnalyzer runMuMuTauETauHadAnalyzer runMuTauFlatTreelizer runFakeMuMuTauMuTauHadAnalyzer runFakeMuMuTauMuTauMuAnalyzer runFakeMuMuTauMuTauEAnalyzer runFakeMuMuTauETauEAnalyzer runFakeMuMuTauETauHadAnalyzer
 
 # ===========================================================================
 .cc.o:
@@ -89,6 +89,12 @@ runFakeMuMuTauETauEAnalyzer: $(OBJLIST) runFakeMuMuTauETauEAnalyzer.o
 	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runFakeMuMuTauETauEAnalyzer.o: runFakeMuMuTauETauEAnalyzer.cc
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
+
+runFakeMuMuTauETauHadAnalyzer: $(OBJLIST) runFakeMuMuTauETauHadAnalyzer.o 
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
+
+runFakeMuMuTauETauHadAnalyzer.o: runFakeMuMuTauETauHadAnalyzer.cc
 	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 # =========================================================================== 
 clean: 

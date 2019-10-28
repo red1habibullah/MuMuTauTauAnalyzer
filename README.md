@@ -41,8 +41,10 @@ $ ./runFakeMuMuTauMuTauHadAnalyzer doWhat=Data maxEvents=3000 ##### for producin
 
 $ ./runFakeMuMuTauETauEAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_e + tau_e channel (control region for jet faking muon study) 
 
+$ ./runFakeMuMuTauETauHadAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_e + tau_had channel (control region for jet faking muon study) 
+
 $ ./runMuTauFlatTreelizer doWhat=Data maxEvents=3000 ###### for producing the flat trees of the tau_mu + tau_had channel
 
 NOTE: If the parameters are customized in the command line, their default values in "mumutautau.cfg" will be ignored.
 
-The ``FlatTreelizer'' produces a flat tree containing the variables that will be used for subsequent RooFit/combine steps.
+The ''FlatTreelizer'' produces a flat tree containing the variables that will be used for subsequent RooFit/combine steps.
