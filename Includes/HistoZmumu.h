@@ -38,6 +38,7 @@ class HistoZmumu{
         TH1D* dREleEle;
         TH1D* dRMu3Tau;
         TH1D* dREleTau;
+        TH1D* dRTauTau;
 
         TH1D* invMassMu1Mu2;
         TH1D* invMassMu3Mu4;
@@ -45,12 +46,14 @@ class HistoZmumu{
         TH1D* invMassEleEle;
         TH1D* invMassMu3Tau;
         TH1D* invMassEleTau;
+        TH1D* invMassTauTau;
 
         TH1D* invMassMuMuTauMuTauMu;
         TH1D* invMassMuMuTauMuTauEle;
         TH1D* invMassMuMuTauEleTauEle;
         TH1D* invMassMuMuTauMuTauHad;
         TH1D* invMassMuMuTauEleTauHad;
+        TH1D* invMassMuMuTauHadTauHad;
 
         TH1D* ptMu1Mu2;
         TH1D* ptMu3Mu4;
@@ -58,12 +61,14 @@ class HistoZmumu{
         TH1D* ptEleEle;
         TH1D* ptMu3Tau;
         TH1D* ptEleTau;
+        TH1D* ptTauTau;
 
         TH1D* ptMuMuTauMuTauMu;
         TH1D* ptMuMuTauMuTauEle;
         TH1D* ptMuMuTauEleTauEle;
         TH1D* ptMuMuTauMuTauHad;
         TH1D* ptMuMuTauEleTauHad;
+        TH1D* ptMuMuTauHadTauHad;
 
         TH1D* mu1Iso;
         TH1D* mu2Iso;
@@ -72,6 +77,7 @@ class HistoZmumu{
         TH1D* ele1Iso;
         TH1D* ele2Iso;
         TH1D* tauIsoMVA;
+        TH1D* tau2IsoMVA;
 
         TH1D* unMatchedMuIso;
         TH1D* unMatchedEleIso;
@@ -120,17 +126,25 @@ class HistoZmumu{
         TH1D* tauMass;
         TH1D* tauDecayMode;
 
+        TH1D* tau2Pt;
+        TH1D* tau2Eta;
+        TH1D* tau2Phi;
+        TH1D* tau2Mass;
+        TH1D* tau2DecayMode;
+
         TH1D* dRMu1Mu3;
         TH1D* dRMu1Mu4;
         TH1D* dRMu1Ele1;
         TH1D* dRMu1Ele2;
         TH1D* dRMu1Tau;
+        TH1D* dRMu1Tau2;
 
         TH1D* dRMu2Mu3;
         TH1D* dRMu2Mu4;
         TH1D* dRMu2Ele1;
         TH1D* dRMu2Ele2;
         TH1D* dRMu2Tau;
+        TH1D* dRMu2Tau2;
 
         TH2D* dRInvMassMu1Mu2;
         TH2D* dRInvMassMu3Mu4;
@@ -138,6 +152,7 @@ class HistoZmumu{
         TH2D* dRInvMassEleEle;
         TH2D* dRInvMassMu3Tau;
         TH2D* dRInvMassEleTau;
+        TH2D* dRInvMassTauTau;
 };
 
 #endif

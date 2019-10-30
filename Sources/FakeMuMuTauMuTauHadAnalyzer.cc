@@ -115,6 +115,7 @@ void FakeMuMuTauMuTauHadAnalyzer::Loop()
 
               indexMu1s.push_back(iMuon);
               indexMu2s.push_back(indexMu2);
+              break;
           } // end if findMu2 
       } // end loop for mu1
 
