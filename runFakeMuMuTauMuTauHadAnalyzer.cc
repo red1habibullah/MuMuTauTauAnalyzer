@@ -132,7 +132,6 @@ int main(int argc, char **argv)
     // --- always need to reinitialize the weight parameter for new sample -----
     summedWeights = 0;
 
-
     if (doWhat == "WJETS" || doWhat == "ALL")
     {
         if (inputFile.EndsWith(".root"))
@@ -162,6 +161,39 @@ int main(int argc, char **argv)
             } // end while loop on input file list
         } // end else
     } // end if WJets
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+    if (doWhat == "TTJETS" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana TTJetsLumi(inputFile);
+            summedWeights = TTJetsLumi.Loop();
+            FakeMuMuTauMuTauHadAnalyzer TTJetsHist(inputFile, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true);
+            TTJetsHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana TTJetsLumi(fileName);
+                summedWeights += TTJetsLumi.Loop();
+            } // end while loop on weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                FakeMuMuTauMuTauHadAnalyzer TTJetsHist(fileName, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true);
+                TTJetsHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if TTJets
 
     return 0;
 }

@@ -159,36 +159,35 @@ int main(int argc, char **argv)
     // --- always need to reinitialize the weight parameter for new sample -----
     summedWeights = 0;
 
-
-    if (doWhat == "H125AA5" || doWhat == "ALL")
+    if (doWhat == "TTJETS" || doWhat == "ALL")
     {
         if (inputFile.EndsWith(".root"))
         {
-            lumiana H125AA5Lumi(inputFile);
-            summedWeights = H125AA5Lumi.Loop();
-            FakeMuMuTauMuTauMuAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu4Iso, Mu4IsoThreshold);
-            H125AA5Hist.Loop();
+            lumiana TTJetsLumi(inputFile);
+            summedWeights = TTJetsLumi.Loop();
+            FakeMuMuTauMuTauMuAnalyzer TTJetsHist(inputFile, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true);
+            TTJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
-        
+
         else{
             ifstream finLumi;
             finLumi.open(inputFile);
             string fileName;
             while (getline(finLumi, fileName))
             {
-                lumiana H125AA5Lumi(fileName);
-                summedWeights += H125AA5Lumi.Loop();
-            } // end while loop for weight sum
+                lumiana TTJetsLumi(fileName);
+                summedWeights += TTJetsLumi.Loop();
+            } // end while loop on weight sum
 
             ifstream finTree;
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                FakeMuMuTauMuTauMuAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu4Iso, Mu4IsoThreshold);
-                H125AA5Hist.Loop();
+                FakeMuMuTauMuTauMuAnalyzer TTJetsHist(fileName, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true);
+                TTJetsHist.Loop();
             } // end while loop on input file list
-        } // end else 
-    } // end if H125AA5 signal
+        } // end else
+    } // end if TTJets
 
     return 0;
 }
