@@ -144,6 +144,7 @@ void MuMuTauHadTauHadAnalyzer::Loop()
       for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
           if ((invertedTauIso == false && recoTauIsoMVAMedium->at(iTau) <= 0) || (invertedTauIso == true && recoTauIsoMVAMedium->at(iTau) > 0)) continue;
+          if (((tauAntiMuDisc == "LOOSE") && (recoTauAntiMuMVALoose->at(iTau) <= 0)) || ((tauAntiMuDisc == "TIGHT") && (recoTauAntiMuMVATight->at(iTau) <= 0))) continue;
           Tau1.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
           float smallestDR = 0.8; // dR cut between tau1 and tau2
           bool findTau2 = false;

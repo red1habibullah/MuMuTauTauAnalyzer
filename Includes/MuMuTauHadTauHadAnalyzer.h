@@ -46,6 +46,14 @@ public :
    vector<float>   *recoTauIsoMVATight;
    vector<float>   *recoTauIsoMVAVTight;
    vector<float>   *recoTauIsoMVAVVTight;
+   vector<float>   *recoTauAntiMuMVALoose;
+   vector<float>   *recoTauAntiMuMVATight;
+   vector<float>   *recoTauAntiEleMVArawValue;
+   vector<float>   *recoTauAntiEleMVAVLoose;
+   vector<float>   *recoTauAntiEleMVALoose;
+   vector<float>   *recoTauAntiEleMVAMedium;
+   vector<float>   *recoTauAntiEleMVATight;
+   vector<float>   *recoTauAntiEleMVAVTight;
    vector<float>   *recoJetPt;
    vector<float>   *recoJetEta;
    vector<float>   *recoJetPhi;
@@ -79,6 +87,14 @@ public :
    TBranch        *b_recoTauIsoMVATight;   //!
    TBranch        *b_recoTauIsoMVAVTight;   //!
    TBranch        *b_recoTauIsoMVAVVTight;   //!
+   TBranch        *b_recoTauAntiMuMVALoose;   //!
+   TBranch        *b_recoTauAntiMuMVATight;   //!
+   TBranch        *b_recoTauAntiEleMVArawValue;   //!
+   TBranch        *b_recoTauAntiEleMVAVLoose;   //!
+   TBranch        *b_recoTauAntiEleMVALoose;   //!
+   TBranch        *b_recoTauAntiEleMVAMedium;   //!
+   TBranch        *b_recoTauAntiEleMVATight;   //!
+   TBranch        *b_recoTauAntiEleMVAVTight;   //!
    TBranch        *b_recoJetPt;   //!
    TBranch        *b_recoJetEta;   //!
    TBranch        *b_recoJetPhi;   //!
@@ -100,8 +116,9 @@ public :
    bool invertedMu2Iso;
    bool invertedTauIso;
    double Mu2IsoThreshold;
+   TString tauAntiMuDisc;
 
-   MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25);
+   MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25, TString tauAntiMuDisc_ = "NULL");
    string createOutputFileName();
    virtual ~MuMuTauHadTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -116,7 +133,7 @@ public :
 #endif
 
 #ifdef MuMuTauHadTauHadAnalyzer_cxx
-MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_) : Histomutau() 
+MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_, TString tauAntiMuDisc_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -127,6 +144,7 @@ MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString ou
     invertedMu2Iso = invertedMu2Iso_;
     invertedTauIso = invertedTauIso_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
+    tauAntiMuDisc = tauAntiMuDisc_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
@@ -214,6 +232,14 @@ void MuMuTauHadTauHadAnalyzer::Init()
    recoTauIsoMVATight = 0;
    recoTauIsoMVAVTight = 0;
    recoTauIsoMVAVVTight = 0;
+   recoTauAntiMuMVALoose = 0;
+   recoTauAntiMuMVATight = 0;
+   recoTauAntiEleMVArawValue = 0;
+   recoTauAntiEleMVAVLoose = 0;
+   recoTauAntiEleMVALoose = 0;
+   recoTauAntiEleMVAMedium = 0;
+   recoTauAntiEleMVATight = 0;
+   recoTauAntiEleMVAVTight = 0;
    recoJetPt = 0;
    recoJetEta = 0;
    recoJetPhi = 0;
@@ -245,6 +271,14 @@ void MuMuTauHadTauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoTauIsoMVATight", &recoTauIsoMVATight, &b_recoTauIsoMVATight);
    fChain->SetBranchAddress("recoTauIsoMVAVTight", &recoTauIsoMVAVTight, &b_recoTauIsoMVAVTight);
    fChain->SetBranchAddress("recoTauIsoMVAVVTight", &recoTauIsoMVAVVTight, &b_recoTauIsoMVAVVTight);
+   fChain->SetBranchAddress("recoTauAntiMuMVALoose", &recoTauAntiMuMVALoose, &b_recoTauAntiMuMVALoose);
+   fChain->SetBranchAddress("recoTauAntiMuMVATight", &recoTauAntiMuMVATight, &b_recoTauAntiMuMVATight);
+   fChain->SetBranchAddress("recoTauAntiEleMVArawValue", &recoTauAntiEleMVArawValue, &b_recoTauAntiEleMVArawValue);
+   fChain->SetBranchAddress("recoTauAntiEleMVAVLoose", &recoTauAntiEleMVAVLoose, &b_recoTauAntiEleMVAVLoose);
+   fChain->SetBranchAddress("recoTauAntiEleMVALoose", &recoTauAntiEleMVALoose, &b_recoTauAntiEleMVALoose);
+   fChain->SetBranchAddress("recoTauAntiEleMVAMedium", &recoTauAntiEleMVAMedium, &b_recoTauAntiEleMVAMedium);
+   fChain->SetBranchAddress("recoTauAntiEleMVATight", &recoTauAntiEleMVATight, &b_recoTauAntiEleMVATight);
+   fChain->SetBranchAddress("recoTauAntiEleMVAVTight", &recoTauAntiEleMVAVTight, &b_recoTauAntiEleMVAVTight);
    fChain->SetBranchAddress("recoJetPt", &recoJetPt, &b_recoJetPt);
    fChain->SetBranchAddress("recoJetEta", &recoJetEta, &b_recoJetEta);
    fChain->SetBranchAddress("recoJetPhi", &recoJetPhi, &b_recoJetPhi);

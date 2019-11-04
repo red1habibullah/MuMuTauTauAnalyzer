@@ -20,6 +20,7 @@ int main(int argc, char **argv)
     bool invertedMu2Iso    = cfg.getB("invertedMu2Iso", false);
     bool invertedTauIso    = cfg.getB("invertedTauIso", false);
     double Mu2IsoThreshold = cfg.getD("Mu2IsoThreshold", 0.25);
+    TString tauAntiMuDisc  = cfg.getS("tauAntiMuDisc", "NULL");
 
     //--- Parse the arguments -----------------------------------------------------
     if (argc > 1)
@@ -68,17 +69,23 @@ int main(int argc, char **argv)
             {
                 getArg(currentArg, Mu2IsoThreshold);
             }
+
+            else if (currentArg.BeginsWith("tauAntiMuDisc="))
+            {
+                getArg(currentArg, tauAntiMuDisc);
+            }
         } // end for loop in argc
     } // end if argc > 1
     
     doWhat.ToUpper();
+    tauAntiMuDisc.ToUpper();
 
     //------------------------- data histograms production -------------------
     if (doWhat == "DATA" || doWhat == "ALL")
     {
         if (inputFile.EndsWith(".root"))
         {
-            MuMuTauHadTauHadAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+            MuMuTauHadTauHadAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
             DataHist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -88,7 +95,7 @@ int main(int argc, char **argv)
             string fileName;
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+                MuMuTauHadTauHadAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
                 DataHist.Loop();
             } // end while loop on file list 
         } // end else inputFile.EndsWith(".root")
@@ -104,7 +111,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuMuTauHadTauHadAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+            MuMuTauHadTauHadAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -122,7 +129,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+                MuMuTauHadTauHadAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -138,7 +145,7 @@ int main(int argc, char **argv)
         {
             lumiana WJetsLumi(inputFile);
             summedWeights = WJetsLumi.Loop();
-            MuMuTauHadTauHadAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+            MuMuTauHadTauHadAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
             WJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -156,7 +163,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+                MuMuTauHadTauHadAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
                 WJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -172,7 +179,7 @@ int main(int argc, char **argv)
         {
             lumiana H125AA5Lumi(inputFile);
             summedWeights = H125AA5Lumi.Loop();
-            MuMuTauHadTauHadAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+            MuMuTauHadTauHadAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
             H125AA5Hist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -190,7 +197,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold);
+                MuMuTauHadTauHadAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
                 H125AA5Hist.Loop();
             } // end while loop on input file list
         } // end else 
