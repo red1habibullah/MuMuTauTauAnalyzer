@@ -171,7 +171,7 @@ int main(int argc, char **argv)
         {
             lumiana TTJetsLumi(inputFile);
             summedWeights = TTJetsLumi.Loop();
-            FakeMuMuTauHadTauHadAnalyzer TTJetsHist(inputFile, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true);
+            FakeMuMuTauHadTauHadAnalyzer TTJetsHist(inputFile, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
             TTJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                FakeMuMuTauHadTauHadAnalyzer TTJetsHist(fileName, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true);
+                FakeMuMuTauHadTauHadAnalyzer TTJetsHist(fileName, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
                 TTJetsHist.Loop();
             } // end while loop on input file list
         } // end else
