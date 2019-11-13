@@ -75,7 +75,13 @@ void ZTauMuTauHadAnalyzer::Loop()
       // ---- start loop on muon candidates ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if ((invertedMu1Iso == true && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold) || (invertedMu1Iso == false && recoMuonIsolation->at(iMuon) > Mu1IsoThreshold)) continue;
+          if ((invertedMu1Iso == true && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold) || (invertedMu1Iso == false && recoMuonIsolation->at(iMuon) > Mu1IsoThreshold))
+          {
+              unMatchedMus.push_back(Mu);
+              unMatchedMuIsos.push_back(recoMuonIsolation->at(iMuon));
+              continue;
+          } // end if MuIso requirement
+
           Mu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
           float highestPt = 0;
           bool findTau = false;
