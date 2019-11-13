@@ -63,6 +63,10 @@ $ ./runMuMuTauHadTauHadAnalyzer doWhat=H125AA5 maxEvents=2000 ###### for produci
 
 $ ./runFakeMuMuTauHadTauHadAnalyzer doWhat=Data maxEvents=3000 ##### for producing the histograms of dimuon + tau_h + tau_h channel (control region for jet faking muon study) 
 
+# Run the ZTauTau (muon + tau_h) Analyzer:
+
+$ ./runZTauMuTauHadAnalyzer doWhat=DYJets maxEvents=2000 ####### for producing histograms for tauID study 
+
 ###############################################################
 
 NOTE: If the parameters are customized in the command line, their default values in "mumutautau.cfg" will be ignored.
