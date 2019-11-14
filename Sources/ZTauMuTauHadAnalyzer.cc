@@ -181,23 +181,33 @@ void ZTauMuTauHadAnalyzer::Loop()
           float zeta = p_zeta_mis - 0.85*p_zeta_vis;
           // -----------------------------------------------------------
 
-          if ((invertedPzetaCut == false && zeta > pzetaThreshold) || (invertedPzetaCut == true && zeta < pzetaThreshold))
+          // ---------------- various parameter cuts for different region analysis ------------------
+          bool pzetaCut = (invertedPzetaCut == false && zeta > pzetaThreshold) || (invertedPzetaCut == true && zeta < pzetaThreshold);
+          bool mutauMtCut = (MuTauMt > mTMuTauLowThreshold) && (MuTauMt < mTMuTauHighThreshold);
+          bool tauPtCut = (Tau.Pt() > tauPtLowThreshold) && (Tau.Pt() < tauPtHighThreshold);
+          // ----------------------------------------------------------------------------------------
+
+          if (pzetaCut && mutauMtCut)
+          {
+              tauPt->Fill(Tau.Pt(), weight);
+          } // end if only pzeta cut and mtMuMet cut
+
+          if (pzetaCut && tauPtCut)
           {
               mtMuMet->Fill(MuTauMt, weight);
-          } // end if only pzeta cut
+          } // end if only pzeta cut && tauPtCut
 
-          if ((MuTauMt > mTMuTauLowThreshold) && (MuTauMt < mTMuTauHighThreshold))
+          if (mutauMtCut && tauPtCut)
           {
               pzeta->Fill(zeta, weight);
-          } // end if only mtMuMet cut
+          } // end if only mtMuMet cut && tauPtCut
 
-          if ((MuTauMt > mTMuTauLowThreshold) && (MuTauMt < mTMuTauHighThreshold) && ((invertedPzetaCut == false && zeta > pzetaThreshold) || (invertedPzetaCut == true && zeta < pzetaThreshold)))
+          if (pzetaCut && mutauMtCut && tauPtCut)
           {
               muPt->Fill(Mu.Pt(), weight);
               muEta->Fill(Mu.Eta(), weight);
               muPhi->Fill(Mu.Phi(), weight);
 
-              tauPt->Fill(Tau.Pt(), weight);
               tauEta->Fill(Tau.Eta(), weight);
               tauPhi->Fill(Tau.Phi(), weight);
               tauMass->Fill(Tau.M(), weight);
@@ -211,7 +221,7 @@ void ZTauMuTauHadAnalyzer::Loop()
 
               metPt->Fill(MetPt, weight);
               metPhi->Fill(MetPhi, weight);
-          } // end if MT(mu,met) and pzeta within thresholds
+          } // end if MT(mu,met), pzeta, and tauPt within thresholds
       } // end if mu-tau pairs
 
       for (unsigned int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)

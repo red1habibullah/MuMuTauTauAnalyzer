@@ -133,8 +133,10 @@ public :
    float mTMuTauHighThreshold;
    bool invertedPzetaCut;
    float pzetaThreshold;
+   float tauPtLowThreshold;
+   float tauPtHighThreshold;
 
-   ZTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu1Iso_ = false, float Mu1IsoThreshold_ = 0.25, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", bool signSameOROpposite_ = false, float mTMuTauLowThreshold_ = 0, float mTMuTauHighThreshold_ = 160.0, bool invertedPzetaCut_ = false, float pzetaThreshold_ = -125.0);
+   ZTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu1Iso_ = false, float Mu1IsoThreshold_ = 0.25, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", bool signSameOROpposite_ = false, float mTMuTauLowThreshold_ = 0, float mTMuTauHighThreshold_ = 160.0, bool invertedPzetaCut_ = false, float pzetaThreshold_ = -125.0, float tauPtLowThreshold_ = 10.0, float tauPtHighThreshold_ = 10000.0);
    string createOutputFileName();
    virtual ~ZTauMuTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -149,7 +151,7 @@ public :
 #endif
 
 #ifdef ZTauMuTauHadAnalyzer_cxx
-ZTauMuTauHadAnalyzer::ZTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu1Iso_, float Mu1IsoThreshold_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, bool signSameOROpposite_, float mTMuTauLowThreshold_, float mTMuTauHighThreshold_, bool invertedPzetaCut_, float pzetaThreshold_) : HistoZmutau() 
+ZTauMuTauHadAnalyzer::ZTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu1Iso_, float Mu1IsoThreshold_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, bool signSameOROpposite_, float mTMuTauLowThreshold_, float mTMuTauHighThreshold_, bool invertedPzetaCut_, float pzetaThreshold_, float tauPtLowThreshold_, float tauPtHighThreshold_) : HistoZmutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -167,6 +169,8 @@ ZTauMuTauHadAnalyzer::ZTauMuTauHadAnalyzer(TString fileName_, TString outputDir_
     mTMuTauHighThreshold = mTMuTauHighThreshold_;
     invertedPzetaCut = invertedPzetaCut_;
     pzetaThreshold = pzetaThreshold_;
+    tauPtLowThreshold = tauPtLowThreshold_;
+    tauPtHighThreshold = tauPtHighThreshold_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
