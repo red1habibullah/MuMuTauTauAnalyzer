@@ -183,7 +183,7 @@ void ZTauMuTauHadAnalyzer::Loop()
 
           // ---------------- various parameter cuts for different region analysis ------------------
           bool pzetaCut = (invertedPzetaCut == false && zeta > pzetaThreshold) || (invertedPzetaCut == true && zeta < pzetaThreshold);
-          bool mutauMtCut = (MuTauMt > mTMuTauLowThreshold) && (MuTauMt < mTMuTauHighThreshold);
+          bool mutauMtCut = (MuTauMt > mTMuMetLowThreshold) && (MuTauMt < mTMuMetHighThreshold);
           bool tauPtCut = (Tau.Pt() > tauPtLowThreshold) && (Tau.Pt() < tauPtHighThreshold);
           // ----------------------------------------------------------------------------------------
 
