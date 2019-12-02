@@ -196,5 +196,104 @@ int main(int argc, char **argv)
         } // end else
     } // end if TTJets
 
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+    if (doWhat == "WW" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana WWIncLumi(inputFile);
+            summedWeights = WWIncLumi.Loop();
+            FakeMuMuTauETauHadAnalyzer WWIncHist(inputFile, outputDir, lumi*118.7*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
+            WWIncHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana WWIncLumi(fileName);
+                summedWeights += WWIncLumi.Loop();
+            } // end while loop on weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                FakeMuMuTauETauHadAnalyzer WWIncHist(fileName, outputDir, lumi*118.7*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
+                WWIncHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if WWInc
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+    if (doWhat == "WZ" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana WZIncLumi(inputFile);
+            summedWeights = WZIncLumi.Loop();
+            FakeMuMuTauETauHadAnalyzer WZIncHist(inputFile, outputDir, lumi*47.13*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
+            WZIncHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana WZIncLumi(fileName);
+                summedWeights += WZIncLumi.Loop();
+            } // end while loop on weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                FakeMuMuTauETauHadAnalyzer WZIncHist(fileName, outputDir, lumi*47.13*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
+                WZIncHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if WZInc
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+    if (doWhat == "ZZ" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana ZZIncLumi(inputFile);
+            summedWeights = ZZIncLumi.Loop();
+            FakeMuMuTauETauHadAnalyzer ZZIncHist(inputFile, outputDir, lumi*16.523*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
+            ZZIncHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana ZZIncLumi(fileName);
+                summedWeights += ZZIncLumi.Loop();
+            } // end while loop on weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                FakeMuMuTauETauHadAnalyzer ZZIncHist(fileName, outputDir, lumi*16.523*1000, summedWeights, maxEvents, true, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP);
+                ZZIncHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if ZZInc
+
     return 0;
 }
