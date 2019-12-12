@@ -27,6 +27,7 @@ class HistoZmumu{
         HistoZmumu();
         ~HistoZmumu();
 
+        // ------ reco-histograms ------
         TH1D* nMatchedMuPair;
         TH1D* nUnMatchedMu;
         TH1D* nUnMatchedEle;
@@ -153,6 +154,33 @@ class HistoZmumu{
         TH2D* dRInvMassMu3Tau;
         TH2D* dRInvMassEleTau;
         TH2D* dRInvMassTauTau;
+
+        // ------ reco-gen response histograms ------
+        TH2D* dRMu1Mu2VSGenMu1GenMu2;
+        TH2D* dRMu3TauVSGenMu3GenTauHad;
+        TH2D* dRMu3TauVSGenTauMuGenTauHad;
+
+        TH2D* invMassMu1Mu2VSGenMu1GenMu2;
+        TH2D* invMassMu3TauVSGenMu3GenTauHad;
+        TH2D* invMassMu3TauVSGenTauMuGenTauHad;
+
+        TH2D* mu1PtVSGenMu1Pt;
+        TH2D* mu1EtaVSGenMu1Eta;
+        TH2D* mu1PhiVSGenMu1Phi;
+
+        TH2D* mu2PtVSGenMu2Pt;
+        TH2D* mu2EtaVSGenMu2Eta;
+        TH2D* mu2PhiVSGenMu2Phi;
+
+        TH2D* mu3PtVSGenMu3Pt;
+        TH2D* mu3EtaVSGenMu3Eta;
+        TH2D* mu3PhiVSGenMu3Phi;
+        TH2D* mu3PtVSGenTauMuPt;
+
+        TH2D* tauPtVSGenTauHadPt;
+        TH2D* tauEtaVSGenTauHadEta;
+        TH2D* tauPhiVSGenTauHadPhi;
+        TH2D* tauPtVSGenTauHadVisPt;
 };
 
 #endif

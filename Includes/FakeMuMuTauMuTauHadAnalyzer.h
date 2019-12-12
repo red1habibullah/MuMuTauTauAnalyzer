@@ -32,6 +32,9 @@ public :
    vector<float>   *recoMuonEnergy;
    vector<int>     *recoMuonPDGId;
    vector<float>   *recoMuonIsolation;
+   vector<float>   *recoMuonDXY;
+   vector<float>   *recoMuonDZ;
+   vector<int>     *recoMuonNTrackerLayers;
    vector<float>   *recoTauPt;
    vector<float>   *recoTauEta;
    vector<float>   *recoTauPhi;
@@ -46,6 +49,14 @@ public :
    vector<float>   *recoTauIsoMVATight;
    vector<float>   *recoTauIsoMVAVTight;
    vector<float>   *recoTauIsoMVAVVTight;
+   vector<float>   *recoTauAntiMuMVALoose;
+   vector<float>   *recoTauAntiMuMVATight;
+   vector<float>   *recoTauAntiEleMVArawValue;
+   vector<float>   *recoTauAntiEleMVAVLoose;
+   vector<float>   *recoTauAntiEleMVALoose;
+   vector<float>   *recoTauAntiEleMVAMedium;
+   vector<float>   *recoTauAntiEleMVATight;
+   vector<float>   *recoTauAntiEleMVAVTight;
    vector<float>   *recoJetPt;
    vector<float>   *recoJetEta;
    vector<float>   *recoJetPhi;
@@ -53,7 +64,34 @@ public :
    vector<float>   *recoJetCSV;
    vector<float>   *recoMET;
    vector<float>   *recoMETPhi;
+   vector<float>   *recoMETPx;
+   vector<float>   *recoMETPy;
    Int_t           recoNPrimaryVertex;
+   Int_t           eventID;
+   vector<float>   *genMuonPt;
+   vector<float>   *genMuonEta;
+   vector<float>   *genMuonPhi;
+   vector<float>   *genMuonMass;
+   vector<int>     *genMuonPDGId;
+   vector<int>     *genMuonMotherPDGId;
+   vector<float>   *genTauMuPt;
+   vector<float>   *genTauMuEta;
+   vector<float>   *genTauMuPhi;
+   vector<float>   *genTauMuMass;
+   vector<int>     *genTauMuPDGId;
+   vector<int>     *genTauMuMotherPDGId;
+   vector<float>   *genTauMuVisPt;
+   vector<float>   *genTauMuVisMass;
+   vector<float>   *genTauHadPt;
+   vector<float>   *genTauHadEta;
+   vector<float>   *genTauHadPhi;
+   vector<float>   *genTauHadMass;
+   vector<int>     *genTauHadPDGId;
+   vector<int>     *genTauHadMotherPDGId;
+   vector<float>   *genTauHadVisPt;
+   vector<float>   *genTauHadVisMass;
+   vector<int>     *genTauHadNPionZero;
+   vector<int>     *genTauHadNChargedHadrons;
    Int_t           recoNPU;
    Int_t           trueNInteraction;
    Float_t         genEventWeight;
@@ -65,6 +103,9 @@ public :
    TBranch        *b_recoMuonEnergy;   //!
    TBranch        *b_recoMuonPDGId;   //!
    TBranch        *b_recoMuonIsolation;   //!
+   TBranch        *b_recoMuonDXY;   //!
+   TBranch        *b_recoMuonDZ;   //!
+   TBranch        *b_recoMuonNTrackerLayers;   //!
    TBranch        *b_recoTauPt;   //!
    TBranch        *b_recoTauEta;   //!
    TBranch        *b_recoTauPhi;   //!
@@ -79,6 +120,14 @@ public :
    TBranch        *b_recoTauIsoMVATight;   //!
    TBranch        *b_recoTauIsoMVAVTight;   //!
    TBranch        *b_recoTauIsoMVAVVTight;   //!
+   TBranch        *b_recoTauAntiMuMVALoose;   //!
+   TBranch        *b_recoTauAntiMuMVATight;   //!
+   TBranch        *b_recoTauAntiEleMVArawValue;   //!
+   TBranch        *b_recoTauAntiEleMVAVLoose;   //!
+   TBranch        *b_recoTauAntiEleMVALoose;   //!
+   TBranch        *b_recoTauAntiEleMVAMedium;   //!
+   TBranch        *b_recoTauAntiEleMVATight;   //!
+   TBranch        *b_recoTauAntiEleMVAVTight;   //!
    TBranch        *b_recoJetPt;   //!
    TBranch        *b_recoJetEta;   //!
    TBranch        *b_recoJetPhi;   //!
@@ -86,7 +135,34 @@ public :
    TBranch        *b_recoJetCSV;   //!
    TBranch        *b_recoMET;   //!
    TBranch        *b_recoMETPhi;   //!
+   TBranch        *b_recoMETPx;   //!
+   TBranch        *b_recoMETPy;   //!
    TBranch        *b_recoNPrimaryVertex;   //!
+   TBranch        *b_eventID;   //!
+   TBranch        *b_genMuonPt;   //!
+   TBranch        *b_genMuonEta;   //!
+   TBranch        *b_genMuonPhi;   //!
+   TBranch        *b_genMuonMass;   //!
+   TBranch        *b_genMuonPDGId;   //!
+   TBranch        *b_genMuonMotherPDGId;   //!
+   TBranch        *b_genTauMuPt;   //!
+   TBranch        *b_genTauMuEta;   //!
+   TBranch        *b_genTauMuPhi;   //!
+   TBranch        *b_genTauMuMass;   //!
+   TBranch        *b_genTauMuPDGId;   //!
+   TBranch        *b_genTauMuMotherPDGId;   //!
+   TBranch        *b_genTauMuVisPt;   //!
+   TBranch        *b_genTauMuVisMass;   //!
+   TBranch        *b_genTauHadPt;   //!
+   TBranch        *b_genTauHadEta;   //!
+   TBranch        *b_genTauHadPhi;   //!
+   TBranch        *b_genTauHadMass;   //!
+   TBranch        *b_genTauHadPDGId;   //!
+   TBranch        *b_genTauHadMotherPDGId;   //!
+   TBranch        *b_genTauHadVisPt;   //!
+   TBranch        *b_genTauHadVisMass;   //!
+   TBranch        *b_genTauHadNPionZero;   //!
+   TBranch        *b_genTauHadNChargedHadrons;   //!
    TBranch        *b_recoNPU;   //!
    TBranch        *b_trueNInteraction;   //!
    TBranch        *b_genEventWeight;   //!
@@ -100,8 +176,10 @@ public :
    bool tauMVAIsoRawORWP;
    double tauMVAIsoRawThreshold;
    TString tauMVAIsoWP;
+   TString tauAntiMuDisc;
+   bool matchRecGen;
 
-   FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP = false, double tauMVAIsoRawThreshold = -0.5, TString tauMVAIsoWP = "MEDIUM");
+   FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiMuDisc_ = "LOOSE", bool matchRecGen_ = false);
    string createOutputFileName();
    virtual ~FakeMuMuTauMuTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -116,7 +194,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauMuTauHadAnalyzer_cxx
-FakeMuMuTauMuTauHadAnalyzer::FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_) : HistoZmumu() 
+FakeMuMuTauMuTauHadAnalyzer::FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiMuDisc_, bool matchRecGen_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -127,6 +205,8 @@ FakeMuMuTauMuTauHadAnalyzer::FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TStr
     tauMVAIsoRawORWP = tauMVAIsoRawORWP_;
     tauMVAIsoRawThreshold = tauMVAIsoRawThreshold_;
     tauMVAIsoWP = tauMVAIsoWP_;
+    tauAntiMuDisc = tauAntiMuDisc_;
+    matchRecGen = matchRecGen_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
@@ -200,6 +280,9 @@ void FakeMuMuTauMuTauHadAnalyzer::Init()
    recoMuonEnergy = 0;
    recoMuonPDGId = 0;
    recoMuonIsolation = 0;
+   recoMuonDXY = 0;
+   recoMuonDZ = 0;
+   recoMuonNTrackerLayers = 0;
    recoTauPt = 0;
    recoTauEta = 0;
    recoTauPhi = 0;
@@ -214,6 +297,14 @@ void FakeMuMuTauMuTauHadAnalyzer::Init()
    recoTauIsoMVATight = 0;
    recoTauIsoMVAVTight = 0;
    recoTauIsoMVAVVTight = 0;
+   recoTauAntiMuMVALoose = 0;
+   recoTauAntiMuMVATight = 0;
+   recoTauAntiEleMVArawValue = 0;
+   recoTauAntiEleMVAVLoose = 0;
+   recoTauAntiEleMVALoose = 0;
+   recoTauAntiEleMVAMedium = 0;
+   recoTauAntiEleMVATight = 0;
+   recoTauAntiEleMVAVTight = 0;
    recoJetPt = 0;
    recoJetEta = 0;
    recoJetPhi = 0;
@@ -221,6 +312,32 @@ void FakeMuMuTauMuTauHadAnalyzer::Init()
    recoJetCSV = 0;
    recoMET = 0;
    recoMETPhi = 0;
+   recoMETPx = 0;
+   recoMETPy = 0;
+   genMuonPt = 0;
+   genMuonEta = 0;
+   genMuonPhi = 0;
+   genMuonMass = 0;
+   genMuonPDGId = 0;
+   genMuonMotherPDGId = 0;
+   genTauMuPt = 0;
+   genTauMuEta = 0;
+   genTauMuPhi = 0;
+   genTauMuMass = 0;
+   genTauMuPDGId = 0;
+   genTauMuMotherPDGId = 0;
+   genTauMuVisPt = 0;
+   genTauMuVisMass = 0;
+   genTauHadPt = 0;
+   genTauHadEta = 0;
+   genTauHadPhi = 0;
+   genTauHadMass = 0;
+   genTauHadPDGId = 0;
+   genTauHadMotherPDGId = 0;
+   genTauHadVisPt = 0;
+   genTauHadVisMass = 0;
+   genTauHadNPionZero = 0;
+   genTauHadNChargedHadrons = 0;
    // Set branch addresses and branch pointers
    fCurrent = -1;
    fChain->SetMakeClass(1);
@@ -231,6 +348,9 @@ void FakeMuMuTauMuTauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonEnergy", &recoMuonEnergy, &b_recoMuonEnergy);
    fChain->SetBranchAddress("recoMuonPDGId", &recoMuonPDGId, &b_recoMuonPDGId);
    fChain->SetBranchAddress("recoMuonIsolation", &recoMuonIsolation, &b_recoMuonIsolation);
+   fChain->SetBranchAddress("recoMuonDXY", &recoMuonDXY, &b_recoMuonDXY);
+   fChain->SetBranchAddress("recoMuonDZ", &recoMuonDZ, &b_recoMuonDZ);
+   fChain->SetBranchAddress("recoMuonNTrackerLayers", &recoMuonNTrackerLayers, &b_recoMuonNTrackerLayers);
    fChain->SetBranchAddress("recoTauPt", &recoTauPt, &b_recoTauPt);
    fChain->SetBranchAddress("recoTauEta", &recoTauEta, &b_recoTauEta);
    fChain->SetBranchAddress("recoTauPhi", &recoTauPhi, &b_recoTauPhi);
@@ -245,6 +365,14 @@ void FakeMuMuTauMuTauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoTauIsoMVATight", &recoTauIsoMVATight, &b_recoTauIsoMVATight);
    fChain->SetBranchAddress("recoTauIsoMVAVTight", &recoTauIsoMVAVTight, &b_recoTauIsoMVAVTight);
    fChain->SetBranchAddress("recoTauIsoMVAVVTight", &recoTauIsoMVAVVTight, &b_recoTauIsoMVAVVTight);
+   fChain->SetBranchAddress("recoTauAntiMuMVALoose", &recoTauAntiMuMVALoose, &b_recoTauAntiMuMVALoose);
+   fChain->SetBranchAddress("recoTauAntiMuMVATight", &recoTauAntiMuMVATight, &b_recoTauAntiMuMVATight);
+   fChain->SetBranchAddress("recoTauAntiEleMVArawValue", &recoTauAntiEleMVArawValue, &b_recoTauAntiEleMVArawValue);
+   fChain->SetBranchAddress("recoTauAntiEleMVAVLoose", &recoTauAntiEleMVAVLoose, &b_recoTauAntiEleMVAVLoose);
+   fChain->SetBranchAddress("recoTauAntiEleMVALoose", &recoTauAntiEleMVALoose, &b_recoTauAntiEleMVALoose);
+   fChain->SetBranchAddress("recoTauAntiEleMVAMedium", &recoTauAntiEleMVAMedium, &b_recoTauAntiEleMVAMedium);
+   fChain->SetBranchAddress("recoTauAntiEleMVATight", &recoTauAntiEleMVATight, &b_recoTauAntiEleMVATight);
+   fChain->SetBranchAddress("recoTauAntiEleMVAVTight", &recoTauAntiEleMVAVTight, &b_recoTauAntiEleMVAVTight);
    fChain->SetBranchAddress("recoJetPt", &recoJetPt, &b_recoJetPt);
    fChain->SetBranchAddress("recoJetEta", &recoJetEta, &b_recoJetEta);
    fChain->SetBranchAddress("recoJetPhi", &recoJetPhi, &b_recoJetPhi);
@@ -252,9 +380,36 @@ void FakeMuMuTauMuTauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoJetCSV", &recoJetCSV, &b_recoJetCSV);
    fChain->SetBranchAddress("recoMET", &recoMET, &b_recoMET);
    fChain->SetBranchAddress("recoMETPhi", &recoMETPhi, &b_recoMETPhi);
+   fChain->SetBranchAddress("recoMETPx", &recoMETPx, &b_recoMETPx);
+   fChain->SetBranchAddress("recoMETPy", &recoMETPy, &b_recoMETPy);
    fChain->SetBranchAddress("recoNPrimaryVertex", &recoNPrimaryVertex, &b_recoNPrimaryVertex);
+   fChain->SetBranchAddress("eventID", &eventID, &b_eventID);
    if (isMC) 
    {
+       fChain->SetBranchAddress("genMuonPt", &genMuonPt, &b_genMuonPt);
+       fChain->SetBranchAddress("genMuonEta", &genMuonEta, &b_genMuonEta);
+       fChain->SetBranchAddress("genMuonPhi", &genMuonPhi, &b_genMuonPhi);
+       fChain->SetBranchAddress("genMuonMass", &genMuonMass, &b_genMuonMass);
+       fChain->SetBranchAddress("genMuonPDGId", &genMuonPDGId, &b_genMuonPDGId);
+       fChain->SetBranchAddress("genMuonMotherPDGId", &genMuonMotherPDGId, &b_genMuonMotherPDGId);
+       fChain->SetBranchAddress("genTauMuPt", &genTauMuPt, &b_genTauMuPt);
+       fChain->SetBranchAddress("genTauMuEta", &genTauMuEta, &b_genTauMuEta);
+       fChain->SetBranchAddress("genTauMuPhi", &genTauMuPhi, &b_genTauMuPhi);
+       fChain->SetBranchAddress("genTauMuMass", &genTauMuMass, &b_genTauMuMass);
+       fChain->SetBranchAddress("genTauMuPDGId", &genTauMuPDGId, &b_genTauMuPDGId);
+       fChain->SetBranchAddress("genTauMuMotherPDGId", &genTauMuMotherPDGId, &b_genTauMuMotherPDGId);
+       fChain->SetBranchAddress("genTauMuVisPt", &genTauMuVisPt, &b_genTauMuVisPt);
+       fChain->SetBranchAddress("genTauMuVisMass", &genTauMuVisMass, &b_genTauMuVisMass);
+       fChain->SetBranchAddress("genTauHadPt", &genTauHadPt, &b_genTauHadPt);
+       fChain->SetBranchAddress("genTauHadEta", &genTauHadEta, &b_genTauHadEta);
+       fChain->SetBranchAddress("genTauHadPhi", &genTauHadPhi, &b_genTauHadPhi);
+       fChain->SetBranchAddress("genTauHadMass", &genTauHadMass, &b_genTauHadMass);
+       fChain->SetBranchAddress("genTauHadPDGId", &genTauHadPDGId, &b_genTauHadPDGId);
+       fChain->SetBranchAddress("genTauHadMotherPDGId", &genTauHadMotherPDGId, &b_genTauHadMotherPDGId);
+       fChain->SetBranchAddress("genTauHadVisPt", &genTauHadVisPt, &b_genTauHadVisPt);
+       fChain->SetBranchAddress("genTauHadVisMass", &genTauHadVisMass, &b_genTauHadVisMass);
+       fChain->SetBranchAddress("genTauHadNPionZero", &genTauHadNPionZero, &b_genTauHadNPionZero);
+       fChain->SetBranchAddress("genTauHadNChargedHadrons", &genTauHadNChargedHadrons, &b_genTauHadNChargedHadrons);
        fChain->SetBranchAddress("recoNPU", &recoNPU, &b_recoNPU);
        fChain->SetBranchAddress("trueNInteraction", &trueNInteraction, &b_trueNInteraction);
        fChain->SetBranchAddress("genEventWeight", &genEventWeight, &b_genEventWeight);
