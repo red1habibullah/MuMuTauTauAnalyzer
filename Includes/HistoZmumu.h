@@ -159,10 +159,14 @@ class HistoZmumu{
         TH2D* dRMu1Mu2VSGenMu1GenMu2;
         TH2D* dRMu3TauVSGenMu3GenTauHad;
         TH2D* dRMu3TauVSGenTauMuGenTauHad;
+        TH2D* dREleTauVSGenEleGenTauHad;
+        TH2D* dREleTauVSGenTauEleGenTauHad;
 
         TH2D* invMassMu1Mu2VSGenMu1GenMu2;
         TH2D* invMassMu3TauVSGenMu3GenTauHad;
         TH2D* invMassMu3TauVSGenTauMuGenTauHad;
+        TH2D* invMassEleTauVSGenEleGenTauHad;
+        TH2D* invMassEleTauVSGenTauEleGenTauHad;
 
         TH2D* mu1PtVSGenMu1Pt;
         TH2D* mu1EtaVSGenMu1Eta;
@@ -176,6 +180,12 @@ class HistoZmumu{
         TH2D* mu3EtaVSGenMu3Eta;
         TH2D* mu3PhiVSGenMu3Phi;
         TH2D* mu3PtVSGenTauMuPt;
+
+        TH2D* elePtVSGenElePt;
+        TH2D* eleEtaVSGenEleEta;
+        TH2D* elePhiVSGenElePhi;
+        TH2D* elePtVSGenTauElePt;
+        TH2D* elePtVSGenTauEleVisPt;
 
         TH2D* tauPtVSGenTauHadPt;
         TH2D* tauEtaVSGenTauHadEta;
