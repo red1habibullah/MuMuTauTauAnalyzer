@@ -139,6 +139,7 @@ void FakeMuMuTauMuTauHadAnalyzer::Loop()
               if ((condTauMVARaw || condTauMVAWPVVLoose || condTauMVAWPVLoose || condTauMVAWPLoose || condTauMVAWPMedium || condTauMVAWPTight || condTauMVAWPVTight || condTauMVAWPVVTight) && (condTauAntiMuMVALoose || condTauAntiMuMVATight || condTauAntiMuMVANull))
               {
                   Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+                  float smallestDR = 5.0; // dR between Mu3 and tau
                   bool findMu3 = false;
                   int indexMu3 = 0;
 
@@ -150,9 +151,10 @@ void FakeMuMuTauMuTauHadAnalyzer::Loop()
 
                       TLorentzVector Mu3Cand;
                       Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-                      if (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)))
+                      if (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)) && Tau.DeltaR(Mu3Cand) < smallestDR)
                       {
                           Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+                          smallestDR = Tau.DeltaR(Mu3);
                           findMu3 = true;
                           indexMu3 = iMuon;
                       } // end if find mu3 with opposite charge

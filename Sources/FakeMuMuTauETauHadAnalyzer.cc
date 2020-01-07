@@ -148,6 +148,7 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
               if ((condTauMVARaw || condTauMVAWPVVLoose || condTauMVAWPVLoose || condTauMVAWPLoose || condTauMVAWPMedium || condTauMVAWPTight || condTauMVAWPVTight || condTauMVAWPVVTight) && (condTauAntiEleMVALoose || condTauAntiEleMVAMedium || condTauAntiEleMVATight || condTauAntiEleMVANull))
               {
                   Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+                  float smallestDR = 5.0; // dR between electron and tau
                   bool findEle = false;
                   int indexEle = 0;
 
@@ -155,9 +156,10 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
                   {
                       TLorentzVector EleCand;
                       EleCand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
-                      if (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)))
+                      if (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) && Tau.DeltaR(EleCand) < smallestDR)
                       {
                           Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
+                          smallestDR = Tau.DeltaR(Ele);
                           findEle = true;
                           indexEle = iEle;
                       } // end if find electron with opposite charge

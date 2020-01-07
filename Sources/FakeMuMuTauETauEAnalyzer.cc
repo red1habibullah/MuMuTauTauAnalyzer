@@ -120,7 +120,7 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           } // end if findMu2 
       } // end loop for mu1
 
-      // ---- search for a muon-electron pair for fake rate study ----
+      // ---- search for a electron-electron pair for fake rate study ----
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
           if ((invertedEle1Iso == false && recoElectronIsolation->at(iEle) > Ele1IsoThreshold) || (invertedEle1Iso == true && recoElectronIsolation->at(iEle) < Ele1IsoThreshold)) continue;
