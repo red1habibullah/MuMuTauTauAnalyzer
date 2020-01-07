@@ -129,7 +129,6 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
 
               indexMu1s.push_back(iMuon);
               indexMu2s.push_back(indexMu2);
-              break;
           } // end if findMu2 
       } // end loop for mu1
 
@@ -172,9 +171,25 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
                       std::vector<int>::iterator iter4 = std::find(indexTau2s.begin(), indexTau2s.end(), iTau2);
                       if (iter4 != indexTau2s.end()) continue;
 
+                      bool condTau2MVARaw = tauMVAIsoRawORWP == true && recoTauIsoMVArawValue->at(iTau2) > tauMVAIsoRawThreshold;
+                      bool condTau2MVAWPVVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVLOOSE" && recoTauIsoMVAVVLoose->at(iTau2)>0;
+                      bool condTau2MVAWPVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VLOOSE" && recoTauIsoMVAVLoose->at(iTau2)>0;
+                      bool condTau2MVAWPLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "LOOSE" && recoTauIsoMVALoose->at(iTau2)>0;
+                      bool condTau2MVAWPMedium = tauMVAIsoRawORWP == false && tauMVAIsoWP == "MEDIUM" && recoTauIsoMVAMedium->at(iTau2)>0;
+                      bool condTau2MVAWPTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "TIGHT" && recoTauIsoMVATight->at(iTau2)>0;
+                      bool condTau2MVAWPVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VTIGHT" && recoTauIsoMVAVTight->at(iTau2)>0;
+                      bool condTau2MVAWPVVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVTIGHT" && recoTauIsoMVAVVTight->at(iTau2)>0;
+                      bool condTau2AntiMuMVALoose = tauAntiMuDisc == "LOOSE" && recoTauAntiMuMVALoose->at(iTau2)>0;
+                      bool condTau2AntiMuMVATight = tauAntiMuDisc == "TIGHT" && recoTauAntiMuMVATight->at(iTau2)>0;
+                      bool condTau2AntiMuMVANull = tauAntiMuDisc != "LOOSE" && tauAntiMuDisc != "TIGHT";
+                      bool condTau2AntiEleMVALoose = tauAntiEleDisc == "LOOSE" && recoTauAntiEleMVALoose->at(iTau2)>0;
+                      bool condTau2AntiEleMVAMedium = tauAntiEleDisc == "MEDIUM" && recoTauAntiEleMVAMedium->at(iTau2)>0;
+                      bool condTau2AntiEleMVATight = tauAntiEleDisc == "TIGHT" && recoTauAntiEleMVATight->at(iTau2)>0;
+                      bool condTau2AntiEleMVANull = tauAntiEleDisc != "LOOSE" && tauAntiEleDisc != "MEDIUM" && tauAntiEleDisc != "TIGHT";
+
                       TLorentzVector Tau2Cand;
                       Tau2Cand.SetPtEtaPhiE(recoTauPt->at(iTau2), recoTauEta->at(iTau2), recoTauPhi->at(iTau2), recoTauEnergy->at(iTau2));
-                      if (recoTauPDGId->at(iTau) == (-1) * recoTauPDGId->at(iTau2) && Tau1.DeltaR(Tau2Cand) < smallestDR)
+                      if (recoTauPDGId->at(iTau) == (-1) * recoTauPDGId->at(iTau2) && Tau1.DeltaR(Tau2Cand) < smallestDR && (condTau2MVARaw || condTau2MVAWPVVLoose || condTau2MVAWPVLoose || condTau2MVAWPLoose || condTau2MVAWPMedium || condTau2MVAWPTight || condTau2MVAWPVTight || condTau2MVAWPVVTight) && (condTau2AntiMuMVALoose || condTau2AntiMuMVATight || condTau2AntiMuMVANull) && (condTau2AntiEleMVALoose || condTau2AntiEleMVAMedium || condTau2AntiEleMVATight || condTau2AntiEleMVANull))
                       {
                           Tau2.SetPtEtaPhiE(recoTauPt->at(iTau2), recoTauEta->at(iTau2), recoTauPhi->at(iTau2), recoTauEnergy->at(iTau2));
                           smallestDR = Tau1.DeltaR(Tau2);
