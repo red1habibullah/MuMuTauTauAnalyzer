@@ -89,12 +89,6 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
       // ---- start loop on muon candidates ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (indexMu2s.size() > 0) 
-          {
-              std::vector<int>::iterator iter = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
-              if (iter != indexMu2s.end()) continue;
-          } // end if there is any matched Mu2 candidiate
-
           if (recoMuonIsolation->at(iMuon) > 0.25) continue;
           Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
           float highestPt = 0;
@@ -105,9 +99,6 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
 
           for (unsigned int iMuon2=iMuon+1; iMuon2<recoMuonPt->size(); iMuon2++)
           {
-              std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon2);
-              if (iter2 != indexMu2s.end()) continue;
-
               if (recoMuonIsolation->at(iMuon2) > 0.25) continue;
               TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
               Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
@@ -137,12 +128,6 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
       {
           for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
           {
-              if (indexTau2s.size() > 0)
-              {
-                  std::vector<int>::iterator iter3 = std::find(indexTau2s.begin(), indexTau2s.end(), iTau);
-                  if (iter3 != indexTau2s.end()) continue;
-              } // end if indexTau2s.size() > 0
-
               bool condTauMVARaw = tauMVAIsoRawORWP == true && recoTauIsoMVArawValue->at(iTau) > tauMVAIsoRawThreshold;
               bool condTauMVAWPVVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVLOOSE" && recoTauIsoMVAVVLoose->at(iTau)>0;
               bool condTauMVAWPVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VLOOSE" && recoTauIsoMVAVLoose->at(iTau)>0;
@@ -168,9 +153,6 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
 
                   for (unsigned int iTau2=iTau+1; iTau2<recoTauPt->size(); iTau2++)
                   {
-                      std::vector<int>::iterator iter4 = std::find(indexTau2s.begin(), indexTau2s.end(), iTau2);
-                      if (iter4 != indexTau2s.end()) continue;
-
                       bool condTau2MVARaw = tauMVAIsoRawORWP == true && recoTauIsoMVArawValue->at(iTau2) > tauMVAIsoRawThreshold;
                       bool condTau2MVAWPVVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVLOOSE" && recoTauIsoMVAVVLoose->at(iTau2)>0;
                       bool condTau2MVAWPVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VLOOSE" && recoTauIsoMVAVLoose->at(iTau2)>0;
