@@ -79,7 +79,7 @@ void ZTauMuTauHadAnalyzer::Loop()
       // ---- start loop on muon candidates ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (((invertedMu1Iso == true && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold) || (invertedMu1Iso == false && recoMuonIsolation->at(iMuon) > Mu1IsoThreshold)) && (recoMuonPt->at(iMuon) > 26.0))
+          if ((invertedMu1Iso == true && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold) || (invertedMu1Iso == false && recoMuonIsolation->at(iMuon) > Mu1IsoThreshold) || (recoMuonPt->at(iMuon) < 26.0))
           {
               continue;
           } // end if MuIso requirement
