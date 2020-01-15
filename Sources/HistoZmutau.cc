@@ -90,9 +90,15 @@ HistoZmutau::HistoZmutau(){
     nUnMatchedMu = newTH1D("nUnMatchedMu", "N_{#mu}(unMatch)", 5, 0, 5);
     nUnMatchedTau = newTH1D("nUnMatchedTau", "N_{#tau}(unMatch)", 5, 0, 5);
 
+    dRMuMu = newTH1D("dRMuMu", "#Delta R(#mu_{1}#mu_{2})", 25, 0, 5.0);
     dRMuTau = newTH1D("dRMuTau", "#Delta R(#mu#tau)", 25, 0, 5.0);
-    invMassMuTau = newTH1D("invMassMuTau", "M(#mu#tau)[GeV]", 50, 0, 150);
+
+    invMassMuMu = newTH1D("invMassMuMu", "M(#mu_{1}#mu_{2})[GeV]", 20, 60, 120);
+    invMassMuTau = newTH1D("invMassMuTau", "M(#mu#tau)[GeV]", 25, 0, 150);
+
+    ptMuMu = newTH1D("ptMuMu", "p_{T}(#mu_{1}#mu_{2})[GeV]", NBinsMuTauPt, MuTauPtBin);
     ptMuTau = newTH1D("ptMuTau", "p_{T}(#mu#tau)[GeV]", NBinsMuTauPt, MuTauPtBin);
+
     mtMuMet = newTH1D("mtMuMet", "M_{T}(#mu#slash{E_{T}})[GeV]", 20, 20, 180);
     pzeta = newTH1D("pzeta", "D_{#zeta}[GeV]", 40, -125, 75);
 
@@ -111,6 +117,10 @@ HistoZmutau::HistoZmutau(){
     muEta = newTH1D("muEta", "#eta(#mu)", 20, -2.1, 2.1);
     muPhi = newTH1D("muPhi", "#phi(#mu)", 20, -2.5, 2.5);
 
+    mu2Pt = newTH1D("mu2Pt", "p_{T}(#mu_{2}) [GeV]", NBinsMuPt, MuPtBin);
+    mu2Eta = newTH1D("mu2Eta", "#eta(#mu_{2})", 20, -2.1, 2.1);
+    mu2Phi = newTH1D("mu2Phi", "#phi(#mu_{2})", 20, -2.5, 2.5);
+
     tauPt = newTH1D("tauPt", "p_{T}(#tau) [GeV]", NBinsTauPt, tauPtBin);
     tauEta = newTH1D("tauEta", "#eta(#tau)", 20, -2.1, 2.1);
     tauPhi = newTH1D("tauPhi", "#phi(#tau)", 20, -2.5, 2.5);
@@ -121,7 +131,34 @@ HistoZmutau::HistoZmutau(){
     metPt = newTH1D("metPt", "#slash{E_{T}} [GeV]", NBinsMetPt, metPtBin);
     metPhi = newTH1D("metPhi", "#phi(#slash{E_{T}})", 20, -2.5, 2.5);
 
+    dRInvMassMuMu = newTH2D("dRInvMassMuMu", "#Delta R(#mu_{1}#mu_{2})", "M(#mu_{1}#mu_{2})[GeV]", 25, 0, 5, 20, 60, 120);
     dRInvMassMuTau = newTH2D("dRInvMassMuTau", "#Delta R(#mu#tau)", "M(#mu#tau)[GeV]", 25, 0, 5, 50, 0, 150);
+
+    // -------------- reco-gen response histograms ------------------
+    dRMuMuVSGenMuGenMu = newTH2D("dRMuMuVSGenMuGenMu", "#DeltaR(#mu_{1}^{rec}#mu_{2}^{rec})", "#DeltaR(#mu_{1}^{gen}#mu_{2}^{gen})", 25, 0, 5, 25, 0, 5);
+    dRMuTauVSGenMuGenTauHad = newTH2D("dRMuTauVSGenMuGenTauHad", "#DeltaR(#mu^{rec}#tau_{h}^{rec})", "#DeltaR(#mu^{gen}#tau_{h}^{gen})", 25, 0, 5, 25, 0, 5);
+    dRMuTauVSGenTauMuGenTauHad = newTH2D("dRMuTauVSGenTauMuGenTauHad", "#DeltaR(#mu^{rec}#tau_{h}^{rec})", "#DeltaR(#tau_{#mu}^{gen}#tau_{h}^{gen})", 25, 0, 5, 25, 0, 5);
+
+    invMassMuMuVSGenMuGenMu = newTH2D("invMassMuMuVSGenMuGenMu", "M(#mu_{1}^{rec}#mu_{2}^{rec})[GeV]", "M(#mu_{1}^{gen}#mu_{2}^{gen})[GeV]", 20, 60, 120, 20, 60, 120);
+    invMassMuTauVSGenMuGenTauHad = newTH2D("invMassMuTauVSGenMuGenTauHad", "M(#mu_^{rec}#tau_{h}^{rec})[GeV]", "M(#mu^{gen}#tau_{h}^{gen})[GeV]", 25, 0, 150, 25, 0, 150);
+    invMassMuTauVSGenTauMuGenTauHad = newTH2D("invMassMuTauVSGenTauMuGenTauHad", "M(#mu_^{rec}#tau_{h}^{rec})[GeV]", "M(#tau_{#mu}^{gen}#tau_{h}^{gen})[GeV]", 25, 0, 150, 25, 0, 150);
+
+    muPtVSGenMuPt = newTH2D("muPtVSGenMuPt", "p_{T}^{rec}(#mu)[GeV]", "p_{T}^{gen}(#mu)[GeV]", NBinsMuPt, MuPtBin, NBinsMuPt, MuPtBin);
+    muEtaVSGenMuEta = newTH2D("muEtaVSGenMuEta", "#eta^{rec}(#mu)", "#eta^{gen}(#mu)", 20, -2.1, 2.1, 20, -2.1, 2.1);
+    muPhiVSGenMuPhi = newTH2D("muPhiVSGenMuPhi", "#phi^{rec}(#mu)", "#phi^{gen}(#mu)", 20, -2.1, 2.1, 20, -2.1, 2.1);
+    muPtVSGenTauMuPt = newTH2D("muPtVSGenTauMuPt", "p_{T}^{rec}(#mu)[GeV]", "p_{T}^{gen}(#tau_{#mu})[GeV]", NBinsMuPt, MuPtBin, NBinsMuPt, MuPtBin);
+
+    mu2PtVSGenMu2Pt = newTH2D("mu2PtVSGenMu2Pt", "p_{T}^{rec}(#mu_{2})[GeV]", "p_{T}^{gen}(#mu_{2})[GeV]", NBinsMuPt, MuPtBin, NBinsMuPt, MuPtBin);
+    mu2EtaVSGenMu2Eta = newTH2D("mu2EtaVSGenMu2Eta", "#eta^{rec}(#mu_{2})", "#eta^{gen}(#mu_{2})", 20, -2.1, 2.1, 20, -2.1, 2.1);
+    mu2PhiVSGenMu2Phi = newTH2D("mu2PhiVSGenMu2Phi", "#phi^{rec}(#mu_{2})", "#phi^{gen}(#mu_{2})", 20, -2.1, 2.1, 20, -2.1, 2.1);
+
+    tauPtVSGenTauHadPt = newTH2D("tauPtVSGenTauHadPt", "p_{T}^{rec}(#tau)[GeV]", "p_{T}^{gen}(#tau_{h})[GeV]", NBinsTauPt, tauPtBin, NBinsTauPt, tauPtBin);
+    tauEtaVSGenTauHadEta = newTH2D("tauEtaVSGenTauHadEta", "#eta^{rec}(#tau)", "#eta^{gen}(#tau_{h})", 20, -2.1, 2.1, 20, -2.1, 2.1);
+    tauPhiVSGenTauHadPhi = newTH2D("tauPhiVSGenTauHadPhi", "#phi^{rec}(#tau)", "#phi^{gen}(#tau_{h})", 20, -2.1, 2.1, 20, -2.1, 2.1);
+    tauPtVSGenTauHadVisPt = newTH2D("tauPtVSGenTauHadVisPt", "p_{T}^{rec}(#tau)[GeV]", "p_{T}^{gen}(#tau_{h}^{vis})[GeV]", NBinsTauPt, tauPtBin, NBinsTauPt, tauPtBin);
+
+    tauPtVSTauPtResponse = newTH2D("tauPtVSTauPtResponse", "p_{T}^{rec}(#tau)[GeV]", "p_{T}^{rec}(#tau)/p_{T}^{gen}(#tau_{h}^{vis})", NBinsTauPt, tauPtBin, 20, 0, 2);
+    tauPtResponse = newTH1D("tauPtResponse", "p_{T}^{rec}(#tau)/p_{T}^{gen}(#tau_{h}^{vis})", 20, 0, 2);
 }
 
 HistoZmutau::~HistoZmutau()
