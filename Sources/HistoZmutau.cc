@@ -124,7 +124,7 @@ HistoZmutau::HistoZmutau(){
     tauPt = newTH1D("tauPt", "p_{T}(#tau) [GeV]", NBinsTauPt, tauPtBin);
     tauEta = newTH1D("tauEta", "#eta(#tau)", 20, -2.1, 2.1);
     tauPhi = newTH1D("tauPhi", "#phi(#tau)", 20, -2.5, 2.5);
-    tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 10, 0, 10);
+    tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 10, 0, 3);
     tauDecayMode = newTH1D("tauDecayMode", "DecayMode(#tau)", 11, 0, 11);
     tauIsoMVA = newTH1D("tauIsoMVA", "#tau^{iso}", 20, -1, 1);
 
