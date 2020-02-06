@@ -73,8 +73,10 @@ public :
    bool invertedMu4Iso;
    double Mu2IsoThreshold;
    double Mu4IsoThreshold;
+   double diMuonMassLowThreshold;
+   double diMuonMassHighThreshold;
 
-   MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu4Iso_ = false, double Mu2IsoThreshold_ = 0.25, double Mu4IsoThreshold_ = 0.25);
+   MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu4Iso_ = false, double Mu2IsoThreshold_ = 0.25, double Mu4IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
    string createOutputFileName();
    virtual ~MuMuTauMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -89,7 +91,7 @@ public :
 #endif
 
 #ifdef MuMuTauMuTauMuAnalyzer_cxx
-MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu4Iso_, double Mu2IsoThreshold_, double Mu4IsoThreshold_) : Histomutau() 
+MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu4Iso_, double Mu2IsoThreshold_, double Mu4IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -101,6 +103,9 @@ MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString output
     invertedMu4Iso = invertedMu4Iso_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
     Mu4IsoThreshold = Mu4IsoThreshold_;
+    diMuonMassLowThreshold = diMuonMassLowThreshold_;
+    diMuonMassHighThreshold = diMuonMassHighThreshold_;
+    invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {

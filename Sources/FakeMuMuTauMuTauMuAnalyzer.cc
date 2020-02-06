@@ -126,6 +126,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
 
           if ((invertedMu4Iso == false && recoMuonIsolation->at(iMuon4) > Mu4IsoThreshold) || (invertedMu4Iso == true && recoMuonIsolation->at(iMuon4) < Mu4IsoThreshold)) continue;
           Mu4.SetPtEtaPhiE(recoMuonPt->at(iMuon4), recoMuonEta->at(iMuon4), recoMuonPhi->at(iMuon4), recoMuonEnergy->at(iMuon4));
+          float smallestDR = 5.0; // dR between mu3 and mu4
           bool findMu3 = false;
           int indexMu3 = 0;
 
@@ -137,9 +138,10 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
 
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, Mu4) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
-              if (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon4))
+              if (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon4) && Mu4.DeltaR(Mu3Cand) < smallestDR)
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
+                  smallestDR = Mu4.DeltaR(Mu3);
                   findMu3 = true;
                   indexMu3 = iMuon3;
               } // end if find mu3 with mu4 matched

@@ -21,6 +21,8 @@ int main(int argc, char **argv)
     bool invertedTauIso    = cfg.getB("invertedTauIso", false);
     double Mu2IsoThreshold = cfg.getD("Mu2IsoThreshold", 0.25);
     TString tauAntiMuDisc  = cfg.getS("tauAntiMuDisc", "NULL");
+    double diMuonMassLowThreshold  = cfg.getD("diMuonMassLowThreshold", 0);
+    double diMuonMassHighThreshold = cfg.getD("diMuonMassHighThreshold", 25.0);
 
     //--- Parse the arguments -----------------------------------------------------
     if (argc > 1)
@@ -74,6 +76,16 @@ int main(int argc, char **argv)
             {
                 getArg(currentArg, tauAntiMuDisc);
             }
+
+            else if (currentArg.BeginsWith("diMuonMassLowThreshold="))
+            {
+                getArg(currentArg, diMuonMassLowThreshold);
+            }
+
+            else if (currentArg.BeginsWith("diMuonMassHighThreshold="))
+            {
+                getArg(currentArg, diMuonMassHighThreshold);
+            }
         } // end for loop in argc
     } // end if argc > 1
     
@@ -85,7 +97,7 @@ int main(int argc, char **argv)
     {
         if (inputFile.EndsWith(".root"))
         {
-            MuMuTauHadTauHadAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+            MuMuTauHadTauHadAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
             DataHist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -95,7 +107,7 @@ int main(int argc, char **argv)
             string fileName;
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+                MuMuTauHadTauHadAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 DataHist.Loop();
             } // end while loop on file list 
         } // end else inputFile.EndsWith(".root")
@@ -111,7 +123,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuMuTauHadTauHadAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+            MuMuTauHadTauHadAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -129,7 +141,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+                MuMuTauHadTauHadAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -145,7 +157,7 @@ int main(int argc, char **argv)
         {
             lumiana WJetsLumi(inputFile);
             summedWeights = WJetsLumi.Loop();
-            MuMuTauHadTauHadAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+            MuMuTauHadTauHadAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
             WJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -163,7 +175,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+                MuMuTauHadTauHadAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 WJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -179,7 +191,7 @@ int main(int argc, char **argv)
         {
             lumiana H125AA5Lumi(inputFile);
             summedWeights = H125AA5Lumi.Loop();
-            MuMuTauHadTauHadAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+            MuMuTauHadTauHadAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
             H125AA5Hist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -197,7 +209,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc);
+                MuMuTauHadTauHadAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu2IsoThreshold, tauAntiMuDisc, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 H125AA5Hist.Loop();
             } // end while loop on input file list
         } // end else 

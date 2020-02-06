@@ -21,6 +21,8 @@ int main(int argc, char **argv)
     bool invertedMu4Iso    = cfg.getB("invertedMu4Iso", false);
     double Mu2IsoThreshold = cfg.getD("Mu2IsoThreshold", 0.25);
     double Mu4IsoThreshold = cfg.getD("Mu4IsoThreshold", 0.25);
+    double diMuonMassLowThreshold  = cfg.getD("diMuonMassLowThreshold", 0);
+    double diMuonMassHighThreshold = cfg.getD("diMuonMassHighThreshold", 25.0);
 
     //--- Parse the arguments -----------------------------------------------------
     if (argc > 1)
@@ -69,9 +71,20 @@ int main(int argc, char **argv)
             {
                 getArg(currentArg, Mu2IsoThreshold);
             }
+
             else if (currentArg.BeginsWith("Mu4IsoThreshold="))
             {
                 getArg(currentArg, Mu4IsoThreshold);
+            }
+
+            else if (currentArg.BeginsWith("diMuonMassLowThreshold="))
+            {
+                getArg(currentArg, diMuonMassLowThreshold);
+            }
+
+            else if (currentArg.BeginsWith("diMuonMassHighThreshold="))
+            {
+                getArg(currentArg, diMuonMassHighThreshold);
             }
         } // end for loop in argc
     } // end if argc > 1
@@ -83,7 +96,7 @@ int main(int argc, char **argv)
     {
         if (inputFile.EndsWith(".root"))
         {
-            MuMuTauMuTauMuAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+            MuMuTauMuTauMuAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
             DataHist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -93,7 +106,7 @@ int main(int argc, char **argv)
             string fileName;
             while (getline(finTree, fileName))
             {
-                MuMuTauMuTauMuAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+                MuMuTauMuTauMuAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 DataHist.Loop();
             } // end while loop on file list 
         } // end else inputFile.EndsWith(".root")
@@ -109,7 +122,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuMuTauMuTauMuAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+            MuMuTauMuTauMuAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -127,7 +140,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauMuTauMuAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+                MuMuTauMuTauMuAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -143,7 +156,7 @@ int main(int argc, char **argv)
         {
             lumiana WJetsLumi(inputFile);
             summedWeights = WJetsLumi.Loop();
-            MuMuTauMuTauMuAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+            MuMuTauMuTauMuAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
             WJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -161,7 +174,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauMuTauMuAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+                MuMuTauMuTauMuAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 WJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -177,7 +190,7 @@ int main(int argc, char **argv)
         {
             lumiana H125AA5Lumi(inputFile);
             summedWeights = H125AA5Lumi.Loop();
-            MuMuTauMuTauMuAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+            MuMuTauMuTauMuAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
             H125AA5Hist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -195,7 +208,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauMuTauMuAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold);
+                MuMuTauMuTauMuAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedMu4Iso, Mu2IsoThreshold, Mu4IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 H125AA5Hist.Loop();
             } // end while loop on input file list
         } // end else 

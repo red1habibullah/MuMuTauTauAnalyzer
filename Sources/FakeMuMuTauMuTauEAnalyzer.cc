@@ -127,6 +127,7 @@ void FakeMuMuTauMuTauEAnalyzer::Loop()
       {
           if ((invertedEle1Iso == false && recoElectronIsolation->at(iEle) > Ele1IsoThreshold) || (invertedEle1Iso == true && recoElectronIsolation->at(iEle) < Ele1IsoThreshold)) continue;
           Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
+          float smallestDR = 5.0; // dR between electron and muon
           bool findMu3 = false;
           int indexMu3 = 0;
 
@@ -138,9 +139,10 @@ void FakeMuMuTauMuTauEAnalyzer::Loop()
 
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, Electron) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-              if (recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)))
+              if (recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)) && Ele.DeltaR(Mu3Cand) < smallestDR)
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+                  smallestDR = Ele.DeltaR(Mu3);
                   findMu3 = true;
                   indexMu3 = iMuon;
               } // end if find mu3 with electron matched

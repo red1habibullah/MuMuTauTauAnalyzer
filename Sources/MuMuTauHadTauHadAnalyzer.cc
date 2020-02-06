@@ -118,7 +118,7 @@ void MuMuTauHadTauHadAnalyzer::Loop()
               if ((invertedMu2Iso == false && recoMuonIsolation->at(iMuon2) > Mu2IsoThreshold) || (invertedMu2Iso == true && recoMuonIsolation->at(iMuon2) < Mu2IsoThreshold)) continue;
               TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
               Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
-              if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
+              if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)) && ((Mu1+Mu2Cand).M() > diMuonMassLowThreshold) && ((Mu1+Mu2Cand).M() < diMuonMassHighThreshold))
               {
                   Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
                   smallestDR = Mu1.DeltaR(Mu2);
@@ -154,7 +154,7 @@ void MuMuTauHadTauHadAnalyzer::Loop()
           {
               TLorentzVector Tau2Cand; // prepare this variable for dR(tau1, tau2) implementation
               Tau2Cand.SetPtEtaPhiE(recoTauPt->at(iTau2), recoTauEta->at(iTau2), recoTauPhi->at(iTau2), recoTauEnergy->at(iTau2));
-              if ((Tau1.DeltaR(Tau2Cand) < smallestDR) && (recoTauPDGId->at(iTau) == (-1) * recoTauPDGId->at(iTau2)))
+              if ((Tau1.DeltaR(Tau2Cand) < smallestDR) && (recoTauPDGId->at(iTau) == (-1) * recoTauPDGId->at(iTau2)) && ((Tau1+Tau2Cand).M() < 60.0))
               {
                   Tau2.SetPtEtaPhiE(recoTauPt->at(iTau2), recoTauEta->at(iTau2), recoTauPhi->at(iTau2), recoTauEnergy->at(iTau2));
                   smallestDR = Tau1.DeltaR(Tau2);

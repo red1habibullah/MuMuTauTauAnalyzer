@@ -100,8 +100,10 @@ public :
    bool invertedMu2Iso;
    bool invertedTauIso;
    double Mu2IsoThreshold;
+   double diMuonMassLowThreshold;
+   double diMuonMassHighThreshold;
 
-   MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25);
+   MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
    string createOutputFileName();
    virtual ~MuMuTauMuTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -116,7 +118,7 @@ public :
 #endif
 
 #ifdef MuMuTauMuTauHadAnalyzer_cxx
-MuMuTauMuTauHadAnalyzer::MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_) : Histomutau() 
+MuMuTauMuTauHadAnalyzer::MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -127,6 +129,9 @@ MuMuTauMuTauHadAnalyzer::MuMuTauMuTauHadAnalyzer(TString fileName_, TString outp
     invertedMu2Iso = invertedMu2Iso_;
     invertedTauIso = invertedTauIso_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
+    diMuonMassLowThreshold = diMuonMassLowThreshold_;
+    diMuonMassHighThreshold = diMuonMassHighThreshold_;
+    invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {

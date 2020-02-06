@@ -125,6 +125,7 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       {
           if ((invertedEle1Iso == false && recoElectronIsolation->at(iEle) > Ele1IsoThreshold) || (invertedEle1Iso == true && recoElectronIsolation->at(iEle) < Ele1IsoThreshold)) continue;
           Ele1.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
+          float smallestDR = 5.0; // dR between ele1 and ele2
           bool findEle2 = false;
           int indexEle2 = 0;
 
@@ -132,9 +133,10 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           {
               TLorentzVector Ele2Cand; // prepare this variable for dR(Ele1, Ele2) implementation
               Ele2Cand.SetPtEtaPhiE(recoElectronPt->at(iEle2), recoElectronEta->at(iEle2), recoElectronPhi->at(iEle2), recoElectronEcalTrkEnergyPostCorr->at(iEle2));
-              if (recoElectronPDGId->at(iEle) == (-1) * recoElectronPDGId->at(iEle2))
+              if (recoElectronPDGId->at(iEle) == (-1) * recoElectronPDGId->at(iEle2) && Ele1.DeltaR(Ele2Cand) < smallestDR)
               {
                   Ele2.SetPtEtaPhiE(recoElectronPt->at(iEle2), recoElectronEta->at(iEle2), recoElectronPhi->at(iEle2), recoElectronEcalTrkEnergyPostCorr->at(iEle2));
+                  smallestDR = Ele1.DeltaR(Ele2);
                   findEle2 = true;
                   indexEle2 = iEle2;
               } // end if find ele2 with electron matched
