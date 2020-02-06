@@ -132,7 +132,7 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
           if ((invertedMu4Iso == false && recoMuonIsolation->at(iMuon4) > Mu4IsoThreshold) || (invertedMu4Iso == true && recoMuonIsolation->at(iMuon4) < Mu4IsoThreshold)) continue;
           Mu4.SetPtEtaPhiE(recoMuonPt->at(iMuon4), recoMuonEta->at(iMuon4), recoMuonPhi->at(iMuon4), recoMuonEnergy->at(iMuon4));
-          float smallestDR = 0.8; // dR cut between Mu3 and Mu4
+          float smallestDR = 1.0; // dR cut between Mu3 and Mu4
           bool findMu3 = false;
           int indexMu3 = 0;
 
@@ -198,7 +198,7 @@ void MuMuTauMuTauMuAnalyzer::Loop()
                   TLorentzVector Mu3Mu4 = Mu3 + Mu4;
                   TLorentzVector MuMuMuMu = Mu1Mu2 + Mu3Mu4;
 
-                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Mu4) > 0.8 && Mu2.DeltaR(Mu4) > 0.8)
+                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Mu4) > 0.4 && Mu2.DeltaR(Mu4) > 0.4)
                   {
                       passDR = true;
 

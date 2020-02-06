@@ -134,7 +134,7 @@ void MuMuTauETauEAnalyzer::Loop()
       {
           if ((invertedEle1Iso == false && recoElectronIsolation->at(iEle) > Ele1IsoThreshold) || (invertedEle1Iso == true && recoElectronIsolation->at(iEle) < Ele1IsoThreshold)) continue;
           Ele1.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
-          float smallestDR = 0.8; // dR cut between Ele1 and Ele2
+          float smallestDR = 1.0; // dR cut between Ele1 and Ele2
           bool findEle2 = false;
           int indexEle2 = 0;
 

@@ -137,7 +137,7 @@ void MuMuTauMuTauEAnalyzer::Loop()
       {
           if ((invertedEle1Iso == false && recoElectronIsolation->at(iEle) > Ele1IsoThreshold) || (invertedEle1Iso == true && recoElectronIsolation->at(iEle) < Ele1IsoThreshold)) continue;
           Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
-          float smallestDR = 0.8; // dR cut between Mu3 and electron
+          float smallestDR = 1.0; // dR cut between Mu3 and electron
           bool findMu3 = false;
           int indexMu3 = 0;
 
@@ -221,7 +221,7 @@ void MuMuTauMuTauEAnalyzer::Loop()
                   TLorentzVector MuEle = Mu3 + Ele;
                   TLorentzVector MuMuMuEle = Mu1Mu2 + MuEle;
 
-                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Ele) > 0.8 && Mu2.DeltaR(Ele) > 0.8)
+                  if (Mu1.DeltaR(Mu3) > 0.4 && Mu2.DeltaR(Mu3) > 0.4 && Mu1.DeltaR(Ele) > 0.4 && Mu2.DeltaR(Ele) > 0.4)
                   {
                       passDR = true;
 
