@@ -57,7 +57,7 @@ void MuMuTauMuTauEAnalyzer::Loop()
               indexMu1 = iMuon;
               findMu1 = true;
               break;
-          } // end if there is any matched Mu2 candidiate
+          } // end if there is any matched Mu1 candidiate
       } // end loop for mu1
 
       if (!findMu1) continue;
