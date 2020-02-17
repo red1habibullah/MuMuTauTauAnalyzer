@@ -43,8 +43,8 @@ void MuMuTauMuTauHadAnalyzer::Loop()
       float TauIso;
       float TauDM;
 
-      int indexMu1 = -1;
-      int indexMu2 = -1;
+      unsigned int indexMu1 = -1;
+      unsigned int indexMu2 = -1;
       // ============================================================================
 
       // ---- start loop on muon candidates for mu1 ----

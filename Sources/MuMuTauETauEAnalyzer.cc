@@ -42,7 +42,7 @@ void MuMuTauETauEAnalyzer::Loop()
       float Ele1Iso;
       float Ele2Iso;
 
-      int indexMu1 = -1;
+      unsigned int indexMu1 = -1;
       // ============================================================================
 
       // ---- start loop on muon candidates for mu1 ----

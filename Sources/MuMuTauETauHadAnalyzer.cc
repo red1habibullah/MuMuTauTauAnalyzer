@@ -43,7 +43,7 @@ void MuMuTauETauHadAnalyzer::Loop()
       float TauIso;
       float TauDM;
 
-      int indexMu1;
+      unsigned int indexMu1;
 
       // ============================================================================
 
