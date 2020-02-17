@@ -32,6 +32,10 @@ public :
    vector<float>   *recoMuonEnergy;
    vector<int>     *recoMuonPDGId;
    vector<float>   *recoMuonIsolation;
+   vector<float>   *recoMuonDXY;
+   vector<float>   *recoMuonDZ;
+   vector<int>     *recoMuonNTrackerLayers;
+   vector<int>     *recoMuonTriggerFlag;
    vector<float>   *recoElectronPt;
    vector<float>   *recoElectronEta;
    vector<float>   *recoElectronPhi;
@@ -54,6 +58,14 @@ public :
    vector<float>   *recoTauIsoMVATight;
    vector<float>   *recoTauIsoMVAVTight;
    vector<float>   *recoTauIsoMVAVVTight;
+   vector<float>   *recoTauAntiMuMVALoose;
+   vector<float>   *recoTauAntiMuMVATight;
+   vector<float>   *recoTauAntiEleMVArawValue;
+   vector<float>   *recoTauAntiEleMVAVLoose;
+   vector<float>   *recoTauAntiEleMVALoose;
+   vector<float>   *recoTauAntiEleMVAMedium;
+   vector<float>   *recoTauAntiEleMVATight;
+   vector<float>   *recoTauAntiEleMVAVTight;
    vector<float>   *recoJetPt;
    vector<float>   *recoJetEta;
    vector<float>   *recoJetPhi;
@@ -61,7 +73,10 @@ public :
    vector<float>   *recoJetCSV;
    vector<float>   *recoMET;
    vector<float>   *recoMETPhi;
+   vector<float>   *recoMETPx;
+   vector<float>   *recoMETPy;
    Int_t           recoNPrimaryVertex;
+   Int_t           eventID;
    Int_t           recoNPU;
    Int_t           trueNInteraction;
    Float_t         genEventWeight;
@@ -73,6 +88,10 @@ public :
    TBranch        *b_recoMuonEnergy;   //!
    TBranch        *b_recoMuonPDGId;   //!
    TBranch        *b_recoMuonIsolation;   //!
+   TBranch        *b_recoMuonDXY;   //!
+   TBranch        *b_recoMuonDZ;   //!
+   TBranch        *b_recoMuonNTrackerLayers;   //!
+   TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoElectronPt;   //!
    TBranch        *b_recoElectronEta;   //!
    TBranch        *b_recoElectronPhi;   //!
@@ -95,6 +114,14 @@ public :
    TBranch        *b_recoTauIsoMVATight;   //!
    TBranch        *b_recoTauIsoMVAVTight;   //!
    TBranch        *b_recoTauIsoMVAVVTight;   //!
+   TBranch        *b_recoTauAntiMuMVALoose;   //!
+   TBranch        *b_recoTauAntiMuMVATight;   //!
+   TBranch        *b_recoTauAntiEleMVArawValue;   //!
+   TBranch        *b_recoTauAntiEleMVAVLoose;   //!
+   TBranch        *b_recoTauAntiEleMVALoose;   //!
+   TBranch        *b_recoTauAntiEleMVAMedium;   //!
+   TBranch        *b_recoTauAntiEleMVATight;   //!
+   TBranch        *b_recoTauAntiEleMVAVTight;   //!
    TBranch        *b_recoJetPt;   //!
    TBranch        *b_recoJetEta;   //!
    TBranch        *b_recoJetPhi;   //!
@@ -102,7 +129,10 @@ public :
    TBranch        *b_recoJetCSV;   //!
    TBranch        *b_recoMET;   //!
    TBranch        *b_recoMETPhi;   //!
+   TBranch        *b_recoMETPx;   //!
+   TBranch        *b_recoMETPy;   //!
    TBranch        *b_recoNPrimaryVertex;   //!
+   TBranch        *b_eventID;   //!
    TBranch        *b_recoNPU;   //!
    TBranch        *b_trueNInteraction;   //!
    TBranch        *b_genEventWeight;   //!
@@ -160,7 +190,7 @@ MuMuTauETauHadAnalyzer::MuMuTauETauHadAnalyzer(TString fileName_, TString output
     system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + "/MuMuTauETauHadAnalyzer/objectTree";
+    TString treePath = fileName + "/DiMuDiTauAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
@@ -221,6 +251,10 @@ void MuMuTauETauHadAnalyzer::Init()
    recoMuonEnergy = 0;
    recoMuonPDGId = 0;
    recoMuonIsolation = 0;
+   recoMuonDXY = 0;
+   recoMuonDZ = 0;
+   recoMuonNTrackerLayers = 0;
+   recoMuonTriggerFlag = 0;
    recoElectronPt = 0;
    recoElectronEta = 0;
    recoElectronPhi = 0;
@@ -243,6 +277,14 @@ void MuMuTauETauHadAnalyzer::Init()
    recoTauIsoMVATight = 0;
    recoTauIsoMVAVTight = 0;
    recoTauIsoMVAVVTight = 0;
+   recoTauAntiMuMVALoose = 0;
+   recoTauAntiMuMVATight = 0;
+   recoTauAntiEleMVArawValue = 0;
+   recoTauAntiEleMVAVLoose = 0;
+   recoTauAntiEleMVALoose = 0;
+   recoTauAntiEleMVAMedium = 0;
+   recoTauAntiEleMVATight = 0;
+   recoTauAntiEleMVAVTight = 0;
    recoJetPt = 0;
    recoJetEta = 0;
    recoJetPhi = 0;
@@ -250,6 +292,8 @@ void MuMuTauETauHadAnalyzer::Init()
    recoJetCSV = 0;
    recoMET = 0;
    recoMETPhi = 0;
+   recoMETPx = 0;
+   recoMETPy = 0;
    // Set branch addresses and branch pointers
    fCurrent = -1;
    fChain->SetMakeClass(1);
@@ -260,6 +304,10 @@ void MuMuTauETauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonEnergy", &recoMuonEnergy, &b_recoMuonEnergy);
    fChain->SetBranchAddress("recoMuonPDGId", &recoMuonPDGId, &b_recoMuonPDGId);
    fChain->SetBranchAddress("recoMuonIsolation", &recoMuonIsolation, &b_recoMuonIsolation);
+   fChain->SetBranchAddress("recoMuonDXY", &recoMuonDXY, &b_recoMuonDXY);
+   fChain->SetBranchAddress("recoMuonDZ", &recoMuonDZ, &b_recoMuonDZ);
+   fChain->SetBranchAddress("recoMuonNTrackerLayers", &recoMuonNTrackerLayers, &b_recoMuonNTrackerLayers);
+   fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoElectronPt", &recoElectronPt, &b_recoElectronPt);
    fChain->SetBranchAddress("recoElectronEta", &recoElectronEta, &b_recoElectronEta);
    fChain->SetBranchAddress("recoElectronPhi", &recoElectronPhi, &b_recoElectronPhi);
@@ -282,6 +330,14 @@ void MuMuTauETauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoTauIsoMVATight", &recoTauIsoMVATight, &b_recoTauIsoMVATight);
    fChain->SetBranchAddress("recoTauIsoMVAVTight", &recoTauIsoMVAVTight, &b_recoTauIsoMVAVTight);
    fChain->SetBranchAddress("recoTauIsoMVAVVTight", &recoTauIsoMVAVVTight, &b_recoTauIsoMVAVVTight);
+   fChain->SetBranchAddress("recoTauAntiMuMVALoose", &recoTauAntiMuMVALoose, &b_recoTauAntiMuMVALoose);
+   fChain->SetBranchAddress("recoTauAntiMuMVATight", &recoTauAntiMuMVATight, &b_recoTauAntiMuMVATight);
+   fChain->SetBranchAddress("recoTauAntiEleMVArawValue", &recoTauAntiEleMVArawValue, &b_recoTauAntiEleMVArawValue);
+   fChain->SetBranchAddress("recoTauAntiEleMVAVLoose", &recoTauAntiEleMVAVLoose, &b_recoTauAntiEleMVAVLoose);
+   fChain->SetBranchAddress("recoTauAntiEleMVALoose", &recoTauAntiEleMVALoose, &b_recoTauAntiEleMVALoose);
+   fChain->SetBranchAddress("recoTauAntiEleMVAMedium", &recoTauAntiEleMVAMedium, &b_recoTauAntiEleMVAMedium);
+   fChain->SetBranchAddress("recoTauAntiEleMVATight", &recoTauAntiEleMVATight, &b_recoTauAntiEleMVATight);
+   fChain->SetBranchAddress("recoTauAntiEleMVAVTight", &recoTauAntiEleMVAVTight, &b_recoTauAntiEleMVAVTight);
    fChain->SetBranchAddress("recoJetPt", &recoJetPt, &b_recoJetPt);
    fChain->SetBranchAddress("recoJetEta", &recoJetEta, &b_recoJetEta);
    fChain->SetBranchAddress("recoJetPhi", &recoJetPhi, &b_recoJetPhi);
@@ -289,7 +345,10 @@ void MuMuTauETauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoJetCSV", &recoJetCSV, &b_recoJetCSV);
    fChain->SetBranchAddress("recoMET", &recoMET, &b_recoMET);
    fChain->SetBranchAddress("recoMETPhi", &recoMETPhi, &b_recoMETPhi);
+   fChain->SetBranchAddress("recoMETPx", &recoMETPx, &b_recoMETPx);
+   fChain->SetBranchAddress("recoMETPy", &recoMETPy, &b_recoMETPy);
    fChain->SetBranchAddress("recoNPrimaryVertex", &recoNPrimaryVertex, &b_recoNPrimaryVertex);
+   fChain->SetBranchAddress("eventID", &eventID, &b_eventID);
    if (isMC) 
    {
        fChain->SetBranchAddress("recoNPU", &recoNPU, &b_recoNPU);

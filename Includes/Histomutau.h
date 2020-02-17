@@ -27,17 +27,6 @@ class Histomutau{
         Histomutau();
         ~Histomutau();
 
-        TH1D* nMatchedMuPair;
-        TH1D* nMatchedMuMuPair;
-        TH1D* nMatchedMuElePair;
-        TH1D* nMatchedEleElePair;
-        TH1D* nMatchedMuTauPair;
-        TH1D* nMatchedEleTauPair;
-        TH1D* nMatchedTauTauPair;
-        TH1D* nUnMatchedMu;
-        TH1D* nUnMatchedEle;
-        TH1D* nUnMatchedTau;
-
         TH1D* dRMu1Mu2;
         TH1D* dRMu3Mu4;
         TH1D* dRMu3Ele;
@@ -84,23 +73,6 @@ class Histomutau{
         TH1D* ele2Iso;
         TH1D* tauIsoMVA;
         TH1D* tau2IsoMVA;
-
-        TH1D* unMatchedMuIso;
-        TH1D* unMatchedEleIso;
-        TH1D* unMatchedTauIsoMVA;
-        TH1D* unMatchedTauDecayMode;
-
-        TH1D* unMatchedMuPt;
-        TH1D* unMatchedMuEta;
-        TH1D* unMatchedMuPhi;
-
-        TH1D* unMatchedElePt;
-        TH1D* unMatchedEleEta;
-        TH1D* unMatchedElePhi;
-
-        TH1D* unMatchedTauPt;
-        TH1D* unMatchedTauEta;
-        TH1D* unMatchedTauPhi;
 
         TH1D* mu1Pt;
         TH1D* mu1Eta;
@@ -159,13 +131,6 @@ class Histomutau{
         TH2D* dRInvMassMu3Tau;
         TH2D* dRInvMassEleTau;
         TH2D* dRInvMassTauTau;
-        
-        TH2D* nMatchedMuPairNMatchedMuMuPair;
-        TH2D* nMatchedMuPairNMatchedMuElePair;
-        TH2D* nMatchedMuPairNMatchedEleElePair;
-        TH2D* nMatchedMuPairNMatchedMuTauPair;
-        TH2D* nMatchedMuPairNMatchedEleTauPair;
-        TH2D* nMatchedMuPairNMatchedTauTauPair;
 };
 
 #endif

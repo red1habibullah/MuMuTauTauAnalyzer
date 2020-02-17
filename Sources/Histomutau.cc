@@ -100,17 +100,6 @@ Histomutau::Histomutau(){
     int NBinsMu3TauPt = sizeof(Mu3TauPtBin)/sizeof(Mu3TauPtBin[0])-1;
     int NBinsMu1Mu2Mu3TauPt = sizeof(Mu1Mu2Mu3TauPtBin)/sizeof(Mu1Mu2Mu3TauPtBin[0])-1;
 
-    nMatchedMuPair = newTH1D("nMatchedMuPair", "N(#mu_{1}#mu_{2})", 5, 0, 5);
-    nMatchedMuMuPair = newTH1D("nMatchedMuMuPair", "N(#mu_{3}#mu_{4})", 5, 0, 5);
-    nMatchedMuElePair = newTH1D("nMatchedMuElePair", "N(#mu_{3}e)", 5, 0, 5);
-    nMatchedEleElePair = newTH1D("nMatchedEleElePair", "N(ee)", 5, 0, 5);
-    nMatchedMuTauPair = newTH1D("nMatchedMuTauPair", "N(#mu_{3}#tau)", 5, 0, 5);
-    nMatchedEleTauPair = newTH1D("nMatchedEleTauPair", "N(e#tau)", 5, 0, 5);
-    nMatchedTauTauPair = newTH1D("nMatchedTauTauPair", "N(#tau#tau)", 5, 0, 5);
-    nUnMatchedMu = newTH1D("nUnMatchedMu", "N_{#mu}(unMatch)", 5, 0, 5);
-    nUnMatchedEle = newTH1D("nUnMatchedEle", "N_{e}(unMatch)", 5, 0, 5);
-    nUnMatchedTau = newTH1D("nUnMatchedTau", "N_{#tau}(unMatch)", 5, 0, 5);
-
     dRMu1Mu2 = newTH1D("dRMu1Mu2", "#Delta R(#mu_{1}#mu_{2})", 25, 0, 1.0);
     dRMu3Mu4 = newTH1D("dRMu3Mu4", "#Delta R(#mu_{3}#mu_{4})", 25, 0, 1.0);
     dRMu3Ele = newTH1D("dRMu3Ele", "#Delta R(#mu_{3}e)", 25, 0, 1.0);
@@ -127,12 +116,12 @@ Histomutau::Histomutau(){
     invMassEleTau = newTH1D("invMassEleTau", "M(e#tau)[GeV]", 20, 0, 60);
     invMassTauTau = newTH1D("invMassTauTau", "M(#tau#tau)[GeV]", 20, 0, 60);
 
-    invMassMuMuTauMuTauMu = newTH1D("invMassMuMuTauMuTauMu", "M(#mu#mu#mu#mu)[GeV]", 20, 20, 200);
-    invMassMuMuTauMuTauEle = newTH1D("invMassMuMuTauMuTauEle", "M(#mu#mu#mue)[GeV]", 20, 20, 200);
-    invMassMuMuTauEleTauEle = newTH1D("invMassMuMuTauEleTauEle", "M(#mu#muee)[GeV]", 20, 20, 200);
-    invMassMuMuTauMuTauHad = newTH1D("invMassMuMuTauMuTauHad", "M(#mu#mu#mu#tau)[GeV]", 20, 20, 200);
-    invMassMuMuTauEleTauHad = newTH1D("invMassMuMuTauEleTauHad", "M(#mu#mue#tau)[GeV]", 20, 20, 200);
-    invMassMuMuTauHadTauHad = newTH1D("invMassMuMuTauHadTauHad", "M(#mu#mu#tau#tau)[GeV]", 20, 20, 200);
+    invMassMuMuTauMuTauMu = newTH1D("invMassMuMuTauMuTauMu", "M(#mu#mu#mu#mu)[GeV]", 25, 20, 1000);
+    invMassMuMuTauMuTauEle = newTH1D("invMassMuMuTauMuTauEle", "M(#mu#mu#mue)[GeV]", 25, 20, 1000);
+    invMassMuMuTauEleTauEle = newTH1D("invMassMuMuTauEleTauEle", "M(#mu#muee)[GeV]", 25, 20, 1000);
+    invMassMuMuTauMuTauHad = newTH1D("invMassMuMuTauMuTauHad", "M(#mu#mu#mu#tau)[GeV]", 25, 20, 1000);
+    invMassMuMuTauEleTauHad = newTH1D("invMassMuMuTauEleTauHad", "M(#mu#mue#tau)[GeV]", 25, 20, 1000);
+    invMassMuMuTauHadTauHad = newTH1D("invMassMuMuTauHadTauHad", "M(#mu#mu#tau#tau)[GeV]", 25, 20, 1000);
 
     ptMu1Mu2 = newTH1D("ptMu1Mu2", "p_{T}(#mu_{1}#mu_{2})[GeV]", NBinsMu1Mu2Pt, Mu1Mu2PtBin);
     ptMu3Mu4 = newTH1D("ptMu3Mu4", "p_{T}(#mu_{3}#mu_{4})[GeV]", NBinsMu3TauPt, Mu3TauPtBin);
@@ -157,23 +146,6 @@ Histomutau::Histomutau(){
     ele2Iso = newTH1D("ele2Iso", "e_{2}^{iso}", 20, 0, 20);
     tauIsoMVA = newTH1D("tauIsoMVA", "#tau^{iso}", 20, -1, 1);
     tau2IsoMVA = newTH1D("tau2IsoMVA", "#tau_{2}^{iso}", 20, -1, 1);
-
-    unMatchedMuIso = newTH1D("unMatchedMuIso", "#mu^{iso}(unMatch)", 200, 0, 200);
-    unMatchedEleIso = newTH1D("unMatchedEleIso", "e^{iso}(unMatch)", 200, 0, 200);
-    unMatchedTauIsoMVA = newTH1D("unMatchedTauIsoMVA", "#tau^{iso}(unMatch)", 20, -1, 1);
-    unMatchedTauDecayMode = newTH1D("unMatchedTauDecayMode", "DM(unMatch #tau)", 11, 0, 11);
-
-    unMatchedMuPt = newTH1D("unMatchedMuPt", "p_{T}(#mu_{unMatched}) [GeV]", 20, 3, 203);
-    unMatchedMuEta = newTH1D("unMatchedMuEta", "#eta(#mu_{unMatched})", 20, -2.1, 2.1);
-    unMatchedMuPhi = newTH1D("unMatchedMuPhi", "#phi(#mu_{unMatched})", 20, -2.5, 2.5);
-
-    unMatchedElePt = newTH1D("unMatchedElePt", "p_{T}(e_{unMatched}) [GeV]", 20, 3, 203);
-    unMatchedEleEta = newTH1D("unMatchedEleEta", "#eta(e_{unMatched})", 20, -2.1, 2.1);
-    unMatchedElePhi = newTH1D("unMatchedElePhi", "#phi(e_{unMatched})", 20, -2.5, 2.5);
-
-    unMatchedTauPt = newTH1D("unMatchedTauPt", "p_{T}(#tau_{unMatched}) [GeV]", 20, 3, 203);
-    unMatchedTauEta = newTH1D("unMatchedTauEta", "#eta(#tau_{unMatched})", 20, -2.1, 2.1);
-    unMatchedTauPhi = newTH1D("unMatchedTauPhi", "#phi(#tau_{unMatched})", 20, -2.5, 2.5);
 
     mu1Pt = newTH1D("mu1Pt", "p_{T}(#mu_{1}) [GeV]", NBinsMu1Pt, Mu1PtBin);
     mu1Eta = newTH1D("mu1Eta", "#eta(#mu_{1})", 20, -2.1, 2.1);
@@ -232,13 +204,6 @@ Histomutau::Histomutau(){
     dRInvMassMu3Tau = newTH2D("dRInvMassMu3Tau", "#Delta R(#mu_{3}#tau)", "M(#mu_{3}#tau)[GeV]", 25, 0, 1, 20, 0, 60);
     dRInvMassEleTau = newTH2D("dRInvMassEleTau", "#Delta R(e#tau)", "M(e#tau)[GeV]", 25, 0, 1, 20, 0, 60);
     dRInvMassTauTau = newTH2D("dRInvMassTauTau", "#Delta R(#tau#tau)", "M(#tau#tau)[GeV]", 25, 0, 1, 20, 0, 60);
-
-    nMatchedMuPairNMatchedMuMuPair = newTH2D("nMatchedMuPairNMatchedMuMuPair", "N(#mu_{1}#mu_{2})", "N(#mu_{3}#mu_{4})", 4, 0, 4, 4, 0, 4);
-    nMatchedMuPairNMatchedMuElePair = newTH2D("nMatchedMuPairNMatchedMuElePair", "N(#mu_{1}#mu_{2})", "N(#mu_{3}e)", 4, 0, 4, 4, 0, 4);
-    nMatchedMuPairNMatchedEleElePair = newTH2D("nMatchedMuPairNMatchedEleElePair", "N(#mu_{1}#mu_{2})", "N(ee)", 4, 0, 4, 4, 0, 4);
-    nMatchedMuPairNMatchedMuTauPair = newTH2D("nMatchedMuPairNMatchedMuTauPair", "N(#mu_{1}#mu_{2})", "N(#mu_{3}#tau)", 4, 0, 4, 4, 0, 4);
-    nMatchedMuPairNMatchedEleTauPair = newTH2D("nMatchedMuPairNMatchedEleTauPair", "N(#mu_{1}#mu_{2})", "N(e#tau)", 4, 0, 4, 4, 0, 4);
-    nMatchedMuPairNMatchedTauTauPair = newTH2D("nMatchedMuPairNMatchedTauTauPair", "N(#mu_{1}#mu_{2})", "N(#tau#tau)", 4, 0, 4, 4, 0, 4);
 }
 
 Histomutau::~Histomutau()
