@@ -31,179 +31,113 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
       nb = fChain->GetEntry(jentry);
       nbytes += nb;
 
-      // ---- prepare for the vector of matched muon pairs and a electron & tau candidate ---
-      vector<TLorentzVector> Mu1s;
-      vector<TLorentzVector> Mu2s;
-      vector<TLorentzVector> Eles;
-      vector<TLorentzVector> Taus;
-
-      vector<float> EleIso;
-      vector<float> TauIso;
-      vector<float> TauDM;
-
-      Mu1s.clear();
-      Mu2s.clear();
-      Eles.clear();
-      Taus.clear();
-
-      EleIso.clear();
-      TauIso.clear();
-      TauDM.clear();
-      // ========================================================================
-
-      // ---- these vectors containing the rank of each matched muon or electron to avoid double counting ---
-      vector<int> indexMu1s;
-      vector<int> indexMu2s;
-      vector<int> indexEles;
-
-      indexMu1s.clear();
-      indexMu2s.clear();
-      indexEles.clear();
-      // =============================================================================
-
-      // ---- these vectors containing the muons that are not matched into pairs --- 
-      vector<TLorentzVector> unMatchedMus;
-      vector<TLorentzVector> unMatchedEles;
-      vector<TLorentzVector> unMatchedTaus;
-
-      unMatchedMus.clear();
-      unMatchedEles.clear();
-      unMatchedTaus.clear();
-      // ============================================================================
-
-      // ---- define varibles that will be used to be pushed into the above vectors ---
+      // ---- define varibles that will be used to be filled into histograms ---
       TLorentzVector Mu1;
       TLorentzVector Mu2;
       TLorentzVector Ele;
       TLorentzVector Tau;
-      TLorentzVector unMatchedMu;
-      TLorentzVector unMatchedEle;
+
+      float Mu1Iso;
+      float Mu2Iso;
+      float EleIso;
+      float TauIso;
+      float TauDM;
+
+      unsigned int indexMu1;
       // ============================================================================
 
-      // ---- start loop on muon candidates ----
+      // ---- start loop on muon candidates for mu1 ----
+      bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (indexMu2s.size() > 0) 
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25)
           {
-              std::vector<int>::iterator iter = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
-              if (iter != indexMu2s.end()) continue;
-          } // end if there is any matched Mu2 candidiate
-
-          if (recoMuonIsolation->at(iMuon) > 0.25) continue;
-          Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-          float highestPt = 0;
-          float invMassLowThre = 60.0;
-          float invMassHighThre = 120.0;
-          bool findMu2 = false;
-          int indexMu2 = 0;
-
-          for (unsigned int iMuon2=iMuon+1; iMuon2<recoMuonPt->size(); iMuon2++)
-          {
-              std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon2);
-              if (iter2 != indexMu2s.end()) continue;
-
-              if (recoMuonIsolation->at(iMuon2) > 0.25) continue;
-              TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
-              Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
-              if((Mu2Cand.Pt() > highestPt) 
-                      && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
-                      && (recoMuonPDGId->at(iMuon) == (-1) * recoMuonPDGId->at(iMuon2)))
-              {
-                  Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon2), recoMuonEta->at(iMuon2), recoMuonPhi->at(iMuon2), recoMuonEnergy->at(iMuon2));
-                  highestPt = Mu2Cand.Pt();
-                  findMu2 = true;
-                  indexMu2 = iMuon2;
-              } // end if pair candidates
-          } // end loop for mu2
-          
-          if (findMu2 == true)
-          {
-              Mu1s.push_back(Mu1);
-              Mu2s.push_back(Mu2);
-
-              indexMu1s.push_back(iMuon);
-              indexMu2s.push_back(indexMu2);
+              Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              Mu1Iso = recoMuonIsolation->at(iMuon);
+              indexMu1 = iMuon;
+              findMu1 = true;
               break;
-          } // end if findMu2 
+          } // end if there is any matched Mu1 candidiate
       } // end loop for mu1
 
-      // ---- search for an additional electron and tau for fake rate study ----
-      if (recoElectronPt->size()>0 && recoTauPt->size()>0)
-      {
-          for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
-          {
-              bool condTauMVARaw = tauMVAIsoRawORWP == true && recoTauIsoMVArawValue->at(iTau) > tauMVAIsoRawThreshold;
-              bool condTauMVAWPVVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVLOOSE" && recoTauIsoMVAVVLoose->at(iTau)>0;
-              bool condTauMVAWPVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VLOOSE" && recoTauIsoMVAVLoose->at(iTau)>0;
-              bool condTauMVAWPLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "LOOSE" && recoTauIsoMVALoose->at(iTau)>0;
-              bool condTauMVAWPMedium = tauMVAIsoRawORWP == false && tauMVAIsoWP == "MEDIUM" && recoTauIsoMVAMedium->at(iTau)>0;
-              bool condTauMVAWPTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "TIGHT" && recoTauIsoMVATight->at(iTau)>0;
-              bool condTauMVAWPVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VTIGHT" && recoTauIsoMVAVTight->at(iTau)>0;
-              bool condTauMVAWPVVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVTIGHT" && recoTauIsoMVAVVTight->at(iTau)>0;
-              bool condTauAntiEleMVALoose = tauAntiEleDisc == "LOOSE" && recoTauAntiEleMVALoose->at(iTau)>0;
-              bool condTauAntiEleMVAMedium = tauAntiEleDisc == "MEDIUM" && recoTauAntiEleMVAMedium->at(iTau)>0;
-              bool condTauAntiEleMVATight = tauAntiEleDisc == "TIGHT" && recoTauAntiEleMVATight->at(iTau)>0; 
-              bool condTauAntiEleMVANull = tauAntiEleDisc != "LOOSE" && tauAntiEleDisc != "MEDIUM" && tauAntiEleDisc != "TIGHT";
+      if (!findMu1) continue;
+      float dRCut = 0.3; // dR cut between Mu1 and Mu2
+      float highestPt = 0;
+      float invMassLowThre = 60.0;
+      float invMassHighThre = 120.0;
+      bool findMu2 = false;
 
-              if ((condTauMVARaw || condTauMVAWPVVLoose || condTauMVAWPVLoose || condTauMVAWPLoose || condTauMVAWPMedium || condTauMVAWPTight || condTauMVAWPVTight || condTauMVAWPVVTight) && (condTauAntiEleMVALoose || condTauAntiEleMVAMedium || condTauAntiEleMVATight || condTauAntiEleMVANull))
-              {
-                  Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
-                  float smallestDR = 5.0; // dR between electron and tau
-                  bool findEle = false;
-                  int indexEle = 0;
-
-                  for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
-                  {
-                      TLorentzVector EleCand;
-                      EleCand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
-                      if (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) && Tau.DeltaR(EleCand) < smallestDR)
-                      {
-                          Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
-                          smallestDR = Tau.DeltaR(Ele);
-                          findEle = true;
-                          indexEle = iEle;
-                      } // end if find electron with opposite charge
-                  } // end for loop on electrons
-
-                  if (findEle == true)
-                  {
-                      Eles.push_back(Ele);
-                      indexEles.push_back(indexEle);
-
-                      Taus.push_back(Tau);
-                      TauIso.push_back(recoTauIsoMVArawValue->at(iTau));
-                      TauDM.push_back(recoTauDecayMode->at(iTau));
-                  } // end if findEle
-              } // end if a tau candidate passes the requirement
-              else{
-                  unMatchedTaus.push_back(Tau);
-              } // end else a tau candidate passes the requirement
-          } // end for loop on tau candidates
-      } // end if tau cluster size > 0 && electron cluster > 0
-
-      // ---- search for unMatched muon candidates ----
+      // ---- start loop on muon candidates for mu2 ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          std::vector<int>::iterator iter1 = std::find(indexMu1s.begin(), indexMu1s.end(), iMuon);
-          std::vector<int>::iterator iter2 = std::find(indexMu2s.begin(), indexMu2s.end(), iMuon);
+          if (iMuon == indexMu1) continue;
+          if (recoMuonIsolation->at(iMuon) > 0.25) continue;
 
-          if (iter1 == indexMu1s.end() && iter2 == indexMu2s.end())
+          TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
+          Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+          if((Mu1.DeltaR(Mu2Cand) > dRCut) && (Mu2Cand.Pt() > highestPt) 
+                  && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
+                  && (recoMuonPDGId->at(indexMu1) == (-1) * recoMuonPDGId->at(iMuon)))
           {
-              unMatchedMu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-              unMatchedMus.push_back(unMatchedMu);
-          } // end if find unMatched Mu
-      } // end loop for unMatched muon candidates
+              Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              Mu2Iso = recoMuonIsolation->at(iMuon);
+              highestPt = Mu2Cand.Pt();
+              findMu2 = true;
+          } // end if pair candidates
+      } // end loop for mu2
 
-      // ---- search for unMatched electron candidates ----
-      for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
+      if (!findMu2) continue;
+      bool findEleTauPair = false;
+
+      // ---- search for an additional electron and tau for fake rate study ----
+      for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
-          std::vector<int>::iterator iter = std::find(indexEles.begin(), indexEles.end(), iEle);
-          if (iter == indexEles.end())
+          bool condTauMVARaw = tauMVAIsoRawORWP == true && recoTauIsoMVArawValue->at(iTau) > tauMVAIsoRawThreshold;
+          bool condTauMVAWPVVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVLOOSE" && recoTauIsoMVAVVLoose->at(iTau)>0;
+          bool condTauMVAWPVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VLOOSE" && recoTauIsoMVAVLoose->at(iTau)>0;
+          bool condTauMVAWPLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "LOOSE" && recoTauIsoMVALoose->at(iTau)>0;
+          bool condTauMVAWPMedium = tauMVAIsoRawORWP == false && tauMVAIsoWP == "MEDIUM" && recoTauIsoMVAMedium->at(iTau)>0;
+          bool condTauMVAWPTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "TIGHT" && recoTauIsoMVATight->at(iTau)>0;
+          bool condTauMVAWPVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VTIGHT" && recoTauIsoMVAVTight->at(iTau)>0;
+          bool condTauMVAWPVVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVTIGHT" && recoTauIsoMVAVVTight->at(iTau)>0;
+          bool condTauAntiEleMVALoose = tauAntiEleDisc == "LOOSE" && recoTauAntiEleMVALoose->at(iTau)>0;
+          bool condTauAntiEleMVAMedium = tauAntiEleDisc == "MEDIUM" && recoTauAntiEleMVAMedium->at(iTau)>0;
+          bool condTauAntiEleMVATight = tauAntiEleDisc == "TIGHT" && recoTauAntiEleMVATight->at(iTau)>0; 
+          bool condTauAntiEleMVANull = tauAntiEleDisc != "LOOSE" && tauAntiEleDisc != "MEDIUM" && tauAntiEleDisc != "TIGHT";
+
+          TLorentzVector TauCand;
+          TauCand.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+
+          if (TauCand.DeltaR(Mu1) < 0.8 || TauCand.DeltaR(Mu2) < 0.8) continue;
+          if ((condTauMVARaw || condTauMVAWPVVLoose || condTauMVAWPVLoose || condTauMVAWPLoose || condTauMVAWPMedium || condTauMVAWPTight || condTauMVAWPVTight || condTauMVAWPVVTight) && (condTauAntiEleMVALoose || condTauAntiEleMVAMedium || condTauAntiEleMVATight || condTauAntiEleMVANull))
           {
-              unMatchedEle.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
-              unMatchedEles.push_back(unMatchedEle);
-          } // end if find unMatched electron
-      } // end loop for unMatched electron candidates
+              Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+              TauIso = recoTauIsoMVArawValue->at(iTau);
+              TauDM = recoTauDecayMode->at(iTau);
+
+              float smallestDR = 4.0; // dR between electron and tau
+              bool findEle = false;
+
+              for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
+              {
+                  TLorentzVector EleCand;
+                  EleCand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
+                  if ((recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle))) && (Tau.DeltaR(EleCand) < smallestDR) && ((Tau+EleCand).M() < 60.0) && (EleCand.DeltaR(Mu1) > 0.4) && (EleCand.DeltaR(Mu2) > 0.4))
+                  {
+                      Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEcalTrkEnergyPostCorr->at(iEle));
+                      EleIso = recoElectronIsolation->at(iEle);
+                      smallestDR = Tau.DeltaR(Ele);
+                      findEle = true;
+                  } // end if find electron
+              } // end for loop on electrons
+
+              if (!findEle) continue;
+              else{
+                  findEleTauPair = true;
+                  break;
+              } // end if findEle
+          } // end if a tau candidate passes the requirement
+      } // end for loop on tau candidates
 
       // ---- prepare event weight info ----
       double weight = 1;
@@ -213,79 +147,52 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
       } // end if isMC == true
 
       // ---- fill histograms ----
-      nMatchedMuPair->Fill(Mu1s.size(), weight);
-      nUnMatchedMu->Fill(unMatchedMus.size(), weight);
-      
-      if (Mu1s.size() >0 && Taus.size() >0)
+      if (findMu1 && findMu2 && findEleTauPair)
       {
-          bool fillRec = false;
-          // --- filling histograms of mu-mu ---
-          for (unsigned int iMuon=0; iMuon<Mu1s.size(); iMuon++)
-          {
-              Mu1 = Mu1s.at(iMuon);
-              Mu2 = Mu2s.at(iMuon);
-              TLorentzVector Mu1Mu2 = Mu1 + Mu2;
-              bool passDR = false; // dR between mu-mu pair and tau
+          ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
+          dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
+          invMassMu1Mu2->Fill((Mu1+Mu2).M(), weight);
+          dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), (Mu1+Mu2).M(), weight);
 
-              for (unsigned int iTau=0; iTau<Taus.size(); iTau++)
-              {
-                  Ele = Eles.at(iTau);
-                  Tau = Taus.at(iTau);
-                  TLorentzVector EleTau = Ele + Tau;
-                  TLorentzVector MuMuEleTau = Mu1Mu2 + EleTau;
+          mu1Iso->Fill(Mu1Iso, weight);
+          mu2Iso->Fill(Mu2Iso, weight);
 
-                  if (Mu1.DeltaR(Ele) > 0.4 && Mu2.DeltaR(Ele) > 0.4 && Mu1.DeltaR(Tau) > 0.8 && Mu2.DeltaR(Tau) > 0.8)
-                  {
-                      passDR = true;
+          mu1Pt->Fill(Mu1.Pt(), weight);
+          mu1Eta->Fill(Mu1.Eta(), weight);
+          mu1Phi->Fill(Mu1.Phi(), weight);
 
-                      ptEleTau->Fill(EleTau.Pt(), weight);
-                      dREleTau->Fill(Ele.DeltaR(Tau), weight);
-                      invMassEleTau->Fill(EleTau.M(), weight);
-                      dRInvMassEleTau->Fill(Ele.DeltaR(Tau), EleTau.M(), weight);
+          mu2Pt->Fill(Mu2.Pt(), weight);
+          mu2Eta->Fill(Mu2.Eta(), weight);
+          mu2Phi->Fill(Mu2.Phi(), weight);
 
-                      ele1Pt->Fill(Ele.Pt(), weight);
-                      ele1Eta->Fill(Ele.Eta(), weight);
-                      ele1Phi->Fill(Ele.Phi(), weight);
+          ptEleTau->Fill((Ele+Tau).Pt(), weight);
+          dREleTau->Fill(Ele.DeltaR(Tau), weight);
+          invMassEleTau->Fill((Ele+Tau).M(), weight);
+          dRInvMassEleTau->Fill(Ele.DeltaR(Tau), (Ele+Tau).M(), weight);
 
-                      tauPt->Fill(Tau.Pt(), weight);
-                      tauEta->Fill(Tau.Eta(), weight);
-                      tauPhi->Fill(Tau.Phi(), weight);
-                      tauMass->Fill(Tau.M(), weight);
-                      tauDecayMode->Fill(TauDM.at(iTau), weight);
+          ele1Iso->Fill(EleIso, weight);
+          tauIsoMVA->Fill(TauIso, weight);
+          tauDecayMode->Fill(TauDM, weight);
 
-                      dRMu1Ele1->Fill(Mu1.DeltaR(Ele), weight);
-                      dRMu1Tau->Fill(Mu1.DeltaR(Tau), weight);
-                      dRMu2Ele1->Fill(Mu2.DeltaR(Ele), weight);
-                      dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
+          ele1Pt->Fill(Ele.Pt(), weight);
+          ele1Eta->Fill(Ele.Eta(), weight);
+          ele1Phi->Fill(Ele.Phi(), weight);
 
-                      ptMuMuTauEleTauHad->Fill(MuMuEleTau.Pt(), weight);
-                      invMassMuMuTauEleTauHad->Fill(MuMuEleTau.M(), weight);
-                      
-                      fillRec = true;
-                      break;
-                  } // end if dR between mu-mu pair and tau
-              } // end for loop on taus
+          tauPt->Fill(Tau.Pt(), weight);
+          tauEta->Fill(Tau.Eta(), weight);
+          tauPhi->Fill(Tau.Phi(), weight);
+          tauMass->Fill(Tau.M(), weight);
 
-              if (passDR == true)
-              {
-                  ptMu1Mu2->Fill(Mu1Mu2.Pt(), weight);
-                  dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
-                  invMassMu1Mu2->Fill(Mu1Mu2.M(), weight);
-                  dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), Mu1Mu2.M(), weight);
+          dRMu1Ele1->Fill(Mu1.DeltaR(Ele), weight);
+          dRMu1Tau->Fill(Mu1.DeltaR(Tau), weight);
+          dRMu2Ele1->Fill(Mu2.DeltaR(Ele), weight);
+          dRMu2Tau->Fill(Mu2.DeltaR(Tau), weight);
 
-                  mu1Pt->Fill(Mu1.Pt(), weight);
-                  mu1Eta->Fill(Mu1.Eta(), weight);
-                  mu1Phi->Fill(Mu1.Phi(), weight);
-
-                  mu2Pt->Fill(Mu2.Pt(), weight);
-                  mu2Eta->Fill(Mu2.Eta(), weight);
-                  mu2Phi->Fill(Mu2.Phi(), weight);
-                  break;
-              } // end if passDR between mu-mu pair and tau and additional electron
-          } // end loop for mu-mu pairs
+          ptMuMuTauEleTauHad->Fill((Mu1+Mu2+Ele+Tau).Pt(), weight);
+          invMassMuMuTauEleTauHad->Fill((Mu1+Mu2+Ele+Tau).M(), weight);
 
           // --------- implement the matching between gen particles and reco objects (MC only) -------------
-          if (isMC && matchRecGen && fillRec)
+          if (isMC && matchRecGen)
           {
               TLorentzVector GenMu1;
               TLorentzVector GenMu2;
@@ -448,29 +355,8 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
                   dREleTauVSGenTauEleGenTauHad->Fill(Ele.DeltaR(Tau), GenTauEle.DeltaR(GenTauHad), weight);
                   invMassEleTauVSGenTauEleGenTauHad->Fill(EleTau.M(), GenTauEleTauHad.M(), weight);
               } // end if findMatchedRecGenTauEle && findMatchedRecGenTauHad
-          } // end if isMC && matchRecGen && fillRec
-      } // end if mu-mu pairs
-
-      for (unsigned int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
-      {
-          unMatchedMuPt->Fill(unMatchedMus.at(iMuon).Pt(), weight);
-          unMatchedMuEta->Fill(unMatchedMus.at(iMuon).Eta(), weight);
-          unMatchedMuPhi->Fill(unMatchedMus.at(iMuon).Phi(), weight);
-      } // end loop for unMatched muons
-
-      for (unsigned int iEle=0; iEle<unMatchedEles.size(); iEle++)
-      {
-          unMatchedElePt->Fill(unMatchedEles.at(iEle).Pt(), weight);
-          unMatchedEleEta->Fill(unMatchedEles.at(iEle).Eta(), weight);
-          unMatchedElePhi->Fill(unMatchedEles.at(iEle).Phi(), weight);
-      } // end loop for unMatched electrons
-
-      for (unsigned int iTau=0; iTau<unMatchedTaus.size(); iTau++)
-      {
-          unMatchedTauPt->Fill(unMatchedTaus.at(iTau).Pt(), weight);
-          unMatchedTauEta->Fill(unMatchedTaus.at(iTau).Eta(), weight);
-          unMatchedTauPhi->Fill(unMatchedTaus.at(iTau).Phi(), weight);
-      } // end loop for unMatched taus
+          } // end if isMC && matchRecGen
+      } // end if findMu1 && findMu2 && findEleTauPair
    }// end loop for events
 
    outputFile->cd();

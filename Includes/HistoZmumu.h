@@ -28,11 +28,6 @@ class HistoZmumu{
         ~HistoZmumu();
 
         // ------ reco-histograms ------
-        TH1D* nMatchedMuPair;
-        TH1D* nUnMatchedMu;
-        TH1D* nUnMatchedEle;
-        TH1D* nUnMatchedTau;
-
         TH1D* dRMu1Mu2;
         TH1D* dRMu3Mu4;
         TH1D* dRMu3Ele;
@@ -79,23 +74,6 @@ class HistoZmumu{
         TH1D* ele2Iso;
         TH1D* tauIsoMVA;
         TH1D* tau2IsoMVA;
-
-        TH1D* unMatchedMuIso;
-        TH1D* unMatchedEleIso;
-        TH1D* unMatchedTauIsoMVA;
-        TH1D* unMatchedTauDecayMode;
-
-        TH1D* unMatchedMuPt;
-        TH1D* unMatchedMuEta;
-        TH1D* unMatchedMuPhi;
-
-        TH1D* unMatchedElePt;
-        TH1D* unMatchedEleEta;
-        TH1D* unMatchedElePhi;
-
-        TH1D* unMatchedTauPt;
-        TH1D* unMatchedTauEta;
-        TH1D* unMatchedTauPhi;
 
         TH1D* mu1Pt;
         TH1D* mu1Eta;

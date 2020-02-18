@@ -44,7 +44,6 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
       unsigned int indexMu1 = -1;
       unsigned int indexMu2 = -1;
-      unsigned int indexMu4 = -1;
       // =============================================================================
 
       // ---- start loop on muon candidates for mu1 ----
@@ -99,18 +98,17 @@ void MuMuTauMuTauMuAnalyzer::Loop()
           if (Mu4Cand.DeltaR(Mu1) < 0.4 || Mu4Cand.DeltaR(Mu2) < 0.4) continue;
           Mu4.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
           Mu4Iso = recoMuonIsolation->at(iMuon);
-          indexMu4 = iMuon;
 
           float smallestDR = 1.0; // dR cut between Mu3 and Mu4
           bool findMu3 = false;
 
           for (unsigned int iMuon3=0; iMuon3<recoMuonPt->size(); iMuon3++)
           {
-              if (iMuon3 == indexMu1 || iMuon3 == indexMu2 || iMuon3 == indexMu4) continue;
+              if (iMuon3 == indexMu1 || iMuon3 == indexMu2 || iMuon3 == iMuon) continue;
 
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, Mu4) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
-              if ((Mu4.DeltaR(Mu3Cand) < smallestDR) && (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon)) && ((Mu4+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4) && (recoMuonIsolation->at(iMuon3) < Mu4IsoThreshold))
+              if ((Mu4.DeltaR(Mu3Cand) < smallestDR) && (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon)) && ((Mu4+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4))
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
                   Mu3Iso = recoMuonIsolation->at(iMuon3);

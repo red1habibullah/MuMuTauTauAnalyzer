@@ -32,6 +32,10 @@ public :
    vector<float>   *recoMuonEnergy;
    vector<int>     *recoMuonPDGId;
    vector<float>   *recoMuonIsolation;
+   vector<float>   *recoMuonDXY;
+   vector<float>   *recoMuonDZ;
+   vector<int>     *recoMuonNTrackerLayers;
+   vector<int>     *recoMuonTriggerFlag;
    vector<float>   *recoElectronPt;
    vector<float>   *recoElectronEta;
    vector<float>   *recoElectronPhi;
@@ -47,7 +51,10 @@ public :
    vector<float>   *recoJetCSV;
    vector<float>   *recoMET;
    vector<float>   *recoMETPhi;
+   vector<float>   *recoMETPx;
+   vector<float>   *recoMETPy;
    Int_t           recoNPrimaryVertex;
+   Int_t           eventID;
    Int_t           recoNPU;
    Int_t           trueNInteraction;
    Float_t         genEventWeight;
@@ -59,6 +66,10 @@ public :
    TBranch        *b_recoMuonEnergy;   //!
    TBranch        *b_recoMuonPDGId;   //!
    TBranch        *b_recoMuonIsolation;   //!
+   TBranch        *b_recoMuonDXY;   //!
+   TBranch        *b_recoMuonDZ;   //!
+   TBranch        *b_recoMuonNTrackerLayers;   //!
+   TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoElectronPt;   //!
    TBranch        *b_recoElectronEta;   //!
    TBranch        *b_recoElectronPhi;   //!
@@ -74,7 +85,10 @@ public :
    TBranch        *b_recoJetCSV;   //!
    TBranch        *b_recoMET;   //!
    TBranch        *b_recoMETPhi;   //!
+   TBranch        *b_recoMETPx;   //!
+   TBranch        *b_recoMETPy;   //!
    TBranch        *b_recoNPrimaryVertex;   //!
+   TBranch        *b_eventID;   //!
    TBranch        *b_recoNPU;   //!
    TBranch        *b_trueNInteraction;   //!
    TBranch        *b_genEventWeight;   //!
@@ -125,7 +139,7 @@ FakeMuMuTauMuTauEAnalyzer::FakeMuMuTauMuTauEAnalyzer(TString fileName_, TString 
     system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + "/DiMuonAnalyzer/objectTree";
+    TString treePath = fileName + "/ZMuMuInclusiveAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
@@ -186,6 +200,10 @@ void FakeMuMuTauMuTauEAnalyzer::Init()
    recoMuonEnergy = 0;
    recoMuonPDGId = 0;
    recoMuonIsolation = 0;
+   recoMuonDXY = 0;
+   recoMuonDZ = 0;
+   recoMuonNTrackerLayers = 0;
+   recoMuonTriggerFlag = 0;
    recoElectronPt = 0;
    recoElectronEta = 0;
    recoElectronPhi = 0;
@@ -201,6 +219,8 @@ void FakeMuMuTauMuTauEAnalyzer::Init()
    recoJetCSV = 0;
    recoMET = 0;
    recoMETPhi = 0;
+   recoMETPx = 0;
+   recoMETPy = 0;
    // Set branch addresses and branch pointers
    fCurrent = -1;
    fChain->SetMakeClass(1);
@@ -211,6 +231,10 @@ void FakeMuMuTauMuTauEAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonEnergy", &recoMuonEnergy, &b_recoMuonEnergy);
    fChain->SetBranchAddress("recoMuonPDGId", &recoMuonPDGId, &b_recoMuonPDGId);
    fChain->SetBranchAddress("recoMuonIsolation", &recoMuonIsolation, &b_recoMuonIsolation);
+   fChain->SetBranchAddress("recoMuonDXY", &recoMuonDXY, &b_recoMuonDXY);
+   fChain->SetBranchAddress("recoMuonDZ", &recoMuonDZ, &b_recoMuonDZ);
+   fChain->SetBranchAddress("recoMuonNTrackerLayers", &recoMuonNTrackerLayers, &b_recoMuonNTrackerLayers);
+   fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoElectronPt", &recoElectronPt, &b_recoElectronPt);
    fChain->SetBranchAddress("recoElectronEta", &recoElectronEta, &b_recoElectronEta);
    fChain->SetBranchAddress("recoElectronPhi", &recoElectronPhi, &b_recoElectronPhi);
@@ -226,7 +250,10 @@ void FakeMuMuTauMuTauEAnalyzer::Init()
    fChain->SetBranchAddress("recoJetCSV", &recoJetCSV, &b_recoJetCSV);
    fChain->SetBranchAddress("recoMET", &recoMET, &b_recoMET);
    fChain->SetBranchAddress("recoMETPhi", &recoMETPhi, &b_recoMETPhi);
+   fChain->SetBranchAddress("recoMETPx", &recoMETPx, &b_recoMETPx);
+   fChain->SetBranchAddress("recoMETPy", &recoMETPy, &b_recoMETPy);
    fChain->SetBranchAddress("recoNPrimaryVertex", &recoNPrimaryVertex, &b_recoNPrimaryVertex);
+   fChain->SetBranchAddress("eventID", &eventID, &b_eventID);
    if (isMC) 
    {
        fChain->SetBranchAddress("recoNPU", &recoNPU, &b_recoNPU);

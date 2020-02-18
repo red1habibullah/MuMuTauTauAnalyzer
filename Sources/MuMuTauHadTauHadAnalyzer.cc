@@ -45,7 +45,6 @@ void MuMuTauHadTauHadAnalyzer::Loop()
       float Tau2DM;
 
       unsigned int indexMu1 = -1;
-      unsigned int indexTau1 = -1;
       // =============================================================================
 
       // ---- start loop on muon candidates for mu1 ----
@@ -85,8 +84,8 @@ void MuMuTauHadTauHadAnalyzer::Loop()
       } // end loop for mu2
           
       if (!findMu2) continue;
-
       bool findTauTauPair = false;
+
       // ------- start loop on tau candidates -------
       for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
@@ -101,14 +100,13 @@ void MuMuTauHadTauHadAnalyzer::Loop()
           Tau1.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
           Tau1Iso = recoTauIsoMVArawValue->at(iTau);
           Tau1DM = recoTauDecayMode->at(iTau);
-          indexTau1 = iTau;
 
           float smallestDR = 0.8; // dR cut between tau1 and tau2
           bool findTau2 = false;
 
           for (unsigned int iTau2=0; iTau2<recoTauPt->size(); iTau2++)
           {
-              if (iTau2 == indexTau1) continue;
+              if (iTau2 == iTau) continue;
               TLorentzVector Tau2Cand; // prepare this variable for dR(tau1, tau2) implementation
               Tau2Cand.SetPtEtaPhiE(recoTauPt->at(iTau2), recoTauEta->at(iTau2), recoTauPhi->at(iTau2), recoTauEnergy->at(iTau2));
               if ((Tau1.DeltaR(Tau2Cand) < smallestDR) && (recoTauPDGId->at(iTau) == (-1) * recoTauPDGId->at(iTau2)) && ((Tau1+Tau2Cand).M() < 60.0) && (Tau2Cand.DeltaR(Mu1) > 0.8) && (Tau2Cand.DeltaR(Mu2) > 0.8))

@@ -35,6 +35,7 @@ public :
    vector<float>   *recoMuonDXY;
    vector<float>   *recoMuonDZ;
    vector<int>     *recoMuonNTrackerLayers;
+   vector<int>     *recoMuonTriggerFlag;
    vector<float>   *recoElectronPt;
    vector<float>   *recoElectronEta;
    vector<float>   *recoElectronPhi;
@@ -120,6 +121,7 @@ public :
    TBranch        *b_recoMuonDXY;   //!
    TBranch        *b_recoMuonDZ;   //!
    TBranch        *b_recoMuonNTrackerLayers;   //!
+   TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoElectronPt;   //!
    TBranch        *b_recoElectronEta;   //!
    TBranch        *b_recoElectronPhi;   //!
@@ -247,7 +249,7 @@ FakeMuMuTauETauHadAnalyzer::FakeMuMuTauETauHadAnalyzer(TString fileName_, TStrin
     system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + "/DiMuonAnalyzer/objectTree";
+    TString treePath = fileName + "/ZMuMuInclusiveAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
@@ -311,6 +313,7 @@ void FakeMuMuTauETauHadAnalyzer::Init()
    recoMuonDXY = 0;
    recoMuonDZ = 0;
    recoMuonNTrackerLayers = 0;
+   recoMuonTriggerFlag = 0;
    recoElectronPt = 0;
    recoElectronEta = 0;
    recoElectronPhi = 0;
@@ -393,6 +396,7 @@ void FakeMuMuTauETauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonDXY", &recoMuonDXY, &b_recoMuonDXY);
    fChain->SetBranchAddress("recoMuonDZ", &recoMuonDZ, &b_recoMuonDZ);
    fChain->SetBranchAddress("recoMuonNTrackerLayers", &recoMuonNTrackerLayers, &b_recoMuonNTrackerLayers);
+   fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoElectronPt", &recoElectronPt, &b_recoElectronPt);
    fChain->SetBranchAddress("recoElectronEta", &recoElectronEta, &b_recoElectronEta);
    fChain->SetBranchAddress("recoElectronPhi", &recoElectronPhi, &b_recoElectronPhi);

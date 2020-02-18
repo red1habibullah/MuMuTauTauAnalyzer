@@ -84,8 +84,8 @@ void MuMuTauETauHadAnalyzer::Loop()
       } // end loop for mu2
           
       if (!findMu2) continue;
-
       bool findEleTauPair = false;
+
       // ------- start loop on tau candidates -------
       for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {

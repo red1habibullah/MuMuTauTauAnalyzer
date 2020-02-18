@@ -80,10 +80,10 @@ void MuMuTauETauEAnalyzer::Loop()
               findMu2 = true;
           } // end if pair candidates
       } // end loop for mu2
-          
-      if (!findMu2) continue;
 
-      bool findMuElePair = false;
+      if (!findMu2) continue;
+      bool findEleElePair = false;
+
       // ------- start loop on electron candidates -------
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
@@ -98,11 +98,12 @@ void MuMuTauETauEAnalyzer::Loop()
           float smallestDR = 1.0; // dR cut between Ele1 and Ele2
           bool findEle2 = false;
 
-          for (unsigned int iEle2=iEle+1; iEle2<recoElectronPt->size(); iEle2++)
+          for (unsigned int iEle2=0; iEle2<recoElectronPt->size(); iEle2++)
           {
+              if (iEle2 == iEle) continue;
               TLorentzVector Ele2Cand; // prepare this variable for dR(Ele1, Ele2) implementation
               Ele2Cand.SetPtEtaPhiE(recoElectronPt->at(iEle2), recoElectronEta->at(iEle2), recoElectronPhi->at(iEle2), recoElectronEcalTrkEnergyPostCorr->at(iEle2));
-              if ((Ele1.DeltaR(Ele2Cand) < smallestDR) && (recoElectronPDGId->at(iEle) == (-1) * recoElectronPDGId->at(iEle2)) && ((Ele1+Ele2Cand).M() < 60.0) && (Ele2Cand.DeltaR(Mu1) > 0.4) && (Ele2Cand.DeltaR(Mu2) > 0.4) && (recoElectronIsolation->at(iEle2) < Ele1IsoThreshold))
+              if ((Ele1.DeltaR(Ele2Cand) < smallestDR) && (recoElectronPDGId->at(iEle) == (-1) * recoElectronPDGId->at(iEle2)) && ((Ele1+Ele2Cand).M() < 60.0) && (Ele2Cand.DeltaR(Mu1) > 0.4) && (Ele2Cand.DeltaR(Mu2) > 0.4))
               {
                   Ele2.SetPtEtaPhiE(recoElectronPt->at(iEle2), recoElectronEta->at(iEle2), recoElectronPhi->at(iEle2), recoElectronEcalTrkEnergyPostCorr->at(iEle2));
                   Ele2Iso = recoElectronIsolation->at(iEle2);
@@ -113,7 +114,7 @@ void MuMuTauETauEAnalyzer::Loop()
 
           if (!findEle2) continue;
           else{
-              findMuElePair = true;
+              findEleElePair = true;
               break;
           } // end if findEle2
       } // end loop for electron
@@ -126,7 +127,7 @@ void MuMuTauETauEAnalyzer::Loop()
       } // end if isMC == true
 
       // ---- fill histograms ----
-      if (findMu1 && findMu2 && findMuElePair)
+      if (findMu1 && findMu2 && findEleElePair)
       {
           ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
           dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);

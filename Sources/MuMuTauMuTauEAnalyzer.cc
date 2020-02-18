@@ -82,10 +82,10 @@ void MuMuTauMuTauEAnalyzer::Loop()
               findMu2 = true;
           } // end if pair candidates
       } // end loop for mu2
-          
-      if (!findMu2) continue;
 
+      if (!findMu2) continue;
       bool findMuElePair = false;
+
       // ------- start loop on electron candidates -------
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
@@ -106,7 +106,7 @@ void MuMuTauMuTauEAnalyzer::Loop()
 
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, electron) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-              if ((Ele.DeltaR(Mu3Cand) < smallestDR) && (recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))) && ((Ele+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4) && (recoMuonIsolation->at(iMuon) < Mu2IsoThreshold))
+              if ((Ele.DeltaR(Mu3Cand) < smallestDR) && (recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))) && ((Ele+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4))
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
                   Mu3Iso = recoMuonIsolation->at(iMuon);
