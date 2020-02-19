@@ -34,6 +34,8 @@ public :
    vector<float>   *recoMuonIsolation;
    vector<float>   *recoMuonDXY;
    vector<float>   *recoMuonDZ;
+   vector<int>     *recoMuonNTrackerLayers;
+   vector<int>     *recoMuonTriggerFlag;
    vector<float>   *recoTauPt;
    vector<float>   *recoTauEta;
    vector<float>   *recoTauPhi;
@@ -104,6 +106,8 @@ public :
    TBranch        *b_recoMuonIsolation;   //!
    TBranch        *b_recoMuonDXY;   //!
    TBranch        *b_recoMuonDZ;   //!
+   TBranch        *b_recoMuonNTrackerLayers;   //!
+   TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoTauPt;   //!
    TBranch        *b_recoTauEta;   //!
    TBranch        *b_recoTauPhi;   //!
@@ -300,6 +304,8 @@ void ZTauMuTauHadAnalyzer::Init()
    recoMuonIsolation = 0;
    recoMuonDXY = 0;
    recoMuonDZ = 0;
+   recoMuonNTrackerLayers = 0;
+   recoMuonTriggerFlag = 0;
    recoTauPt = 0;
    recoTauEta = 0;
    recoTauPhi = 0;
@@ -367,6 +373,8 @@ void ZTauMuTauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonIsolation", &recoMuonIsolation, &b_recoMuonIsolation);
    fChain->SetBranchAddress("recoMuonDXY", &recoMuonDXY, &b_recoMuonDXY);
    fChain->SetBranchAddress("recoMuonDZ", &recoMuonDZ, &b_recoMuonDZ);
+   fChain->SetBranchAddress("recoMuonNTrackerLayers", &recoMuonNTrackerLayers, &b_recoMuonNTrackerLayers);
+   fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoTauPt", &recoTauPt, &b_recoTauPt);
    fChain->SetBranchAddress("recoTauEta", &recoTauEta, &b_recoTauEta);
    fChain->SetBranchAddress("recoTauPhi", &recoTauPhi, &b_recoTauPhi);

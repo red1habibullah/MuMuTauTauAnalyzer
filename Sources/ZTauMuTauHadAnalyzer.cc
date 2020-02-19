@@ -30,127 +30,81 @@ void ZTauMuTauHadAnalyzer::Loop()
       if (jentry % 1000 == 0 && jentry > 0) cout << "*** Processing #Events: " << jentry << endl;
       nb = fChain->GetEntry(jentry);
       nbytes += nb;
-      
-      // ---- prepare for the vector of muon & tau candidates ---
-      vector<TLorentzVector> Mus;
-      vector<TLorentzVector> Taus;
 
-      vector<float> TauDM;
-      vector<float> TauIso;
-
-      Mus.clear();
-      Taus.clear();
-
-      TauDM.clear();
-      TauIso.clear();
-      // =============================================================================
-
-      // ---- these vectors containing the rank of each matched muon to avoid double counting ---
-      vector<int> indexMus;
-      indexMus.clear();
-
-      // ---- these vectors containing the rank of each matched tau to avoid double counting ---
-      vector<int> indexTaus;
-      indexTaus.clear();
-      // =============================================================================
-
-      // ---- these vectors containing the muons or taus that are not matched into pairs ---
-      vector<TLorentzVector> unMatchedMus;
-      vector<TLorentzVector> unMatchedTaus;
-
-      vector<float> unMatchedMuIsos;
-      vector<float> unMatchedTauMVAIsos;
-      vector<float> unMatchedTauDM;
-
-      unMatchedMus.clear();
-      unMatchedTaus.clear();
-
-      unMatchedMuIsos.clear();
-      unMatchedTauMVAIsos.clear();
-      unMatchedTauDM.clear();
-      // =============================================================================
-      
-      // ---- define varibles that will be used to be pushed into the above vectors ---
+      // ---- define varibles that will be used to be filled into histograms ---
       TLorentzVector Mu;
       TLorentzVector Tau;
-      TLorentzVector unMatchedTau;
+
+      float MuIso;
+      float TauIso;
+      float TauDM;
+
+      unsigned int indexMu = -1;
+      unsigned int indexTau = -1;
       // =============================================================================
 
-      // ---- start loop on muon candidates ----
+      // ---- start loop on muon candidates for mu1 ----
+      bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if ((invertedMu1Iso == true && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold) || (invertedMu1Iso == false && recoMuonIsolation->at(iMuon) > Mu1IsoThreshold) || (recoMuonPt->at(iMuon) < 26.0))
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25)
           {
-              continue;
-          } // end if MuIso requirement
+              Mu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              MuIso = recoMuonIsolation->at(iMuon);
+              indexMu = iMuon;
+              findMu1 = true;
+              break;
+          } // end if there is any matched Mu1 candidiate
+      } // end loop for mu1
 
-          Mu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-          float highestPt = 0;
-          bool findTau = false;
-          int indexTau = 0;
+      if (!findMu1) continue;
+      bool findMu2 = false;
 
-          for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
-          {
-              bool condTauMVARaw = tauMVAIsoRawORWP == true && recoTauIsoMVArawValue->at(iTau) > tauMVAIsoRawThreshold;
-              bool condTauMVAWPVVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVLOOSE" && recoTauIsoMVAVVLoose->at(iTau)>0;
-              bool condTauMVAWPVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VLOOSE" && recoTauIsoMVAVLoose->at(iTau)>0;
-              bool condTauMVAWPLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "LOOSE" && recoTauIsoMVALoose->at(iTau)>0;
-              bool condTauMVAWPMedium = tauMVAIsoRawORWP == false && tauMVAIsoWP == "MEDIUM" && recoTauIsoMVAMedium->at(iTau)>0;
-              bool condTauMVAWPTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "TIGHT" && recoTauIsoMVATight->at(iTau)>0;
-              bool condTauMVAWPVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VTIGHT" && recoTauIsoMVAVTight->at(iTau)>0;
-              bool condTauMVAWPVVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVTIGHT" && recoTauIsoMVAVVTight->at(iTau)>0;
-              bool condTauAntiMuMVALoose = tauAntiMuDisc == "LOOSE" && recoTauAntiMuMVALoose->at(iTau)>0;
-              bool condTauAntiMuMVATight = tauAntiMuDisc == "TIGHT" && recoTauAntiMuMVATight->at(iTau)>0;
-              bool condTauAntiMuMVANull = tauAntiMuDisc != "LOOSE" && tauAntiMuDisc != "TIGHT";
-              bool condTauAntiEleMVALoose = tauAntiEleDisc == "LOOSE" && recoTauAntiEleMVALoose->at(iTau)>0;
-              bool condTauAntiEleMVAMedium = tauAntiEleDisc == "MEDIUM" && recoTauAntiEleMVAMedium->at(iTau)>0;
-              bool condTauAntiEleMVATight = tauAntiEleDisc == "TIGHT" && recoTauAntiEleMVATight->at(iTau)>0;
-              bool condTauAntiEleMVANull = tauAntiEleDisc != "LOOSE" && tauAntiEleDisc != "MEDIUM" && tauAntiEleDisc != "TIGHT";
+      // ---- start loop on muon candidates to veto dimuon events ----
+      for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+      {
+          if (iMuon == indexMu) continue;
+          if (recoMuonIsolation->at(iMuon) > 0.25) continue;
+          if (recoMuonPt->at(iMuon) > 10) {findMu2 = true;}
+      } // end loop for muon candidates
 
-              if ((condTauMVARaw || condTauMVAWPVVLoose || condTauMVAWPVLoose || condTauMVAWPLoose || condTauMVAWPMedium || condTauMVAWPTight || condTauMVAWPVTight || condTauMVAWPVVTight) && (condTauAntiMuMVALoose || condTauAntiMuMVATight || condTauAntiMuMVANull) && (condTauAntiEleMVALoose || condTauAntiEleMVAMedium || condTauAntiEleMVATight || condTauAntiEleMVANull))
-              {
-                  TLorentzVector TauCand;
-                  TauCand.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
-                  if (Mu.DeltaR(TauCand) > 0.5 && TauCand.Pt() > highestPt)
-                  {
-                      Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
-                      highestPt = TauCand.Pt();
-                      findTau = true;
-                      indexTau = iTau;
-                  } // end if dR (mu, tau) and highest pt
-              } // end if tau candidates satisfying MVA discriminators
-          } // end for loop on taus
+      if (findMu2) continue; // veto events with dimuon
+      float highestPt = 0;
+      bool findTau = false;
 
-          if (findTau == true)
-          {
-              Mus.push_back(Mu);
-              Taus.push_back(Tau);
-
-              TauIso.push_back(recoTauIsoMVArawValue->at(indexTau));
-              TauDM.push_back(recoTauDecayMode->at(indexTau));
-
-              indexMus.push_back(iMuon);
-              indexTaus.push_back(indexTau);
-          } // end if findTau
-
-          else{
-              unMatchedMus.push_back(Mu);
-              unMatchedMuIsos.push_back(recoMuonIsolation->at(iMuon));
-          } // end else findTau
-      } // end for loop on muons
-
-      // ---- search for unMatched tau candidates ----
       for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
-          std::vector<int>::iterator iter = std::find(indexTaus.begin(), indexTaus.end(), iTau);
-          if (iter == indexTaus.end())
+          bool condTauMVARaw = tauMVAIsoRawORWP == true && recoTauIsoMVArawValue->at(iTau) > tauMVAIsoRawThreshold;
+          bool condTauMVAWPVVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVLOOSE" && recoTauIsoMVAVVLoose->at(iTau)>0;
+          bool condTauMVAWPVLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VLOOSE" && recoTauIsoMVAVLoose->at(iTau)>0;
+          bool condTauMVAWPLoose = tauMVAIsoRawORWP == false && tauMVAIsoWP == "LOOSE" && recoTauIsoMVALoose->at(iTau)>0;
+          bool condTauMVAWPMedium = tauMVAIsoRawORWP == false && tauMVAIsoWP == "MEDIUM" && recoTauIsoMVAMedium->at(iTau)>0;
+          bool condTauMVAWPTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "TIGHT" && recoTauIsoMVATight->at(iTau)>0;
+          bool condTauMVAWPVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VTIGHT" && recoTauIsoMVAVTight->at(iTau)>0;
+          bool condTauMVAWPVVTight = tauMVAIsoRawORWP == false && tauMVAIsoWP == "VVTIGHT" && recoTauIsoMVAVVTight->at(iTau)>0;
+          bool condTauAntiMuMVALoose = tauAntiMuDisc == "LOOSE" && recoTauAntiMuMVALoose->at(iTau)>0;
+          bool condTauAntiMuMVATight = tauAntiMuDisc == "TIGHT" && recoTauAntiMuMVATight->at(iTau)>0;
+          bool condTauAntiMuMVANull = tauAntiMuDisc != "LOOSE" && tauAntiMuDisc != "TIGHT";
+          bool condTauAntiEleMVALoose = tauAntiEleDisc == "LOOSE" && recoTauAntiEleMVALoose->at(iTau)>0;
+          bool condTauAntiEleMVAMedium = tauAntiEleDisc == "MEDIUM" && recoTauAntiEleMVAMedium->at(iTau)>0;
+          bool condTauAntiEleMVATight = tauAntiEleDisc == "TIGHT" && recoTauAntiEleMVATight->at(iTau)>0;
+          bool condTauAntiEleMVANull = tauAntiEleDisc != "LOOSE" && tauAntiEleDisc != "MEDIUM" && tauAntiEleDisc != "TIGHT";
+
+          if ((condTauMVARaw || condTauMVAWPVVLoose || condTauMVAWPVLoose || condTauMVAWPLoose || condTauMVAWPMedium || condTauMVAWPTight || condTauMVAWPVTight || condTauMVAWPVVTight) && (condTauAntiMuMVALoose || condTauAntiMuMVATight || condTauAntiMuMVANull) && (condTauAntiEleMVALoose || condTauAntiEleMVAMedium || condTauAntiEleMVATight || condTauAntiEleMVANull))
           {
-              unMatchedTau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
-              unMatchedTaus.push_back(unMatchedTau);
-              unMatchedTauMVAIsos.push_back(recoTauIsoMVArawValue->at(iTau));
-              unMatchedTauDM.push_back(recoTauDecayMode->at(iTau));
-          } // end if find unMatched taus
-      } // end for loop on unMatched tau candidates
+              TLorentzVector TauCand;
+              TauCand.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+              if (Mu.DeltaR(TauCand) > 0.5 && TauCand.Pt() > highestPt)
+              {
+                  Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+                  TauIso = recoTauIsoMVArawValue->at(iTau);
+                  TauDM = recoTauDecayMode->at(iTau);
+                  highestPt = TauCand.Pt();
+                  indexTau = iTau;
+                  findTau = true;
+              } // end if dR (mu, tau) and highest pt
+          } // end if tau candidates satisfying MVA discriminators
+      } // end for loop on taus
 
       // ---- prepare event weight info ----
       double weight = 1;
@@ -160,21 +114,13 @@ void ZTauMuTauHadAnalyzer::Loop()
       } // end if isMC == true
 
       // ---- fill histograms ----
-      nMatchedMuTauPair->Fill(Mus.size(), weight);
-      nUnMatchedMu->Fill(unMatchedMus.size(), weight);
-      nUnMatchedTau->Fill(unMatchedTaus.size(), weight);
-
-      if (Mus.size()>0 && Taus.size()>0)
+      if (findMu1 && !findMu2 && findTau)
       {
           bool fillRec = false;
-
-          // --- filling histograms --- 
-          Mu = Mus.at(0);
-          Tau = Taus.at(0);
           TLorentzVector MuTau = Mu + Tau;
 
-          bool isSameSign = recoTauPDGId->at(indexTaus.at(0))/fabs(recoTauPDGId->at(indexTaus.at(0))) == recoMuonPDGId->at(indexMus.at(0))/fabs(recoMuonPDGId->at(indexMus.at(0)));
-          bool isOppositeSign = recoTauPDGId->at(indexTaus.at(0))/fabs(recoTauPDGId->at(indexTaus.at(0))) == (-1) * recoMuonPDGId->at(indexMus.at(0))/fabs(recoMuonPDGId->at(indexMus.at(0)));
+          bool isSameSign = recoTauPDGId->at(indexTau)/fabs(recoTauPDGId->at(indexTau)) == recoMuonPDGId->at(indexMu)/fabs(recoMuonPDGId->at(indexMu));
+          bool isOppositeSign = recoTauPDGId->at(indexTau)/fabs(recoTauPDGId->at(indexTau)) == (-1) * recoMuonPDGId->at(indexMu)/fabs(recoMuonPDGId->at(indexMu));
           if ((isSameSign && !signSameOROpposite) || (isOppositeSign && signSameOROpposite)) continue;
 
           float MetPt = recoMET->at(0);
@@ -282,8 +228,8 @@ void ZTauMuTauHadAnalyzer::Loop()
                   tauEta->Fill(Tau.Eta(), weight);
                   tauPhi->Fill(Tau.Phi(), weight);
                   tauMass->Fill(Tau.M(), weight);
-                  tauDecayMode->Fill(TauDM.at(0), weight);
-                  tauIsoMVA->Fill(TauIso.at(0), weight);
+                  tauDecayMode->Fill(TauDM, weight);
+                  tauIsoMVA->Fill(TauIso, weight);
 
                   dRMuTau->Fill(Mu.DeltaR(Tau), weight);
                   invMassMuTau->Fill(MuTau.M(), weight);
@@ -373,8 +319,8 @@ void ZTauMuTauHadAnalyzer::Loop()
                   tauEta->Fill(Tau.Eta(), weight);
                   tauPhi->Fill(Tau.Phi(), weight);
                   tauMass->Fill(Tau.M(), weight);
-                  tauDecayMode->Fill(TauDM.at(0), weight);
-                  tauIsoMVA->Fill(TauIso.at(0), weight);
+                  tauDecayMode->Fill(TauDM, weight);
+                  tauIsoMVA->Fill(TauIso, weight);
 
                   dRMuTau->Fill(Mu.DeltaR(Tau), weight);
                   invMassMuTau->Fill(MuTau.M(), weight);
@@ -460,8 +406,8 @@ void ZTauMuTauHadAnalyzer::Loop()
                   tauEta->Fill(Tau.Eta(), weight);
                   tauPhi->Fill(Tau.Phi(), weight);
                   tauMass->Fill(Tau.M(), weight);
-                  tauDecayMode->Fill(TauDM.at(0), weight);
-                  tauIsoMVA->Fill(TauIso.at(0), weight);
+                  tauDecayMode->Fill(TauDM, weight);
+                  tauIsoMVA->Fill(TauIso, weight);
 
                   dRMuTau->Fill(Mu.DeltaR(Tau), weight);
                   invMassMuTau->Fill(MuTau.M(), weight);
@@ -506,8 +452,8 @@ void ZTauMuTauHadAnalyzer::Loop()
                   tauEta->Fill(Tau.Eta(), weight);
                   tauPhi->Fill(Tau.Phi(), weight);
                   tauMass->Fill(Tau.M(), weight);
-                  tauDecayMode->Fill(TauDM.at(0), weight);
-                  tauIsoMVA->Fill(TauIso.at(0), weight);
+                  tauDecayMode->Fill(TauDM, weight);
+                  tauIsoMVA->Fill(TauIso, weight);
 
                   dRMuTau->Fill(Mu.DeltaR(Tau), weight);
                   invMassMuTau->Fill(MuTau.M(), weight);
@@ -624,24 +570,7 @@ void ZTauMuTauHadAnalyzer::Loop()
                   } // end if findMatchedRecGenTauMu && findMatchedRecGenTauHad
               } // end if isMC && fillRec == true
           } // end if doWhatSample != "ZTT" && doWhatSample != "DYB" && doWhatSample != "DYJ"
-      } // end if mu-tau pairs
-
-      for (unsigned int iMuon=0; iMuon<unMatchedMus.size(); iMuon++)
-      {
-          unMatchedMuPt->Fill(unMatchedMus.at(iMuon).Pt(), weight);
-          unMatchedMuEta->Fill(unMatchedMus.at(iMuon).Eta(), weight);
-          unMatchedMuPhi->Fill(unMatchedMus.at(iMuon).Phi(), weight);
-          unMatchedMuIso->Fill(unMatchedMuIsos.at(iMuon), weight);
-      } // end loop for unMatched muons
-
-      for (unsigned int iTau=0; iTau<unMatchedTaus.size(); iTau++)
-      {
-          unMatchedTauIsoMVA->Fill(unMatchedTauMVAIsos.at(iTau), weight);
-          unMatchedTauDecayMode->Fill(unMatchedTauDM.at(iTau), weight);
-          unMatchedTauPt->Fill(unMatchedTaus.at(iTau).Pt(), weight);
-          unMatchedTauEta->Fill(unMatchedTaus.at(iTau).Eta(), weight);
-          unMatchedTauPhi->Fill(unMatchedTaus.at(iTau).Phi(), weight);
-      } // end loop for unMatched taus
+      } // end if findMu1 && !findMu2 && findTau
    } // end for loop on events
 
    outputFile->cd();

@@ -86,10 +86,6 @@ HistoZmutau::HistoZmutau(){
     int NBinsMuTauPt = sizeof(MuTauPtBin)/sizeof(MuTauPtBin[0])-1;
     int NBinsMetPt = sizeof(metPtBin)/sizeof(metPtBin[0])-1;
 
-    nMatchedMuTauPair = newTH1D("nMatchedMuTauPair", "N(#mu#tau)", 5, 0, 5);
-    nUnMatchedMu = newTH1D("nUnMatchedMu", "N_{#mu}(unMatch)", 5, 0, 5);
-    nUnMatchedTau = newTH1D("nUnMatchedTau", "N_{#tau}(unMatch)", 5, 0, 5);
-
     dRMuMu = newTH1D("dRMuMu", "#Delta R(#mu_{1}#mu_{2})", 25, 0, 5.0);
     dRMuTau = newTH1D("dRMuTau", "#Delta R(#mu#tau)", 25, 0, 5.0);
 
@@ -101,17 +97,6 @@ HistoZmutau::HistoZmutau(){
 
     mtMuMet = newTH1D("mtMuMet", "M_{T}(#mu#slash{E_{T}})[GeV]", 20, 20, 180);
     pzeta = newTH1D("pzeta", "D_{#zeta}[GeV]", 40, -125, 75);
-
-    unMatchedMuPt = newTH1D("unMatchedMuPt", "p_{T}(#mu_{unMatched}) [GeV]", NBinsMuPt, MuPtBin);
-    unMatchedMuEta = newTH1D("unMatchedMuEta", "#eta(#mu_{unMatched})", 20, -2.1, 2.1);
-    unMatchedMuPhi = newTH1D("unMatchedMuPhi", "#phi(#mu_{unMatched})", 20, -2.5, 2.5);
-    unMatchedMuIso = newTH1D("unMatchedMuIso", "#mu^{iso}(unMatch)", 200, 0, 200);
-
-    unMatchedTauPt = newTH1D("unMatchedTauPt", "p_{T}(#tau_{unMatched}) [GeV]", 50, 3, 203);
-    unMatchedTauEta = newTH1D("unMatchedTauEta", "#eta(#tau_{unMatched})", 20, -2.1, 2.1);
-    unMatchedTauPhi = newTH1D("unMatchedTauPhi", "#phi(#tau_{unMatched})", 20, -2.5, 2.5);
-    unMatchedTauIsoMVA = newTH1D("unMatchedTauIsoMVA", "#tau^{iso}(unMatch)", 20, -1, 1);
-    unMatchedTauDecayMode = newTH1D("unMatchedTauDecayMode", "DM(unMatch #tau)", 11, 0, 11);
 
     muPt = newTH1D("muPt", "p_{T}(#mu) [GeV]", NBinsMuPt, MuPtBin);
     muEta = newTH1D("muEta", "#eta(#mu)", 20, -2.1, 2.1);

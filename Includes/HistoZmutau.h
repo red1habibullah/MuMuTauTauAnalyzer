@@ -27,10 +27,6 @@ class HistoZmutau{
         HistoZmutau();
         ~HistoZmutau();
 
-        TH1D* nMatchedMuTauPair;
-        TH1D* nUnMatchedMu;
-        TH1D* nUnMatchedTau;
-
         TH1D* dRMuMu;
         TH1D* dRMuTau;
         TH1D* invMassMuMu;
@@ -39,17 +35,6 @@ class HistoZmutau{
         TH1D* ptMuTau;
         TH1D* mtMuMet;
         TH1D* pzeta;
-
-        TH1D* unMatchedMuPt;
-        TH1D* unMatchedMuEta;
-        TH1D* unMatchedMuPhi;
-        TH1D* unMatchedMuIso;
-
-        TH1D* unMatchedTauPt;
-        TH1D* unMatchedTauEta;
-        TH1D* unMatchedTauPhi;
-        TH1D* unMatchedTauIsoMVA;
-        TH1D* unMatchedTauDecayMode;
 
         TH1D* muPt;
         TH1D* muEta;
