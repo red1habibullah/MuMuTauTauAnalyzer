@@ -46,7 +46,7 @@ void ZTauMuTauHadAnalyzer::Loop()
       bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25)
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && ((!invertedMu1Iso && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold) || (invertedMu1Iso && recoMuonIsolation->at(iMuon) > Mu1IsoThreshold)))
           {
               Mu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               indexMu = iMuon;
