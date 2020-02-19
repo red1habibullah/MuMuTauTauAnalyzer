@@ -35,7 +35,6 @@ void ZTauMuTauHadAnalyzer::Loop()
       TLorentzVector Mu;
       TLorentzVector Tau;
 
-      float MuIso;
       float TauIso;
       float TauDM;
 
@@ -50,7 +49,6 @@ void ZTauMuTauHadAnalyzer::Loop()
           if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25)
           {
               Mu.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-              MuIso = recoMuonIsolation->at(iMuon);
               indexMu = iMuon;
               findMu1 = true;
               break;
