@@ -86,7 +86,7 @@ public :
    bool invertedMu4Iso;
    double Mu4IsoThreshold;
 
-   FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu4Iso = false, double Mu4IsoThreshold = 0.25);
+   FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu4Iso_ = false, double Mu4IsoThreshold_ = 0.25);
    string createOutputFileName();
    virtual ~FakeMuMuTauMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);

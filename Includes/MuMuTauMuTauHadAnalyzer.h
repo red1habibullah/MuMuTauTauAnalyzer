@@ -132,8 +132,12 @@ public :
    double Mu2IsoThreshold;
    double diMuonMassLowThreshold;
    double diMuonMassHighThreshold;
+   bool tauMVAIsoRawORWP;
+   double tauMVAIsoRawThreshold;
+   TString tauMVAIsoWP;
+   TString tauAntiMuDisc;
 
-   MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
+   MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiMuDisc_ = "NULL");
    string createOutputFileName();
    virtual ~MuMuTauMuTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -148,7 +152,7 @@ public :
 #endif
 
 #ifdef MuMuTauMuTauHadAnalyzer_cxx
-MuMuTauMuTauHadAnalyzer::MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
+MuMuTauMuTauHadAnalyzer::MuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiMuDisc_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -161,6 +165,10 @@ MuMuTauMuTauHadAnalyzer::MuMuTauMuTauHadAnalyzer(TString fileName_, TString outp
     Mu2IsoThreshold = Mu2IsoThreshold_;
     diMuonMassLowThreshold = diMuonMassLowThreshold_;
     diMuonMassHighThreshold = diMuonMassHighThreshold_;
+    tauMVAIsoRawORWP = tauMVAIsoRawORWP_;
+    tauMVAIsoRawThreshold = tauMVAIsoRawThreshold_;
+    tauMVAIsoWP = tauMVAIsoWP_;
+    tauAntiMuDisc = tauAntiMuDisc_;
     invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
 
     //--- Create output directory if necessary ---

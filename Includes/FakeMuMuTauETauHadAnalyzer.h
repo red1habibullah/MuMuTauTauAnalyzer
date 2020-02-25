@@ -209,7 +209,7 @@ public :
    TString tauAntiEleDisc;
    bool matchRecGen;
 
-   FakeMuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP = false, double tauMVAIsoRawThreshold = -0.5, TString tauMVAIsoWP = "MEDIUM", TString tauAntiEleDisc_ = "LOOSE", bool matchRecGen_ = false);
+   FakeMuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiEleDisc_ = "LOOSE", bool matchRecGen_ = false);
    string createOutputFileName();
    virtual ~FakeMuMuTauETauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
