@@ -42,6 +42,29 @@ public :
    vector<float>   *recoTauEnergy;
    vector<int>     *recoTauPDGId;
    vector<float>   *recoTauDecayMode;
+   vector<float>   *recoTauDeepVSeraw;
+   vector<float>   *recoTauDeepVSjetraw;
+   vector<float>   *recoTauDeepVSmuraw;
+   vector<float>   *recoTauDeepVSeLoose;
+   vector<float>   *recoTauDeepVSjetLoose;
+   vector<float>   *recoTauDeepVSmuLoose;
+   vector<float>   *recoTauDeepVSeMedium;
+   vector<float>   *recoTauDeepVSjetMedium;
+   vector<float>   *recoTauDeepVSmuMedium;
+   vector<float>   *recoTauDeepVSeTight;
+   vector<float>   *recoTauDeepVSjetTight;
+   vector<float>   *recoTauDeepVSmuTight;
+   vector<float>   *recoTauDeepVSeVLoose;
+   vector<float>   *recoTauDeepVSjetVLoose;
+   vector<float>   *recoTauDeepVSmuVLoose;
+   vector<float>   *recoTauDeepVSeVTight;
+   vector<float>   *recoTauDeepVSjetVTight;
+   vector<float>   *recoTauDeepVSeVVLoose;
+   vector<float>   *recoTauDeepVSjetVVLoose;
+   vector<float>   *recoTauDeepVSeVVTight;
+   vector<float>   *recoTauDeepVSjetVVTight;
+   vector<float>   *recoTauDeepVSeVVVLoose;
+   vector<float>   *recoTauDeepVSjetVVVLoose;
    vector<float>   *recoTauIsoMVArawValue;
    vector<float>   *recoTauIsoMVAVVLoose;
    vector<float>   *recoTauIsoMVAVLoose;
@@ -90,6 +113,29 @@ public :
    TBranch        *b_recoTauEnergy;   //!
    TBranch        *b_recoTauPDGId;   //!
    TBranch        *b_recoTauDecayMode;   //!
+   TBranch        *b_recoTauDeepVSeraw;   //!
+   TBranch        *b_recoTauDeepVSjetraw;   //!
+   TBranch        *b_recoTauDeepVSmuraw;   //!
+   TBranch        *b_recoTauDeepVSeLoose;   //!
+   TBranch        *b_recoTauDeepVSjetLoose;   //!
+   TBranch        *b_recoTauDeepVSmuLoose;   //!
+   TBranch        *b_recoTauDeepVSeMedium;   //!
+   TBranch        *b_recoTauDeepVSjetMedium;   //!
+   TBranch        *b_recoTauDeepVSmuMedium;   //!
+   TBranch        *b_recoTauDeepVSeTight;   //!
+   TBranch        *b_recoTauDeepVSjetTight;   //!
+   TBranch        *b_recoTauDeepVSmuTight;   //!
+   TBranch        *b_recoTauDeepVSeVLoose;   //!
+   TBranch        *b_recoTauDeepVSjetVLoose;   //!
+   TBranch        *b_recoTauDeepVSmuVLoose;   //!
+   TBranch        *b_recoTauDeepVSeVTight;   //!
+   TBranch        *b_recoTauDeepVSjetVTight;   //!
+   TBranch        *b_recoTauDeepVSeVVLoose;   //!
+   TBranch        *b_recoTauDeepVSjetVVLoose;   //!
+   TBranch        *b_recoTauDeepVSeVVTight;   //!
+   TBranch        *b_recoTauDeepVSjetVVTight;   //!
+   TBranch        *b_recoTauDeepVSeVVVLoose;   //!
+   TBranch        *b_recoTauDeepVSjetVVVLoose;   //!
    TBranch        *b_recoTauIsoMVArawValue;   //!
    TBranch        *b_recoTauIsoMVAVVLoose;   //!
    TBranch        *b_recoTauIsoMVAVLoose;   //!
@@ -134,8 +180,15 @@ public :
    TString tauAntiEleDisc;
    double diMuonMassLowThreshold;
    double diMuonMassHighThreshold;
+   bool tauMVAIsoRawORWP;
+   double tauMVAIsoRawThreshold;
+   TString tauMVAIsoWP;
+   bool deepTauID;
+   TString deepTauVSele;
+   TString deepTauVSmu;
+   TString deepTauVSjet;
 
-   MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25, TString tauAntiMuDisc_ = "NULL", TString tauAntiEleDisc_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
+   MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25, TString tauAntiMuDisc_ = "NULL", TString tauAntiEleDisc_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", bool deepTauID_ = false, TString deepTauVSele_ = "LOOSE", TString deepTauVSmu_ = "LOOSE", TString deepTauVSjet_ = "MEDIUM");
    string createOutputFileName();
    virtual ~MuMuTauHadTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -150,7 +203,7 @@ public :
 #endif
 
 #ifdef MuMuTauHadTauHadAnalyzer_cxx
-MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_, TString tauAntiMuDisc_, TString tauAntiEleDisc_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
+MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_, TString tauAntiMuDisc_, TString tauAntiEleDisc_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, bool deepTauID_, TString deepTauVSele_, TString deepTauVSmu_, TString deepTauVSjet_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -165,6 +218,13 @@ MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString ou
     tauAntiEleDisc = tauAntiEleDisc_;
     diMuonMassLowThreshold = diMuonMassLowThreshold_;
     diMuonMassHighThreshold = diMuonMassHighThreshold_;
+    tauMVAIsoRawORWP = tauMVAIsoRawORWP_;
+    tauMVAIsoRawThreshold = tauMVAIsoRawThreshold_;
+    tauMVAIsoWP = tauMVAIsoWP_;
+    deepTauID = deepTauID_;
+    deepTauVSele = deepTauVSele_;
+    deepTauVSmu = deepTauVSmu_;
+    deepTauVSjet = deepTauVSjet_;
     invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
 
     //--- Create output directory if necessary ---
@@ -249,6 +309,29 @@ void MuMuTauHadTauHadAnalyzer::Init()
    recoTauEnergy = 0;
    recoTauPDGId = 0;
    recoTauDecayMode = 0;
+   recoTauDeepVSeraw = 0;
+   recoTauDeepVSjetraw = 0;
+   recoTauDeepVSmuraw = 0;
+   recoTauDeepVSeLoose = 0;
+   recoTauDeepVSjetLoose = 0;
+   recoTauDeepVSmuLoose = 0;
+   recoTauDeepVSeMedium = 0;
+   recoTauDeepVSjetMedium = 0;
+   recoTauDeepVSmuMedium = 0;
+   recoTauDeepVSeTight = 0;
+   recoTauDeepVSjetTight = 0;
+   recoTauDeepVSmuTight = 0;
+   recoTauDeepVSeVLoose = 0;
+   recoTauDeepVSjetVLoose = 0;
+   recoTauDeepVSmuVLoose = 0;
+   recoTauDeepVSeVTight = 0;
+   recoTauDeepVSjetVTight = 0;
+   recoTauDeepVSeVVLoose = 0;
+   recoTauDeepVSjetVVLoose = 0;
+   recoTauDeepVSeVVTight = 0;
+   recoTauDeepVSjetVVTight = 0;
+   recoTauDeepVSeVVVLoose = 0;
+   recoTauDeepVSjetVVVLoose = 0;
    recoTauIsoMVArawValue = 0;
    recoTauIsoMVAVVLoose = 0;
    recoTauIsoMVAVLoose = 0;
@@ -294,6 +377,29 @@ void MuMuTauHadTauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoTauEnergy", &recoTauEnergy, &b_recoTauEnergy);
    fChain->SetBranchAddress("recoTauPDGId", &recoTauPDGId, &b_recoTauPDGId);
    fChain->SetBranchAddress("recoTauDecayMode", &recoTauDecayMode, &b_recoTauDecayMode);
+   fChain->SetBranchAddress("recoTauDeepVSeraw", &recoTauDeepVSeraw, &b_recoTauDeepVSeraw);
+   fChain->SetBranchAddress("recoTauDeepVSjetraw", &recoTauDeepVSjetraw, &b_recoTauDeepVSjetraw);
+   fChain->SetBranchAddress("recoTauDeepVSmuraw", &recoTauDeepVSmuraw, &b_recoTauDeepVSmuraw);
+   fChain->SetBranchAddress("recoTauDeepVSeLoose", &recoTauDeepVSeLoose, &b_recoTauDeepVSeLoose);
+   fChain->SetBranchAddress("recoTauDeepVSjetLoose", &recoTauDeepVSjetLoose, &b_recoTauDeepVSjetLoose);
+   fChain->SetBranchAddress("recoTauDeepVSmuLoose", &recoTauDeepVSmuLoose, &b_recoTauDeepVSmuLoose);
+   fChain->SetBranchAddress("recoTauDeepVSeMedium", &recoTauDeepVSeMedium, &b_recoTauDeepVSeMedium);
+   fChain->SetBranchAddress("recoTauDeepVSjetMedium", &recoTauDeepVSjetMedium, &b_recoTauDeepVSjetMedium);
+   fChain->SetBranchAddress("recoTauDeepVSmuMedium", &recoTauDeepVSmuMedium, &b_recoTauDeepVSmuMedium);
+   fChain->SetBranchAddress("recoTauDeepVSeTight", &recoTauDeepVSeTight, &b_recoTauDeepVSeTight);
+   fChain->SetBranchAddress("recoTauDeepVSjetTight", &recoTauDeepVSjetTight, &b_recoTauDeepVSjetTight);
+   fChain->SetBranchAddress("recoTauDeepVSmuTight", &recoTauDeepVSmuTight, &b_recoTauDeepVSmuTight);
+   fChain->SetBranchAddress("recoTauDeepVSeVLoose", &recoTauDeepVSeVLoose, &b_recoTauDeepVSeVLoose);
+   fChain->SetBranchAddress("recoTauDeepVSjetVLoose", &recoTauDeepVSjetVLoose, &b_recoTauDeepVSjetVLoose);
+   fChain->SetBranchAddress("recoTauDeepVSmuVLoose", &recoTauDeepVSmuVLoose, &b_recoTauDeepVSmuVLoose);
+   fChain->SetBranchAddress("recoTauDeepVSeVTight", &recoTauDeepVSeVTight, &b_recoTauDeepVSeVTight);
+   fChain->SetBranchAddress("recoTauDeepVSjetVTight", &recoTauDeepVSjetVTight, &b_recoTauDeepVSjetVTight);
+   fChain->SetBranchAddress("recoTauDeepVSeVVLoose", &recoTauDeepVSeVVLoose, &b_recoTauDeepVSeVVLoose);
+   fChain->SetBranchAddress("recoTauDeepVSjetVVLoose", &recoTauDeepVSjetVVLoose, &b_recoTauDeepVSjetVVLoose);
+   fChain->SetBranchAddress("recoTauDeepVSeVVTight", &recoTauDeepVSeVVTight, &b_recoTauDeepVSeVVTight);
+   fChain->SetBranchAddress("recoTauDeepVSjetVVTight", &recoTauDeepVSjetVVTight, &b_recoTauDeepVSjetVVTight);
+   fChain->SetBranchAddress("recoTauDeepVSeVVVLoose", &recoTauDeepVSeVVVLoose, &b_recoTauDeepVSeVVVLoose);
+   fChain->SetBranchAddress("recoTauDeepVSjetVVVLoose", &recoTauDeepVSjetVVVLoose, &b_recoTauDeepVSjetVVVLoose);
    fChain->SetBranchAddress("recoTauIsoMVArawValue", &recoTauIsoMVArawValue, &b_recoTauIsoMVArawValue);
    fChain->SetBranchAddress("recoTauIsoMVAVVLoose", &recoTauIsoMVAVVLoose, &b_recoTauIsoMVAVVLoose);
    fChain->SetBranchAddress("recoTauIsoMVAVLoose", &recoTauIsoMVAVLoose, &b_recoTauIsoMVAVLoose);
