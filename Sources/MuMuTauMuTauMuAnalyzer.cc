@@ -173,6 +173,12 @@ void MuMuTauMuTauMuAnalyzer::Loop()
 
           ptMuMuTauMuTauMu->Fill((Mu1+Mu2+Mu3+Mu4).Pt(), weight);
           invMassMuMuTauMuTauMu->Fill((Mu1+Mu2+Mu3+Mu4).M(), weight);
+
+          // ----- fill flat trees -----
+          invMassMuMu = (Mu1+Mu2).M();
+          visMassTauTau = (Mu3+Mu4).M();
+          visMassMuMuTauTau = (Mu1+Mu2+Mu3+Mu4).M();
+          TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2 && findMuMuPair
    }// end loop for events
 
@@ -188,5 +194,6 @@ void MuMuTauMuTauMuAnalyzer::Loop()
        delete histColl[j];
    } // end loop for deleting all the histograms
 
+   TreeMuMuTauTau->Write("TreeMuMuTauTau", TObject::kOverwrite);
    outputFile->Close();
 }

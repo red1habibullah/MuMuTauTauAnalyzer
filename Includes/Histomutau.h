@@ -1,6 +1,7 @@
 #ifndef _Histomutau_h_
 #define _Histomutau_h_
 
+#include "TTree.h"
 #include "TH1.h"
 #include "TH2.h"
 #include <iostream>
@@ -131,6 +132,12 @@ class Histomutau{
         TH2D* dRInvMassMu3Tau;
         TH2D* dRInvMassEleTau;
         TH2D* dRInvMassTauTau;
+
+        // ----------- flat tree for fit -----------
+        TTree* TreeMuMuTauTau;
+        double invMassMuMu;
+        double visMassTauTau;
+        double visMassMuMuTauTau;
 };
 
 #endif

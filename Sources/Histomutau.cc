@@ -204,6 +204,12 @@ Histomutau::Histomutau(){
     dRInvMassMu3Tau = newTH2D("dRInvMassMu3Tau", "#Delta R(#mu_{3}#tau)", "M(#mu_{3}#tau)[GeV]", 25, 0, 1, 20, 0, 60);
     dRInvMassEleTau = newTH2D("dRInvMassEleTau", "#Delta R(e#tau)", "M(e#tau)[GeV]", 25, 0, 1, 20, 0, 60);
     dRInvMassTauTau = newTH2D("dRInvMassTauTau", "#Delta R(#tau#tau)", "M(#tau#tau)[GeV]", 25, 0, 1, 20, 0, 60);
+
+    // ----------- flat tree for fit -----------
+    TreeMuMuTauTau = new TTree("TreeMuMuTauTau","TreeMuMuTauTau");
+    TreeMuMuTauTau->Branch("invMassMuMu", &invMassMuMu, "invMassMuMu/D");
+    TreeMuMuTauTau->Branch("visMassTauTau", &visMassTauTau, "visMassTauTau/D");
+    TreeMuMuTauTau->Branch("visMassMuMuTauTau", &visMassMuMuTauTau, "visMassMuMuTauTau/D");
 }
 
 Histomutau::~Histomutau()
