@@ -5,20 +5,20 @@
 // found on file: MuMuTreelization.root
 //////////////////////////////////////////////////////////
 
-#ifndef MuMuAnalyzer_h
-#define MuMuAnalyzer_h
+#ifndef ZMuMuAnalyzer_h
+#define ZMuMuAnalyzer_h
 
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include "HistoZmumu.h"
 #include <TString.h>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
-#include "Histomutau.h"
 
-class MuMuAnalyzer : public Histomutau {
+class ZMuMuAnalyzer : public HistoZmumu {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -83,14 +83,10 @@ public :
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
-   bool invertedMu2Iso;
-   double Mu2IsoThreshold;
-   double diMuonMassLowThreshold;
-   double diMuonMassHighThreshold;
 
-   MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, double Mu2IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
+   ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false);
    string createOutputFileName();
-   virtual ~MuMuAnalyzer();
+   virtual ~ZMuMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
@@ -102,8 +98,8 @@ public :
 
 #endif
 
-#ifdef MuMuAnalyzer_cxx
-MuMuAnalyzer::MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, double Mu2IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
+#ifdef ZMuMuAnalyzer_cxx
+ZMuMuAnalyzer::ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -111,11 +107,6 @@ MuMuAnalyzer::MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScal
     summedWeights = summedWeights_;
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
-    invertedMu2Iso = invertedMu2Iso_;
-    Mu2IsoThreshold = Mu2IsoThreshold_;
-    diMuonMassLowThreshold = diMuonMassLowThreshold_;
-    diMuonMassHighThreshold = diMuonMassHighThreshold_;
-    invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
@@ -128,13 +119,13 @@ MuMuAnalyzer::MuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScal
     system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + "/DiMuDiTauAnalyzer/objectTree";
+    TString treePath = fileName + "/ZMuMuInclusiveAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
 }
 
-string MuMuAnalyzer::createOutputFileName()
+string ZMuMuAnalyzer::createOutputFileName()
 {
     ostringstream outputName;
     fileName.Replace(0, fileName.Last('/'), "");
@@ -147,19 +138,19 @@ string MuMuAnalyzer::createOutputFileName()
     return outputName.str();
 }
 
-MuMuAnalyzer::~MuMuAnalyzer()
+ZMuMuAnalyzer::~ZMuMuAnalyzer()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t MuMuAnalyzer::GetEntry(Long64_t entry)
+Int_t ZMuMuAnalyzer::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t MuMuAnalyzer::LoadTree(Long64_t entry)
+Long64_t ZMuMuAnalyzer::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -172,7 +163,7 @@ Long64_t MuMuAnalyzer::LoadTree(Long64_t entry)
    return centry;
 }
 
-void MuMuAnalyzer::Init()
+void ZMuMuAnalyzer::Init()
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -236,7 +227,7 @@ void MuMuAnalyzer::Init()
    Notify();
 }
 
-Bool_t MuMuAnalyzer::Notify()
+Bool_t ZMuMuAnalyzer::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -247,18 +238,18 @@ Bool_t MuMuAnalyzer::Notify()
    return kTRUE;
 }
 
-void MuMuAnalyzer::Show(Long64_t entry)
+void ZMuMuAnalyzer::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t MuMuAnalyzer::Cut(Long64_t entry)
+Int_t ZMuMuAnalyzer::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef MuMuAnalyzer_cxx
+#endif // #ifdef ZMuMuAnalyzer_cxx

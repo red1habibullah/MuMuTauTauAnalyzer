@@ -27,4 +27,5 @@ runFakeMuMuTauMuTauHadAnalyzer
 runFakeMuMuTauETauHadAnalyzer
 runFakeMuMuTauHadTauHadAnalyzer
 runZTauMuTauHadAnalyzer
+runZMuMuAnalyzer
 mumutautau.cfg

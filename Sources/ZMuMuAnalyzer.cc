@@ -1,5 +1,5 @@
-#define MuMuAnalyzer_cxx
-#include "MuMuAnalyzer.h"
+#define ZMuMuAnalyzer_cxx
+#include "ZMuMuAnalyzer.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
@@ -11,7 +11,7 @@
 #include <math.h>
 using namespace std;
 
-void MuMuAnalyzer::Loop()
+void ZMuMuAnalyzer::Loop()
 {
    TString outputfileName = createOutputFileName();
    TFile* outputFile = new TFile(outputfileName, "RECREATE");
@@ -56,23 +56,27 @@ void MuMuAnalyzer::Loop()
       } // end loop for mu1
 
       if (!findMu1) continue;
-      float smallestDR = 1.0; // dR cut between Mu1 and Mu2
+      float dRCut = 0.3; // dR cut between Mu1 and Mu2
+      float highestPt = 0;
+      float invMassLowThre = 60.0;
+      float invMassHighThre = 120.0;
       bool findMu2 = false;
 
       // ---- start loop on muon candidates for mu2 ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           if (iMuon == indexMu1) continue;
-          if ((invertedMu2Iso == false && recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || (invertedMu2Iso == true && recoMuonIsolation->at(iMuon) < Mu2IsoThreshold)) continue;
+          if (recoMuonIsolation->at(iMuon) > 0.25) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-
-          if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(indexMu1) == (-1) * recoMuonPDGId->at(iMuon)) && ((Mu1+Mu2Cand).M() > diMuonMassLowThreshold) && ((Mu1+Mu2Cand).M() < diMuonMassHighThreshold))
+          if((Mu1.DeltaR(Mu2Cand) > dRCut) && (Mu2Cand.Pt() > highestPt) 
+                  && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
+                  && (recoMuonPDGId->at(indexMu1) == (-1) * recoMuonPDGId->at(iMuon)))
           {
               Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu2Iso = recoMuonIsolation->at(iMuon);
-              smallestDR = Mu1.DeltaR(Mu2);
+              highestPt = Mu2Cand.Pt();
               findMu2 = true;
           } // end if pair candidates
       } // end loop for mu2
@@ -102,10 +106,6 @@ void MuMuAnalyzer::Loop()
           mu2Pt->Fill(Mu2.Pt(), weight);
           mu2Eta->Fill(Mu2.Eta(), weight);
           mu2Phi->Fill(Mu2.Phi(), weight);
-
-          // ----- fill flat trees -----
-          invMassMuMu = (Mu1+Mu2).M();
-          TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2
    }// end loop for events
 
@@ -121,6 +121,5 @@ void MuMuAnalyzer::Loop()
        delete histColl[j];
    } // end loop for deleting all the histograms
 
-   TreeMuMuTauTau->Write("TreeMuMuTauTau", TObject::kOverwrite);
    outputFile->Close();
 }

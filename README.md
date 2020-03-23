@@ -25,6 +25,8 @@ also customized in the command line for instance when executing the analyzer, fo
 
 $ ./runMuMuAnalyzer doWhat=DYJets maxEvents=1000 inputFile=inputFile.root ###### for producing histograms of the dimuon channel (control region)
 
+$ ./runZMuMuAnalyzer doWhat=DYJets maxEvents=1000 inputFile=inputFile.root ###### for producing histograms of the dimuon channel (Z boson control region)
+
 # Run the diMuon + ditau (tau_mu + tau_mu) Analyzer:
 
 $ ./runMuMuTauMuTauMuAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.root ###### for producing histograms of the tau_mu + tau_mu channel
