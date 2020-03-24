@@ -208,8 +208,9 @@ public :
    TString tauMVAIsoWP;
    TString tauAntiEleDisc;
    bool matchRecGen;
+   double tauDecayModeThreshold;
 
-   FakeMuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiEleDisc_ = "LOOSE", bool matchRecGen_ = false);
+   FakeMuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiEleDisc_ = "LOOSE", bool matchRecGen_ = false, double tauDecayModeThreshold_ = -1);
    string createOutputFileName();
    virtual ~FakeMuMuTauETauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -224,7 +225,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauETauHadAnalyzer_cxx
-FakeMuMuTauETauHadAnalyzer::FakeMuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiEleDisc_, bool matchRecGen_) : HistoZmumu() 
+FakeMuMuTauETauHadAnalyzer::FakeMuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiEleDisc_, bool matchRecGen_, double tauDecayModeThreshold_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -237,6 +238,7 @@ FakeMuMuTauETauHadAnalyzer::FakeMuMuTauETauHadAnalyzer(TString fileName_, TStrin
     tauMVAIsoWP = tauMVAIsoWP_;
     tauAntiEleDisc = tauAntiEleDisc_;
     matchRecGen = matchRecGen_;
+    tauDecayModeThreshold = tauDecayModeThreshold_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {

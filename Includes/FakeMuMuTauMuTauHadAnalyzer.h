@@ -180,8 +180,9 @@ public :
    TString tauMVAIsoWP;
    TString tauAntiMuDisc;
    bool matchRecGen;
+   double tauDecayModeThreshold;
 
-   FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiMuDisc_ = "LOOSE", bool matchRecGen_ = false);
+   FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiMuDisc_ = "LOOSE", bool matchRecGen_ = false, double tauDecayModeThreshold_ = -1);
    string createOutputFileName();
    virtual ~FakeMuMuTauMuTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -196,7 +197,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauMuTauHadAnalyzer_cxx
-FakeMuMuTauMuTauHadAnalyzer::FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiMuDisc_, bool matchRecGen_) : HistoZmumu() 
+FakeMuMuTauMuTauHadAnalyzer::FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiMuDisc_, bool matchRecGen_, double tauDecayModeThreshold_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -209,6 +210,7 @@ FakeMuMuTauMuTauHadAnalyzer::FakeMuMuTauMuTauHadAnalyzer(TString fileName_, TStr
     tauMVAIsoWP = tauMVAIsoWP_;
     tauAntiMuDisc = tauAntiMuDisc_;
     matchRecGen = matchRecGen_;
+    tauDecayModeThreshold = tauDecayModeThreshold_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
