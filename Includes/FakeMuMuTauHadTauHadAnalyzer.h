@@ -165,8 +165,9 @@ public :
    TString tauAntiMuDisc;
    TString tauAntiEleDisc;
    bool matchRecGen;
+   double tauDecayModeThreshold;
 
-   FakeMuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiMuDisc_ = "LOOSE", TString tauAntiEleDisc_ = "LOOSE", bool matchRecGen_ = false);
+   FakeMuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiMuDisc_ = "LOOSE", TString tauAntiEleDisc_ = "LOOSE", bool matchRecGen_ = false, double tauDecayModeThreshold_ = -1);
    string createOutputFileName();
    virtual ~FakeMuMuTauHadTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -181,7 +182,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauHadTauHadAnalyzer_cxx
-FakeMuMuTauHadTauHadAnalyzer::FakeMuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiMuDisc_, TString tauAntiEleDisc_, bool matchRecGen_) : HistoZmumu() 
+FakeMuMuTauHadTauHadAnalyzer::FakeMuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiMuDisc_, TString tauAntiEleDisc_, bool matchRecGen_, double tauDecayModeThreshold_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -195,6 +196,7 @@ FakeMuMuTauHadTauHadAnalyzer::FakeMuMuTauHadTauHadAnalyzer(TString fileName_, TS
     tauAntiMuDisc = tauAntiMuDisc_;
     tauAntiEleDisc = tauAntiEleDisc_;
     matchRecGen = matchRecGen_;
+    tauDecayModeThreshold = tauDecayModeThreshold_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
