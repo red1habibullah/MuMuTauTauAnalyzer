@@ -151,10 +151,12 @@ class Histomutau{
 
         double Tau1Pt;
         double Tau1Eta;
+        double Tau1Isolation;
         double Tau1DecayMode;
 
         double Tau2Pt;
         double Tau2Eta;
+        double Tau2Isolation;
         double Tau2DecayMode;
 };
 

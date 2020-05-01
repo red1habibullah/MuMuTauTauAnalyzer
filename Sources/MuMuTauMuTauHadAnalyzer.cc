@@ -225,10 +225,12 @@ void MuMuTauMuTauHadAnalyzer::Loop()
 
           Tau1Pt = Mu3.Pt();
           Tau1Eta = Mu3.Eta();
+          Tau1Isolation = Mu3Iso;
 
           Tau2Pt = Tau.Pt();
           Tau2Eta = Tau.Eta();
           Tau2DecayMode = TauDM;
+          Tau2Isolation = TauIso;
 
           TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2 && findMuTauPair

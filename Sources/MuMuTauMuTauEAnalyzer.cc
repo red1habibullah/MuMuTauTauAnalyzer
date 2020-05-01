@@ -188,9 +188,11 @@ void MuMuTauMuTauEAnalyzer::Loop()
 
           Tau1Pt = Mu3.Pt();
           Tau1Eta = Mu3.Eta();
+          Tau1Isolation = Mu3Iso;
 
           Tau2Pt = Ele.Pt();
           Tau2Eta = Ele.Eta();
+          Tau2Isolation = EleIso;
 
           TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2 && findMuElePair

@@ -223,10 +223,12 @@ Histomutau::Histomutau(){
 
     TreeMuMuTauTau->Branch("Tau1Pt", &Tau1Pt, "Tau1Pt/D");
     TreeMuMuTauTau->Branch("Tau1Eta", &Tau1Eta, "Tau1Eta/D");
+    TreeMuMuTauTau->Branch("Tau1Isolation", &Tau1Isolation, "Tau1Isolation/D");
     TreeMuMuTauTau->Branch("Tau1DecayMode", &Tau1DecayMode, "Tau1DecayMode/D");
 
     TreeMuMuTauTau->Branch("Tau2Pt", &Tau2Pt, "Tau2Pt/D");
     TreeMuMuTauTau->Branch("Tau2Eta", &Tau2Eta, "Tau2Eta/D");
+    TreeMuMuTauTau->Branch("Tau2Isolation", &Tau2Isolation, "Tau2Isolation/D");
     TreeMuMuTauTau->Branch("Tau2DecayMode", &Tau2DecayMode, "Tau2DecayMode/D");
 }
 
