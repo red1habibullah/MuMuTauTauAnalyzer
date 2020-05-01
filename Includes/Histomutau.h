@@ -135,9 +135,27 @@ class Histomutau{
 
         // ----------- flat tree for fit -----------
         TTree* TreeMuMuTauTau;
+        
         double invMassMuMu;
         double visMassTauTau;
         double visMassMuMuTauTau;
+
+        double deltaRMuMu;
+        double deltaRTauTau;
+
+        double Mu1Pt;
+        double Mu1Eta;
+
+        double Mu2Pt;
+        double Mu2Eta;
+
+        double Tau1Pt;
+        double Tau1Eta;
+        double Tau1DecayMode;
+
+        double Tau2Pt;
+        double Tau2Eta;
+        double Tau2DecayMode;
 };
 
 #endif

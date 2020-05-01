@@ -207,9 +207,27 @@ Histomutau::Histomutau(){
 
     // ----------- flat tree for fit -----------
     TreeMuMuTauTau = new TTree("TreeMuMuTauTau","TreeMuMuTauTau");
+
     TreeMuMuTauTau->Branch("invMassMuMu", &invMassMuMu, "invMassMuMu/D");
     TreeMuMuTauTau->Branch("visMassTauTau", &visMassTauTau, "visMassTauTau/D");
     TreeMuMuTauTau->Branch("visMassMuMuTauTau", &visMassMuMuTauTau, "visMassMuMuTauTau/D");
+
+    TreeMuMuTauTau->Branch("deltaRMuMu", &deltaRMuMu, "deltaRMuMu/D");
+    TreeMuMuTauTau->Branch("deltaRTauTau", &deltaRTauTau, "deltaRTauTau/D");
+
+    TreeMuMuTauTau->Branch("Mu1Pt", &Mu1Pt, "Mu1Pt/D");
+    TreeMuMuTauTau->Branch("Mu1Eta", &Mu1Eta, "Mu1Eta/D");
+
+    TreeMuMuTauTau->Branch("Mu2Pt", &Mu2Pt, "Mu2Pt/D");
+    TreeMuMuTauTau->Branch("Mu2Eta", &Mu2Eta, "Mu2Eta/D");
+
+    TreeMuMuTauTau->Branch("Tau1Pt", &Tau1Pt, "Tau1Pt/D");
+    TreeMuMuTauTau->Branch("Tau1Eta", &Tau1Eta, "Tau1Eta/D");
+    TreeMuMuTauTau->Branch("Tau1DecayMode", &Tau1DecayMode, "Tau1DecayMode/D");
+
+    TreeMuMuTauTau->Branch("Tau2Pt", &Tau2Pt, "Tau2Pt/D");
+    TreeMuMuTauTau->Branch("Tau2Eta", &Tau2Eta, "Tau2Eta/D");
+    TreeMuMuTauTau->Branch("Tau2DecayMode", &Tau2DecayMode, "Tau2DecayMode/D");
 }
 
 Histomutau::~Histomutau()

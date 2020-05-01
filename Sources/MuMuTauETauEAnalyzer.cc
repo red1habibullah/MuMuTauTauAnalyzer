@@ -173,6 +173,22 @@ void MuMuTauETauEAnalyzer::Loop()
           invMassMuMu = (Mu1+Mu2).M();
           visMassTauTau = (Ele1+Ele2).M();
           visMassMuMuTauTau = (Mu1+Mu2+Ele1+Ele2).M();
+
+          deltaRMuMu = Mu1.DeltaR(Mu2);
+          deltaRTauTau = Ele1.DeltaR(Ele2);
+
+          Mu1Pt = Mu1.Pt();
+          Mu1Eta = Mu1.Eta();
+
+          Mu2Pt = Mu2.Pt();
+          Mu2Eta = Mu2.Eta();
+
+          Tau1Pt = Ele1.Pt();
+          Tau1Eta = Ele1.Eta();
+
+          Tau2Pt = Ele2.Pt();
+          Tau2Eta = Ele2.Eta();
+
           TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2 && findMuElePair
    }// end loop for events
