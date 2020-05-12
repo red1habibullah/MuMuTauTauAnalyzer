@@ -196,6 +196,7 @@ void MuMuTauMuTauMuAnalyzer::Loop()
           Tau2Eta = Mu4.Eta();
           Tau2Isolation = Mu4Iso;
 
+          eventWeight = weight/summedWeights;
           TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2 && findMuMuPair
    }// end loop for events

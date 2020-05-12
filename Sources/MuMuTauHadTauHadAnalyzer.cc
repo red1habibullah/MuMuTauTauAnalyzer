@@ -405,6 +405,7 @@ void MuMuTauHadTauHadAnalyzer::Loop()
           Tau2DecayMode = Tau2DM;
           Tau2Isolation = Tau2Iso;
 
+          eventWeight = weight/summedWeights;
           TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2 && findTauTauPair
    }// end loop for events

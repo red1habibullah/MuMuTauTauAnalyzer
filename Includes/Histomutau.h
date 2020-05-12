@@ -158,6 +158,8 @@ class Histomutau{
         double Tau2Eta;
         double Tau2Isolation;
         double Tau2DecayMode;
+
+        double eventWeight;
 };
 
 #endif

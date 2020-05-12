@@ -105,6 +105,7 @@ void MuMuAnalyzer::Loop()
 
           // ----- fill flat trees -----
           invMassMuMu = (Mu1+Mu2).M();
+          eventWeight = weight/summedWeights;
           TreeMuMuTauTau->Fill();
       } // end if findMu1 && findMu2
    }// end loop for events

@@ -190,7 +190,7 @@ int main(int argc, char **argv)
         {
             lumiana H125AA5Lumi(inputFile);
             summedWeights = H125AA5Lumi.Loop();
-            MuMuTauMuTauEAnalyzer H125AA5Hist(inputFile, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedEle1Iso, Mu2IsoThreshold, Ele1IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
+            MuMuTauMuTauEAnalyzer H125AA5Hist(inputFile, outputDir, 1, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, Mu2IsoThreshold, Ele1IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
             H125AA5Hist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauMuTauEAnalyzer H125AA5Hist(fileName, outputDir, 1, 1, maxEvents, true, invertedMu2Iso, invertedEle1Iso, Mu2IsoThreshold, Ele1IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
+                MuMuTauMuTauEAnalyzer H125AA5Hist(fileName, outputDir, 1, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, Mu2IsoThreshold, Ele1IsoThreshold, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 H125AA5Hist.Loop();
             } // end while loop on input file list
         } // end else 

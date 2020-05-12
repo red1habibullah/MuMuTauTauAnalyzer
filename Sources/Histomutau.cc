@@ -230,6 +230,8 @@ Histomutau::Histomutau(){
     TreeMuMuTauTau->Branch("Tau2Eta", &Tau2Eta, "Tau2Eta/D");
     TreeMuMuTauTau->Branch("Tau2Isolation", &Tau2Isolation, "Tau2Isolation/D");
     TreeMuMuTauTau->Branch("Tau2DecayMode", &Tau2DecayMode, "Tau2DecayMode/D");
+
+    TreeMuMuTauTau->Branch("eventWeight", &eventWeight, "eventWeight/D");
 }
 
 Histomutau::~Histomutau()
