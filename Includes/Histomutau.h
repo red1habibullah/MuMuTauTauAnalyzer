@@ -145,9 +145,17 @@ class Histomutau{
 
         double Mu1Pt;
         double Mu1Eta;
+        double Mu1Phi;
+        double Mu1Energy;
+        double Mu1Charge;
+        double Mu1NTrackerLayers;
 
         double Mu2Pt;
         double Mu2Eta;
+        double Mu2Phi;
+        double Mu2Energy;
+        double Mu2Charge;
+        double Mu2NTrackerLayers;
 
         double Tau1Pt;
         double Tau1Eta;

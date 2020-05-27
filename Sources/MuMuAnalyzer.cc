@@ -51,6 +51,13 @@ void MuMuAnalyzer::Loop()
               Mu1Iso = recoMuonIsolation->at(iMuon);
               indexMu1 = iMuon;
               findMu1 = true;
+
+              Mu1Pt = recoMuonPt->at(iMuon);
+              Mu1Eta = recoMuonEta->at(iMuon);
+              Mu1Phi = recoMuonPhi->at(iMuon);
+              Mu1Energy = recoMuonEnergy->at(iMuon);
+              Mu1Charge = recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon));
+              Mu1NTrackerLayers = recoMuonNTrackerLayers->at(iMuon);
               break;
           } // end if there is any matched Mu1 candidiate
       } // end loop for mu1
@@ -74,6 +81,13 @@ void MuMuAnalyzer::Loop()
               Mu2Iso = recoMuonIsolation->at(iMuon);
               smallestDR = Mu1.DeltaR(Mu2);
               findMu2 = true;
+
+              Mu2Pt = recoMuonPt->at(iMuon);
+              Mu2Eta = recoMuonEta->at(iMuon);
+              Mu2Phi = recoMuonPhi->at(iMuon);
+              Mu2Energy = recoMuonEnergy->at(iMuon);
+              Mu2Charge = recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon));
+              Mu2NTrackerLayers = recoMuonNTrackerLayers->at(iMuon);
           } // end if pair candidates
       } // end loop for mu2
           

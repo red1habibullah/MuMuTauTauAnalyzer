@@ -217,9 +217,17 @@ Histomutau::Histomutau(){
 
     TreeMuMuTauTau->Branch("Mu1Pt", &Mu1Pt, "Mu1Pt/D");
     TreeMuMuTauTau->Branch("Mu1Eta", &Mu1Eta, "Mu1Eta/D");
+    TreeMuMuTauTau->Branch("Mu1Phi", &Mu1Phi, "Mu1Phi/D");
+    TreeMuMuTauTau->Branch("Mu1Energy", &Mu1Energy, "Mu1Energy/D");
+    TreeMuMuTauTau->Branch("Mu1Charge", &Mu1Charge, "Mu1Charge/D");
+    TreeMuMuTauTau->Branch("Mu1NTrackerLayers", &Mu1NTrackerLayers, "Mu1NTrackerLayers/D");
 
     TreeMuMuTauTau->Branch("Mu2Pt", &Mu2Pt, "Mu2Pt/D");
     TreeMuMuTauTau->Branch("Mu2Eta", &Mu2Eta, "Mu2Eta/D");
+    TreeMuMuTauTau->Branch("Mu2Phi", &Mu2Phi, "Mu2Phi/D");
+    TreeMuMuTauTau->Branch("Mu2Energy", &Mu2Energy, "Mu2Energy/D");
+    TreeMuMuTauTau->Branch("Mu2Charge", &Mu2Charge, "Mu2Charge/D");
+    TreeMuMuTauTau->Branch("Mu2NTrackerLayers", &Mu2NTrackerLayers, "Mu2NTrackerLayers/D");
 
     TreeMuMuTauTau->Branch("Tau1Pt", &Tau1Pt, "Tau1Pt/D");
     TreeMuMuTauTau->Branch("Tau1Eta", &Tau1Eta, "Tau1Eta/D");
