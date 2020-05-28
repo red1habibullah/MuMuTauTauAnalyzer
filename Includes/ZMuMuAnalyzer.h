@@ -83,8 +83,9 @@ public :
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
+   TString rochesterFile;
 
-   ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false);
+   ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, TString rochesterFile_ = "");
    string createOutputFileName();
    virtual ~ZMuMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -99,7 +100,7 @@ public :
 #endif
 
 #ifdef ZMuMuAnalyzer_cxx
-ZMuMuAnalyzer::ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_) : HistoZmumu() 
+ZMuMuAnalyzer::ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, TString rochesterFile_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -107,6 +108,7 @@ ZMuMuAnalyzer::ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiSc
     summedWeights = summedWeights_;
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
+    rochesterFile = rochesterFile_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {

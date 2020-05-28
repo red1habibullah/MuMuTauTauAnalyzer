@@ -1,10 +1,12 @@
 #define ZMuMuAnalyzer_cxx
 #include "ZMuMuAnalyzer.h"
+#include "RoccoR.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
 #include <TFile.h>
+#include <TRandom.h>
 #include <iomanip>
 #include <iostream>
 #include <TLorentzVector.h>
@@ -22,6 +24,11 @@ void ZMuMuAnalyzer::Loop()
    cout << "We will run on " << nentries << " events" << endl;
 
    Long64_t nbytes = 0, nb = 0;
+
+   // ---- define the variable for rochester correction ----
+   string rochesterFileName = rochesterFile.Data();
+   RoccoR rc(rochesterFileName);
+   double rochesterSF = 1;
 
    for (Long64_t jentry=0; jentry<nentries; jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -47,7 +54,17 @@ void ZMuMuAnalyzer::Loop()
       {
           if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25)
           {
-              Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              if (isMC)
+              {
+                  double rng = gRandom->Rndm();
+                  rochesterSF = rc.kSmearMC(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonNTrackerLayers->at(iMuon), rng, 0, 0);
+              } // if isMC == true
+
+              else{
+                  rochesterSF = rc.kScaleDT(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), 0, 0);
+              } // if isMC == false (data)
+
+              Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon)*rochesterSF);
               Mu1Iso = recoMuonIsolation->at(iMuon);
               indexMu1 = iMuon;
               findMu1 = true;
@@ -68,13 +85,23 @@ void ZMuMuAnalyzer::Loop()
           if (iMuon == indexMu1) continue;
           if (recoMuonIsolation->at(iMuon) > 0.25) continue;
 
+          if (isMC)
+          {
+              double rng = gRandom->Rndm();
+              rochesterSF = rc.kSmearMC(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonNTrackerLayers->at(iMuon), rng, 0, 0);
+          } // if isMC == true
+
+          else{
+              rochesterSF = rc.kScaleDT(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), 0, 0);
+          } // if isMC == false (data)
+
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
-          Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+          Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon)*rochesterSF);
           if((Mu1.DeltaR(Mu2Cand) > dRCut) && (Mu2Cand.Pt() > highestPt) 
                   && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
                   && (recoMuonPDGId->at(indexMu1) == (-1) * recoMuonPDGId->at(iMuon)))
           {
-              Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon)*rochesterSF);
               Mu2Iso = recoMuonIsolation->at(iMuon);
               highestPt = Mu2Cand.Pt();
               findMu2 = true;
