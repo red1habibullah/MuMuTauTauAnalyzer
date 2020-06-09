@@ -175,13 +175,13 @@ Histomutau::Histomutau(){
     tauEta = newTH1D("tauEta", "#eta(#tau)", 20, -2.1, 2.1);
     tauPhi = newTH1D("tauPhi", "#phi(#tau)", 20, -2.5, 2.5);
     tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 10, 0, 3);
-    tauDecayMode = newTH1D("tauDecayMode", "DecayMode(#tau)", 11, 0, 11);
+    tauDecayMode = newTH1D("tauDecayMode", "DecayMode(#tau)", 12, 0, 12);
 
     tau2Pt = newTH1D("tau2Pt", "p_{T}(#tau_{2}) [GeV]", NBinsTau2Pt, tau2PtBin);
     tau2Eta = newTH1D("tau2Eta", "#eta(#tau_{2})", 20, -2.1, 2.1);
     tau2Phi = newTH1D("tau2Phi", "#phi(#tau_{2})", 20, -2.5, 2.5);
     tau2Mass = newTH1D("tau2Mass", "M(#tau_{2}) [GeV]", 10, 0, 3);
-    tau2DecayMode = newTH1D("tau2DecayMode", "DecayMode(#tau_{2})", 11, 0, 11);
+    tau2DecayMode = newTH1D("tau2DecayMode", "DecayMode(#tau_{2})", 12, 0, 12);
 
     dRMu1Mu3 = newTH1D("dRMu1Mu3", "#Delta R(#mu_{1}#mu_{3})", 25, 0, 5);
     dRMu1Mu4 = newTH1D("dRMu1Mu4", "#Delta R(#mu_{1}#mu_{4})", 25, 0, 5);
