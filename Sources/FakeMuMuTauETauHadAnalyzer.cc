@@ -163,7 +163,7 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
           TauIso = deepTauID ? recoTauDeepVSjetraw->at(iTau) : recoTauIsoMVArawValue->at(iTau);
           TauDM = recoTauDecayMode->at(iTau);
 
-          float smallestDR = 4.0; // dR between electron and tau
+          float smallestDR = 0.8; // dR between electron and tau
           bool findEle = false;
 
           for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)

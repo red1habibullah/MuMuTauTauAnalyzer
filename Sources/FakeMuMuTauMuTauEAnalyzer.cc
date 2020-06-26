@@ -100,7 +100,7 @@ void FakeMuMuTauMuTauEAnalyzer::Loop()
           Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
           EleIso = recoElectronIsolation->at(iEle);
 
-          float smallestDR = 4.0; // dR cut between Mu3 and electron
+          float smallestDR = 1.0; // dR cut between Mu3 and electron
           bool findMu3 = false;
 
           for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)

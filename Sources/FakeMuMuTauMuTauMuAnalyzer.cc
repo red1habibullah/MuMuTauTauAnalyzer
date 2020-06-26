@@ -104,7 +104,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           Mu4Iso = recoMuonIsolation->at(iMuon);
           indexMu4 = iMuon;
 
-          float smallestDR = 4.0; // dR cut between Mu3 and Mu4
+          float smallestDR = 1.0; // dR cut between Mu3 and Mu4
           bool findMu3 = false;
 
           for (unsigned int iMuon3=0; iMuon3<recoMuonPt->size(); iMuon3++)

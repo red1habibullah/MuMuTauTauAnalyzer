@@ -99,7 +99,7 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           Ele1.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
           Ele1Iso = recoElectronIsolation->at(iEle);
           
-          float smallestDR = 4.0; // dR cut between Ele1 and Ele2
+          float smallestDR = 1.0; // dR cut between Ele1 and Ele2
           bool findEle2 = false;
 
           for (unsigned int iEle2=0; iEle2<recoElectronPt->size(); iEle2++)
