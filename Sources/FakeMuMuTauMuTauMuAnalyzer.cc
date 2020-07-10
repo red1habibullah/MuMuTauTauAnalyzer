@@ -94,7 +94,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           if (iMuon == indexMu1 || iMuon == indexMu2) continue;
-          if ((invertedMu4Iso == false && recoMuonIsolation->at(iMuon) > Mu4IsoThreshold) || (invertedMu4Iso == true && recoMuonIsolation->at(iMuon) < Mu4IsoThreshold)) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu4IsoThreshold) continue;
           
           TLorentzVector Mu4Cand;
           Mu4Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
@@ -110,6 +110,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           for (unsigned int iMuon3=0; iMuon3<recoMuonPt->size(); iMuon3++)
           {
               if (iMuon3 == indexMu1 || iMuon3 == indexMu2 || iMuon3 == indexMu4) continue;
+              if (recoMuonIsolation->at(iMuon3) > 0.25) continue;
 
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, Mu4) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
