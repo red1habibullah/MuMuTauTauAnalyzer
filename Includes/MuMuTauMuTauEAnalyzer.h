@@ -116,12 +116,13 @@ public :
    bool invertedMu2Iso;
    bool invertedEle1Iso;
    double Mu2IsoThreshold;
+   double Mu3IsoThreshold;
    double Ele1IsoThreshold;
    TString Ele1RelId;
    double diMuonMassLowThreshold;
    double diMuonMassHighThreshold;
 
-   MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedEle1Iso_ = false, double Mu2IsoThreshold_ = 0.25, double Ele1IsoThreshold_ = 0.25, TString Ele1RelId_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
+   MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedEle1Iso_ = false, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, double Ele1IsoThreshold_ = 0.25, TString Ele1RelId_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
    string createOutputFileName();
    virtual ~MuMuTauMuTauEAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -136,7 +137,7 @@ public :
 #endif
 
 #ifdef MuMuTauMuTauEAnalyzer_cxx
-MuMuTauMuTauEAnalyzer::MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedEle1Iso_, double Mu2IsoThreshold_, double Ele1IsoThreshold_, TString Ele1RelId_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
+MuMuTauMuTauEAnalyzer::MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedEle1Iso_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, double Ele1IsoThreshold_, TString Ele1RelId_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -147,6 +148,7 @@ MuMuTauMuTauEAnalyzer::MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDi
     invertedMu2Iso = invertedMu2Iso_;
     invertedEle1Iso = invertedEle1Iso_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
+    Mu3IsoThreshold = Mu3IsoThreshold_;
     Ele1IsoThreshold = Ele1IsoThreshold_;
     Ele1RelId = Ele1RelId_;
     diMuonMassLowThreshold = diMuonMassLowThreshold_;

@@ -113,10 +113,10 @@ public :
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
-   double Ele1IsoThreshold;
+   double Mu3IsoThreshold;
    TString Ele1RelId;
 
-   FakeMuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Ele1IsoThreshold_ = 0.25, TString Ele1RelId_ = "LOOSE");
+   FakeMuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu3IsoThreshold_ = 0.25, TString Ele1RelId_ = "LOOSE");
    string createOutputFileName();
    virtual ~FakeMuMuTauMuTauEAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -131,7 +131,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauMuTauEAnalyzer_cxx
-FakeMuMuTauMuTauEAnalyzer::FakeMuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Ele1IsoThreshold_, TString Ele1RelId_) : HistoZmumu() 
+FakeMuMuTauMuTauEAnalyzer::FakeMuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu3IsoThreshold_, TString Ele1RelId_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -139,7 +139,7 @@ FakeMuMuTauMuTauEAnalyzer::FakeMuMuTauMuTauEAnalyzer(TString fileName_, TString 
     summedWeights = summedWeights_;
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
-    Ele1IsoThreshold = Ele1IsoThreshold_;
+    Mu3IsoThreshold = Mu3IsoThreshold_;
     Ele1RelId = Ele1RelId_;
 
     //--- Create output directory if necessary ---
