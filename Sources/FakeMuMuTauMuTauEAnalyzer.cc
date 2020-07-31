@@ -95,7 +95,7 @@ void FakeMuMuTauMuTauEAnalyzer::Loop()
           bool condEleLoose = Ele1RelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
           bool condEleMedium = Ele1RelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
           bool condEleTight = Ele1RelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
-          bool condEleNull = Ele1RelId != "LOOSE" && Ele1RelId != "MEDIUM" && Ele1RelId != "TIGHT";
+          bool condEleNull = Ele1RelId != "LOOSE" && Ele1RelId != "MEDIUM" && Ele1RelId != "TIGHT" && recoElectronIsolation->at(iEle) < Ele1IsoThreshold;
           bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
 
           if (!passCondEleId) continue;
