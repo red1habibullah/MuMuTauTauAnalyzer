@@ -91,7 +91,13 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       // ---- search for a electron-electron pair for fake rate study ----
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
-          if ((invertedEle1Iso == false && recoElectronIsolation->at(iEle) > Ele1IsoThreshold) || (invertedEle1Iso == true && recoElectronIsolation->at(iEle) < Ele1IsoThreshold)) continue;
+          bool condEleLoose = Ele1RelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
+          bool condEleMedium = Ele1RelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
+          bool condEleTight = Ele1RelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
+          bool condEleNull = Ele1RelId != "LOOSE" && Ele1RelId != "MEDIUM" && Ele1RelId != "TIGHT" && recoElectronIsolation->at(iEle) < Ele1IsoThreshold;
+          bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
+
+          if (!passCondEleId) continue;
           TLorentzVector Ele1Cand;
           Ele1Cand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
 
@@ -105,6 +111,13 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           for (unsigned int iEle2=0; iEle2<recoElectronPt->size(); iEle2++)
           {
               if (iEle2 == iEle) continue;
+              bool condEleLoose = Ele1RelId == "LOOSE" && recoElectronIdLoose->at(iEle2) > 0;
+              bool condEleMedium = Ele1RelId == "MEDIUM" && recoElectronIdMedium->at(iEle2) > 0;
+              bool condEleTight = Ele1RelId == "TIGHT" && recoElectronIdTight->at(iEle2) > 0;
+              bool condEleNull = Ele1RelId != "LOOSE" && Ele1RelId != "MEDIUM" && Ele1RelId != "TIGHT" && recoElectronIsolation->at(iEle2) < Ele1IsoThreshold;
+              bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
+              if (!passCondEleId) continue;
+
               TLorentzVector Ele2Cand; // prepare this variable for dR(Ele1, Ele2) implementation
               Ele2Cand.SetPtEtaPhiE(recoElectronPt->at(iEle2), recoElectronEta->at(iEle2), recoElectronPhi->at(iEle2), recoElectronEnergy->at(iEle2));
               if ((Ele1.DeltaR(Ele2Cand) < smallestDR) && (recoElectronPDGId->at(iEle) == (-1) * recoElectronPDGId->at(iEle2)) && ((Ele1+Ele2Cand).M() < 60.0) && (Ele2Cand.DeltaR(Mu1) > 0.4) && (Ele2Cand.DeltaR(Mu2) > 0.4))
