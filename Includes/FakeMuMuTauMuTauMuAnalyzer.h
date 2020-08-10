@@ -38,6 +38,9 @@ public :
    vector<int>     *recoMuonTriggerFlag;
    vector<int>     *recoMuonRefToElectron;
    vector<int>     *recoMuonRefToTau;
+   vector<int>     *recoMuonIdLoose;
+   vector<int>     *recoMuonIdMedium;
+   vector<int>     *recoMuonIdTight;
    vector<float>   *recoJetPt;
    vector<float>   *recoJetEta;
    vector<float>   *recoJetPhi;
@@ -66,6 +69,9 @@ public :
    TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoMuonRefToElectron;   //!
    TBranch        *b_recoMuonRefToTau;   //!
+   TBranch        *b_recoMuonIdLoose;   //!
+   TBranch        *b_recoMuonIdMedium;   //!
+   TBranch        *b_recoMuonIdTight;   //!
    TBranch        *b_recoJetPt;   //!
    TBranch        *b_recoJetEta;   //!
    TBranch        *b_recoJetPhi;   //!
@@ -87,9 +93,11 @@ public :
    float lumiScale;
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
-   double Mu4IsoThreshold;
+   double Mu1IsoThreshold;
+   double Mu2IsoThreshold;
+   double Mu3IsoThreshold;
 
-   FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu4IsoThreshold_ = 0.25);
+   FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25);
    string createOutputFileName();
    virtual ~FakeMuMuTauMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -104,7 +112,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauMuTauMuAnalyzer_cxx
-FakeMuMuTauMuTauMuAnalyzer::FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu4IsoThreshold_) : HistoZmumu() 
+FakeMuMuTauMuTauMuAnalyzer::FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -112,7 +120,9 @@ FakeMuMuTauMuTauMuAnalyzer::FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TStrin
     summedWeights = summedWeights_;
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
-    Mu4IsoThreshold = Mu4IsoThreshold_;
+    Mu1IsoThreshold = Mu1IsoThreshold_;
+    Mu2IsoThreshold = Mu2IsoThreshold_;
+    Mu3IsoThreshold = Mu3IsoThreshold_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
@@ -192,6 +202,9 @@ void FakeMuMuTauMuTauMuAnalyzer::Init()
    recoMuonTriggerFlag = 0;
    recoMuonRefToElectron = 0;
    recoMuonRefToTau = 0;
+   recoMuonIdLoose = 0;
+   recoMuonIdMedium = 0;
+   recoMuonIdTight = 0;
    recoJetPt = 0;
    recoJetEta = 0;
    recoJetPhi = 0;
@@ -217,6 +230,9 @@ void FakeMuMuTauMuTauMuAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoMuonRefToElectron", &recoMuonRefToElectron, &b_recoMuonRefToElectron);
    fChain->SetBranchAddress("recoMuonRefToTau", &recoMuonRefToTau, &b_recoMuonRefToTau);
+   fChain->SetBranchAddress("recoMuonIdLoose", &recoMuonIdLoose, &b_recoMuonIdLoose);
+   fChain->SetBranchAddress("recoMuonIdMedium", &recoMuonIdMedium, &b_recoMuonIdMedium);
+   fChain->SetBranchAddress("recoMuonIdTight", &recoMuonIdTight, &b_recoMuonIdTight);
    fChain->SetBranchAddress("recoJetPt", &recoJetPt, &b_recoJetPt);
    fChain->SetBranchAddress("recoJetEta", &recoJetEta, &b_recoJetEta);
    fChain->SetBranchAddress("recoJetPhi", &recoJetPhi, &b_recoJetPhi);

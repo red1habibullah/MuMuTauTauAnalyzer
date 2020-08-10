@@ -35,23 +35,20 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
       TLorentzVector Mu1;
       TLorentzVector Mu2;
       TLorentzVector Mu3;
-      TLorentzVector Mu4;
 
       float Mu1Iso;
       float Mu2Iso;
       float Mu3Iso;
-      float Mu4Iso;
 
       unsigned int indexMu1 = -1;
       unsigned int indexMu2 = -1;
-      unsigned int indexMu4 = -1;
       // =============================================================================
 
       // ---- start loop on muon candidates for mu1 ----
       bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25)
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold)
           {
               Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu1Iso = recoMuonIsolation->at(iMuon);
@@ -64,15 +61,15 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
       if (!findMu1) continue;
       float dRCut = 0.3; // dR cut between Mu1 and Mu2
       float highestPt = 0;
-      float invMassLowThre = 60.0;
-      float invMassHighThre = 120.0;
+      float invMassLowThre = 80.0;
+      float invMassHighThre = 100.0;
       bool findMu2 = false;
 
       // ---- start loop on muon candidates for mu2 ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           if (iMuon == indexMu1) continue;
-          if (recoMuonIsolation->at(iMuon) > 0.25) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
@@ -88,47 +85,28 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
       } // end loop for mu2
 
       if (!findMu2) continue;
-      bool findMuMuPair = false;
+      
+      bool findMu3 = false;
+      highestPt = 0;
 
       // ---- search for an additional muon pair for fake rate study ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           if (iMuon == indexMu1 || iMuon == indexMu2) continue;
-          if (recoMuonIsolation->at(iMuon) > Mu4IsoThreshold) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu3IsoThreshold) continue;
           
-          TLorentzVector Mu4Cand;
-          Mu4Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+          TLorentzVector Mu3Cand;
+          Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
 
-          if (Mu4Cand.DeltaR(Mu1) < 0.4 || Mu4Cand.DeltaR(Mu2) < 0.4) continue;
-          Mu4.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-          Mu4Iso = recoMuonIsolation->at(iMuon);
-          indexMu4 = iMuon;
-
-          float smallestDR = 1.0; // dR cut between Mu3 and Mu4
-          bool findMu3 = false;
-
-          for (unsigned int iMuon3=0; iMuon3<recoMuonPt->size(); iMuon3++)
+          if (Mu3Cand.DeltaR(Mu1) < 0.4 || Mu3Cand.DeltaR(Mu2) < 0.4) continue;
+          if (Mu3Cand.Pt() > highestPt)
           {
-              if (iMuon3 == indexMu1 || iMuon3 == indexMu2 || iMuon3 == indexMu4) continue;
-              if (recoMuonIsolation->at(iMuon3) > 0.25) continue;
-
-              TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, Mu4) implementation
-              Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
-              if ((Mu4.DeltaR(Mu3Cand) < smallestDR) && (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon)) && ((Mu4+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4))
-              {
-                  Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
-                  Mu3Iso = recoMuonIsolation->at(iMuon3);
-                  smallestDR = Mu4.DeltaR(Mu3);
-                  findMu3 = true;
-              } // end if find mu3 with mu4 matched
-          } // end loop for mu3
-
-          if (!findMu3) continue;
-          else{
-              findMuMuPair = true;
-              break;
-          } // end if findMu3
-      } // end loop for Mu4
+              Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              Mu3Iso = recoMuonIsolation->at(iMuon);
+              highestPt = Mu3Cand.Pt();
+              findMu3 = true;
+          } // end if Mu3Cand.Pt() > highestPt
+      } // end loop for Mu3
 
       // ---- prepare event weight info ----
       double weight = 1;
@@ -138,7 +116,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
       } // end if isMC == true
 
       // ---- fill histograms ----
-      if (findMu1 && findMu2 && findMuMuPair)
+      if (findMu1 && findMu2 && findMu3)
       {
           ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
           dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
@@ -147,6 +125,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
 
           mu1Iso->Fill(Mu1Iso, weight);
           mu2Iso->Fill(Mu2Iso, weight);
+          mu3Iso->Fill(Mu3Iso, weight);
 
           mu1Pt->Fill(Mu1.Pt(), weight);
           mu1Eta->Fill(Mu1.Eta(), weight);
@@ -156,29 +135,12 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           mu2Eta->Fill(Mu2.Eta(), weight);
           mu2Phi->Fill(Mu2.Phi(), weight);
 
-          ptMu3Mu4->Fill((Mu3+Mu4).Pt(), weight);
-          dRMu3Mu4->Fill(Mu3.DeltaR(Mu4), weight);
-          invMassMu3Mu4->Fill((Mu3+Mu4).M(), weight);
-          dRInvMassMu3Mu4->Fill(Mu3.DeltaR(Mu4), (Mu3+Mu4).M(), weight);
-
-          mu3Iso->Fill(Mu3Iso, weight);
-          mu4Iso->Fill(Mu4Iso, weight);
-
           mu3Pt->Fill(Mu3.Pt(), weight);
           mu3Eta->Fill(Mu3.Eta(), weight);
           mu3Phi->Fill(Mu3.Phi(), weight);
 
-          mu4Pt->Fill(Mu4.Pt(), weight);
-          mu4Eta->Fill(Mu4.Eta(), weight);
-          mu4Phi->Fill(Mu4.Phi(), weight);
-
           dRMu1Mu3->Fill(Mu1.DeltaR(Mu3), weight);
-          dRMu1Mu4->Fill(Mu1.DeltaR(Mu4), weight);
           dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
-          dRMu2Mu4->Fill(Mu2.DeltaR(Mu4), weight);
-
-          ptMuMuTauMuTauMu->Fill((Mu1+Mu2+Mu3+Mu4).Pt(), weight);
-          invMassMuMuTauMuTauMu->Fill((Mu1+Mu2+Mu3+Mu4).M(), weight);
       } // end if findMu1 && findMu2 && findMuMuPair
    }// end loop for events
 
