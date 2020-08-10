@@ -38,6 +38,9 @@ public :
    vector<int>     *recoMuonTriggerFlag;
    vector<int>     *recoMuonRefToElectron;
    vector<int>     *recoMuonRefToTau;
+   vector<int>     *recoMuonIdLoose;
+   vector<int>     *recoMuonIdMedium;
+   vector<int>     *recoMuonIdTight;
    vector<float>   *recoJetPt;
    vector<float>   *recoJetEta;
    vector<float>   *recoJetPhi;
@@ -66,6 +69,9 @@ public :
    TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoMuonRefToElectron;   //!
    TBranch        *b_recoMuonRefToTau;   //!
+   TBranch        *b_recoMuonIdLoose;   //!
+   TBranch        *b_recoMuonIdMedium;   //!
+   TBranch        *b_recoMuonIdTight;   //!
    TBranch        *b_recoJetPt;   //!
    TBranch        *b_recoJetEta;   //!
    TBranch        *b_recoJetPhi;   //!
@@ -88,14 +94,16 @@ public :
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
    bool invertedMu2Iso;
+   bool invertedMu3Iso;
    bool invertedMu4Iso;
+   double Mu1IsoThreshold;
    double Mu2IsoThreshold;
    double Mu3IsoThreshold;
    double Mu4IsoThreshold;
    double diMuonMassLowThreshold;
    double diMuonMassHighThreshold;
 
-   MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu4Iso_ = false, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, double Mu4IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
+   MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu3Iso_ = false, bool invertedMu4Iso_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, double Mu4IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
    string createOutputFileName();
    virtual ~MuMuTauMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -110,7 +118,7 @@ public :
 #endif
 
 #ifdef MuMuTauMuTauMuAnalyzer_cxx
-MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu4Iso_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, double Mu4IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
+MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu3Iso_, bool invertedMu4Iso_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, double Mu4IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -119,7 +127,9 @@ MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString output
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
     invertedMu2Iso = invertedMu2Iso_;
+    invertedMu3Iso = invertedMu3Iso_;
     invertedMu4Iso = invertedMu4Iso_;
+    Mu1IsoThreshold = Mu1IsoThreshold_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
     Mu3IsoThreshold = Mu3IsoThreshold_;
     Mu4IsoThreshold = Mu4IsoThreshold_;
@@ -205,6 +215,9 @@ void MuMuTauMuTauMuAnalyzer::Init()
    recoMuonTriggerFlag = 0;
    recoMuonRefToElectron = 0;
    recoMuonRefToTau = 0;
+   recoMuonIdLoose = 0;
+   recoMuonIdMedium = 0;
+   recoMuonIdTight = 0;
    recoJetPt = 0;
    recoJetEta = 0;
    recoJetPhi = 0;
@@ -230,6 +243,9 @@ void MuMuTauMuTauMuAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoMuonRefToElectron", &recoMuonRefToElectron, &b_recoMuonRefToElectron);
    fChain->SetBranchAddress("recoMuonRefToTau", &recoMuonRefToTau, &b_recoMuonRefToTau);
+   fChain->SetBranchAddress("recoMuonIdLoose", &recoMuonIdLoose, &b_recoMuonIdLoose);
+   fChain->SetBranchAddress("recoMuonIdMedium", &recoMuonIdMedium, &b_recoMuonIdMedium);
+   fChain->SetBranchAddress("recoMuonIdTight", &recoMuonIdTight, &b_recoMuonIdTight);
    fChain->SetBranchAddress("recoJetPt", &recoJetPt, &b_recoJetPt);
    fChain->SetBranchAddress("recoJetEta", &recoJetEta, &b_recoJetEta);
    fChain->SetBranchAddress("recoJetPhi", &recoJetPhi, &b_recoJetPhi);
