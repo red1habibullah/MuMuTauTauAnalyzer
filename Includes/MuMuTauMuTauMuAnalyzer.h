@@ -100,10 +100,11 @@ public :
    double Mu2IsoThreshold;
    double Mu3IsoThreshold;
    double Mu4IsoThreshold;
+   double MuIsoUpperBound;
    double diMuonMassLowThreshold;
    double diMuonMassHighThreshold;
 
-   MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu3Iso_ = false, bool invertedMu4Iso_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, double Mu4IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
+   MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu3Iso_ = false, bool invertedMu4Iso_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, double Mu4IsoThreshold_ = 0.25, double MuIsoUpperBound_ = 0.5, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
    string createOutputFileName();
    virtual ~MuMuTauMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -118,7 +119,7 @@ public :
 #endif
 
 #ifdef MuMuTauMuTauMuAnalyzer_cxx
-MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu3Iso_, bool invertedMu4Iso_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, double Mu4IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
+MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu3Iso_, bool invertedMu4Iso_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, double Mu4IsoThreshold_, double MuIsoUpperBound_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -133,6 +134,7 @@ MuMuTauMuTauMuAnalyzer::MuMuTauMuTauMuAnalyzer(TString fileName_, TString output
     Mu2IsoThreshold = Mu2IsoThreshold_;
     Mu3IsoThreshold = Mu3IsoThreshold_;
     Mu4IsoThreshold = Mu4IsoThreshold_;
+    MuIsoUpperBound = MuIsoUpperBound_;
     diMuonMassLowThreshold = diMuonMassLowThreshold_;
     diMuonMassHighThreshold = diMuonMassHighThreshold_;
     invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
