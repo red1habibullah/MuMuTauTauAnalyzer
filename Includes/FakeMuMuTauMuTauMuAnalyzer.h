@@ -96,8 +96,9 @@ public :
    double Mu1IsoThreshold;
    double Mu2IsoThreshold;
    double Mu3IsoThreshold;
+   TString MuonId;
 
-   FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25);
+   FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, TString MuonId_ = "LOOSE");
    string createOutputFileName();
    virtual ~FakeMuMuTauMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -112,7 +113,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauMuTauMuAnalyzer_cxx
-FakeMuMuTauMuTauMuAnalyzer::FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_) : HistoZmumu() 
+FakeMuMuTauMuTauMuAnalyzer::FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, TString MuonId_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -123,6 +124,7 @@ FakeMuMuTauMuTauMuAnalyzer::FakeMuMuTauMuTauMuAnalyzer(TString fileName_, TStrin
     Mu1IsoThreshold = Mu1IsoThreshold_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
     Mu3IsoThreshold = Mu3IsoThreshold_;
+    MuonId = MuonId_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
