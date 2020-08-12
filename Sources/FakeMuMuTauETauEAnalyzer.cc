@@ -35,12 +35,10 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       TLorentzVector Mu1;
       TLorentzVector Mu2;
       TLorentzVector Ele1;
-      TLorentzVector Ele2;
 
       float Mu1Iso;
       float Mu2Iso;
       float Ele1Iso;
-      float Ele2Iso;
 
       unsigned int indexMu1 = -1;
       // ============================================================================
@@ -49,7 +47,12 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25)
+          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          bool passMuonID = isLoose || isMedium || isTight;
+
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID)
           {
               Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu1Iso = recoMuonIsolation->at(iMuon);
@@ -62,15 +65,20 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       if (!findMu1) continue;
       float dRCut = 0.3; // dR cut between Mu1 and Mu2
       float highestPt = 0;
-      float invMassLowThre = 60.0;
-      float invMassHighThre = 120.0;
+      float invMassLowThre = 80.0;
+      float invMassHighThre = 100.0;
       bool findMu2 = false;
 
       // ---- start loop on muon candidates for mu2 ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
+          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          bool passMuonID = isLoose || isMedium || isTight;
+
           if (iMuon == indexMu1) continue;
-          if (recoMuonIsolation->at(iMuon) > 0.25) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
@@ -86,7 +94,9 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       } // end loop for mu2
 
       if (!findMu2) continue;
-      bool findEleElePair = false;
+      
+      bool findEle = false;
+      highestPt = 7.0; // pt threshold for reco-electron
 
       // ---- search for a electron-electron pair for fake rate study ----
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
@@ -102,38 +112,13 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           Ele1Cand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
 
           if (Ele1Cand.DeltaR(Mu1) < 0.4 || Ele1Cand.DeltaR(Mu2) < 0.4) continue;
-          Ele1.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
-          Ele1Iso = recoElectronIsolation->at(iEle);
-          
-          float smallestDR = 1.0; // dR cut between Ele1 and Ele2
-          bool findEle2 = false;
-
-          for (unsigned int iEle2=0; iEle2<recoElectronPt->size(); iEle2++)
+          if (Ele1Cand.Pt() > highestPt)
           {
-              if (iEle2 == iEle) continue;
-              bool condEleLoose = Ele1RelId == "LOOSE" && recoElectronIdLoose->at(iEle2) > 0;
-              bool condEleMedium = Ele1RelId == "MEDIUM" && recoElectronIdMedium->at(iEle2) > 0;
-              bool condEleTight = Ele1RelId == "TIGHT" && recoElectronIdTight->at(iEle2) > 0;
-              bool condEleNull = Ele1RelId != "LOOSE" && Ele1RelId != "MEDIUM" && Ele1RelId != "TIGHT" && recoElectronIsolation->at(iEle2) < Ele1IsoThreshold;
-              bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
-              if (!passCondEleId) continue;
-
-              TLorentzVector Ele2Cand; // prepare this variable for dR(Ele1, Ele2) implementation
-              Ele2Cand.SetPtEtaPhiE(recoElectronPt->at(iEle2), recoElectronEta->at(iEle2), recoElectronPhi->at(iEle2), recoElectronEnergy->at(iEle2));
-              if ((Ele1.DeltaR(Ele2Cand) < smallestDR) && (recoElectronPDGId->at(iEle) == (-1) * recoElectronPDGId->at(iEle2)) && ((Ele1+Ele2Cand).M() < 60.0) && (Ele2Cand.DeltaR(Mu1) > 0.4) && (Ele2Cand.DeltaR(Mu2) > 0.4))
-              {
-                  Ele2.SetPtEtaPhiE(recoElectronPt->at(iEle2), recoElectronEta->at(iEle2), recoElectronPhi->at(iEle2), recoElectronEnergy->at(iEle2));
-                  Ele2Iso = recoElectronIsolation->at(iEle2);
-                  smallestDR = Ele1.DeltaR(Ele2);
-                  findEle2 = true;
-              } // end if find ele2 with electron matched
-          } // end loop for ele2
-
-          if (!findEle2) continue;
-          else{
-              findEleElePair = true;
-              break;
-          } // end if findEle2
+              Ele1.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
+              Ele1Iso = recoElectronIsolation->at(iEle);
+              highestPt = Ele1Cand.Pt();
+              findEle = true;
+          } // end if Ele1Cand.Pt() > highestPt
       } // end loop for electron
 
       // ---- prepare event weight info ----
@@ -144,7 +129,7 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       } // end if isMC == true
 
       // ---- fill histograms ----
-      if (findMu1 && findMu2 && findEleElePair)
+      if (findMu1 && findMu2 && findEle)
       {
           ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
           dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
@@ -162,30 +147,15 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           mu2Eta->Fill(Mu2.Eta(), weight);
           mu2Phi->Fill(Mu2.Phi(), weight);
 
-          ptEleEle->Fill((Ele1+Ele2).Pt(), weight);
-          dREleEle->Fill(Ele1.DeltaR(Ele2), weight);
-          invMassEleEle->Fill((Ele1+Ele2).M(), weight);
-          dRInvMassEleEle->Fill(Ele1.DeltaR(Ele2), (Ele1+Ele2).M(), weight);
-
           ele1Iso->Fill(Ele1Iso, weight);
-          ele2Iso->Fill(Ele2Iso, weight);
 
           ele1Pt->Fill(Ele1.Pt(), weight);
           ele1Eta->Fill(Ele1.Eta(), weight);
           ele1Phi->Fill(Ele1.Phi(), weight);
 
-          ele2Pt->Fill(Ele2.Pt(), weight);
-          ele2Eta->Fill(Ele2.Eta(), weight);
-          ele2Phi->Fill(Ele2.Phi(), weight);
-
           dRMu1Ele1->Fill(Mu1.DeltaR(Ele1), weight);
-          dRMu1Ele2->Fill(Mu1.DeltaR(Ele2), weight);
           dRMu2Ele1->Fill(Mu2.DeltaR(Ele1), weight);
-          dRMu2Ele2->Fill(Mu2.DeltaR(Ele2), weight);
-
-          ptMuMuTauEleTauEle->Fill((Mu1+Mu2+Ele1+Ele2).Pt(), weight);
-          invMassMuMuTauEleTauEle->Fill((Mu1+Mu2+Ele1+Ele2).M(), weight);
-      } // end if findMu1 && findMu2 && findEleElePair
+      } // end if findMu1 && findMu2 && findEle
    }// end loop for events
 
    outputFile->cd();

@@ -99,7 +99,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
       bool findMu3 = false;
       highestPt = 0;
 
-      // ---- search for an additional muon pair for fake rate study ----
+      // ---- search for an additional muon probe for fake rate study ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
@@ -156,7 +156,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
 
           dRMu1Mu3->Fill(Mu1.DeltaR(Mu3), weight);
           dRMu2Mu3->Fill(Mu2.DeltaR(Mu3), weight);
-      } // end if findMu1 && findMu2 && findMuMuPair
+      } // end if findMu1 && findMu2 && findMu3
    }// end loop for events
 
    outputFile->cd();
