@@ -118,7 +118,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            FakeMuMuTauETauEAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, Mu1IsoThreshold, Mu2IsoThreshold, MuonId, Ele1RelId, Ele1IsoThreshold);
+            FakeMuMuTauETauEAnalyzer DYJetsHist(inputFile, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, Mu1IsoThreshold, Mu2IsoThreshold, MuonId, Ele1RelId, Ele1IsoThreshold);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                FakeMuMuTauETauEAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, Mu1IsoThreshold, Mu2IsoThreshold, MuonId, Ele1RelId, Ele1IsoThreshold);
+                FakeMuMuTauETauEAnalyzer DYJetsHist(fileName, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, Mu1IsoThreshold, Mu2IsoThreshold, MuonId, Ele1RelId, Ele1IsoThreshold);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else

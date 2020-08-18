@@ -154,7 +154,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuMuTauETauEAnalyzer DYJetsHist(inputFile, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+            MuMuTauETauEAnalyzer DYJetsHist(inputFile, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauETauEAnalyzer DYJetsHist(fileName, outputDir, lumi*2075.14*3*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+                MuMuTauETauEAnalyzer DYJetsHist(fileName, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -181,15 +181,14 @@ int main(int argc, char **argv)
     // --- always need to reinitialize the weight parameter for new sample -----
     summedWeights = 0;
 
-
-    if (doWhat == "WJETS" || doWhat == "ALL")
+    if (doWhat == "DYJETSLOWMASS" || doWhat == "ALL")
     {
         if (inputFile.EndsWith(".root"))
         {
-            lumiana WJetsLumi(inputFile);
-            summedWeights = WJetsLumi.Loop();
-            MuMuTauETauEAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
-            WJetsHist.Loop();
+            lumiana DYJetsLowMassLumi(inputFile);
+            summedWeights = DYJetsLowMassLumi.Loop();
+            MuMuTauETauEAnalyzer DYJetsLowMassHist(inputFile, outputDir, lumi*71310.0*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+            DYJetsLowMassHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
         else{
@@ -198,23 +197,121 @@ int main(int argc, char **argv)
             string fileName;
             while (getline(finLumi, fileName))
             {
-                lumiana WJetsLumi(fileName);
-                summedWeights += WJetsLumi.Loop();
+                lumiana DYJetsLowMassLumi(fileName);
+                summedWeights += DYJetsLowMassLumi.Loop();
             }// end while loop for weight sum
 
             ifstream finTree;
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauETauEAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
-                WJetsHist.Loop();
+                MuMuTauETauEAnalyzer DYJetsLowMassHist(fileName, outputDir, lumi*71310.0*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+                DYJetsLowMassHist.Loop();
             } // end while loop on input file list
         } // end else
-    } // end if WJets
+    } // end if DYJetsLowMass
 
     // --- always need to reinitialize the weight parameter for new sample -----
     summedWeights = 0;
 
+    if (doWhat == "TTJETS" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana TTJetsLumi(inputFile);
+            summedWeights = TTJetsLumi.Loop();
+            MuMuTauETauEAnalyzer TTJetsHist(inputFile, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+            TTJetsHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana TTJetsLumi(fileName);
+                summedWeights += TTJetsLumi.Loop();
+            }// end while loop for weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                MuMuTauETauEAnalyzer TTJetsHist(fileName, outputDir, lumi*831.76*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+                TTJetsHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if TTJets
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+    if (doWhat == "WZ" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana WZLumi(inputFile);
+            summedWeights = WZLumi.Loop();
+            MuMuTauETauEAnalyzer WZHist(inputFile, outputDir, lumi*5.26*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+            WZHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana WZLumi(fileName);
+                summedWeights += WZLumi.Loop();
+            }// end while loop for weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                MuMuTauETauEAnalyzer WZHist(fileName, outputDir, lumi*5.26*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+                WZHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if WZ
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
+
+    if (doWhat == "ZZ" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana ZZLumi(inputFile);
+            summedWeights = ZZLumi.Loop();
+            MuMuTauETauEAnalyzer ZZHist(inputFile, outputDir, lumi*1.212*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+            ZZHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana ZZLumi(fileName);
+                summedWeights += ZZLumi.Loop();
+            }// end while loop for weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                MuMuTauETauEAnalyzer ZZHist(fileName, outputDir, lumi*1.212*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedEle1Iso, invertedEle2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, EleRelId, EleIsoUpperBound, diMuonMassLowThreshold, diMuonMassHighThreshold);
+                ZZHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if ZZ
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
 
     if (doWhat == "H125AA5" || doWhat == "ALL")
     {
