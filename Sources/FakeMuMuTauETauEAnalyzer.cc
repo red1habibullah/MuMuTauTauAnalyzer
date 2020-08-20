@@ -101,10 +101,10 @@ void FakeMuMuTauETauEAnalyzer::Loop()
       // ---- search for a electron-electron pair for fake rate study ----
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
-          bool condEleLoose = Ele1RelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
-          bool condEleMedium = Ele1RelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
-          bool condEleTight = Ele1RelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
-          bool condEleNull = Ele1RelId != "LOOSE" && Ele1RelId != "MEDIUM" && Ele1RelId != "TIGHT" && recoElectronIsolation->at(iEle) < Ele1IsoThreshold;
+          bool condEleLoose = EleRelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
+          bool condEleMedium = EleRelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
+          bool condEleTight = EleRelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
+          bool condEleNull = EleRelId != "LOOSE" && EleRelId != "MEDIUM" && EleRelId != "TIGHT" && recoElectronIsolation->at(iEle) < EleIsoUpperBound;
           bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
 
           if (!passCondEleId) continue;

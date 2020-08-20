@@ -122,10 +122,10 @@ public :
    double Mu1IsoThreshold;
    double Mu2IsoThreshold;
    TString MuonId;
-   TString Ele1RelId;
-   double Ele1IsoThreshold;
+   TString EleRelId;
+   double EleIsoUpperBound;
 
-   FakeMuMuTauETauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, TString MuonId_ = "LOOSE", TString Ele1RelId_ = "LOOSE", double Ele1IsoThreshold_ = 0.3);
+   FakeMuMuTauETauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, TString MuonId_ = "LOOSE", TString EleRelId_ = "LOOSE", double EleIsoUpperBound_ = 0.3);
    string createOutputFileName();
    virtual ~FakeMuMuTauETauEAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -140,7 +140,7 @@ public :
 #endif
 
 #ifdef FakeMuMuTauETauEAnalyzer_cxx
-FakeMuMuTauETauEAnalyzer::FakeMuMuTauETauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, TString MuonId_, TString Ele1RelId_, double Ele1IsoThreshold_) : HistoZmumu() 
+FakeMuMuTauETauEAnalyzer::FakeMuMuTauETauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, TString MuonId_, TString EleRelId_, double EleIsoUpperBound_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -151,8 +151,8 @@ FakeMuMuTauETauEAnalyzer::FakeMuMuTauETauEAnalyzer(TString fileName_, TString ou
     Mu1IsoThreshold = Mu1IsoThreshold_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
     MuonId = MuonId_;
-    Ele1RelId = Ele1RelId_;
-    Ele1IsoThreshold = Ele1IsoThreshold_;
+    EleRelId = EleRelId_;
+    EleIsoUpperBound = EleIsoUpperBound_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
