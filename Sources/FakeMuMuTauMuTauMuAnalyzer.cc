@@ -52,8 +52,9 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
           bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
           bool passMuonID = isLoose || isMedium || isTight;
+          bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
 
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID)
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID && passDXYDZ)
           {
               Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu1Iso = recoMuonIsolation->at(iMuon);
@@ -77,9 +78,10 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
           bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
           bool passMuonID = isLoose || isMedium || isTight;
+          bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
 
           if (iMuon == indexMu1) continue;
-          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID || !passDXYDZ) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
@@ -106,9 +108,10 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
           bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
           bool passMuonID = isLoose || isMedium || isTight;
+          bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
 
           if (iMuon == indexMu1 || iMuon == indexMu2) continue;
-          if (recoMuonIsolation->at(iMuon) > Mu3IsoThreshold || !passMuonID) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu3IsoThreshold || !passMuonID || !passDXYDZ) continue;
           
           TLorentzVector Mu3Cand;
           Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
