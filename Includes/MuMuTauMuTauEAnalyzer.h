@@ -38,6 +38,9 @@ public :
    vector<int>     *recoMuonTriggerFlag;
    vector<int>     *recoMuonRefToElectron;
    vector<int>     *recoMuonRefToTau;
+   vector<int>     *recoMuonIdLoose;
+   vector<int>     *recoMuonIdMedium;
+   vector<int>     *recoMuonIdTight;
    vector<float>   *recoElectronPt;
    vector<float>   *recoElectronEta;
    vector<float>   *recoElectronPhi;
@@ -79,6 +82,9 @@ public :
    TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoMuonRefToElectron;   //!
    TBranch        *b_recoMuonRefToTau;   //!
+   TBranch        *b_recoMuonIdLoose;   //!
+   TBranch        *b_recoMuonIdMedium;   //!
+   TBranch        *b_recoMuonIdTight;   //!
    TBranch        *b_recoElectronPt;   //!
    TBranch        *b_recoElectronEta;   //!
    TBranch        *b_recoElectronPhi;   //!
@@ -114,15 +120,19 @@ public :
    float summedWeights; // these two factors contribute to the MC normalization
    bool isMC;
    bool invertedMu2Iso;
+   bool invertedMu3Iso;
    bool invertedEle1Iso;
+   double Mu1IsoThreshold;
    double Mu2IsoThreshold;
    double Mu3IsoThreshold;
-   double Ele1IsoThreshold;
-   TString Ele1RelId;
+   double MuIsoUpperBound;
+   TString MuonId;
+   TString EleRelId;
+   double EleIsoUpperBound;
    double diMuonMassLowThreshold;
    double diMuonMassHighThreshold;
 
-   MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedEle1Iso_ = false, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, double Ele1IsoThreshold_ = 0.25, TString Ele1RelId_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
+   MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedMu3Iso_ = false, bool invertedEle1Iso_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, double MuIsoUpperBound_ = 0.4, TString MuonId_ = "LOOSE", TString EleRelId_ = "LOOSE", double EleIsoUpperBound_ = 0.6, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0);
    string createOutputFileName();
    virtual ~MuMuTauMuTauEAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -137,7 +147,7 @@ public :
 #endif
 
 #ifdef MuMuTauMuTauEAnalyzer_cxx
-MuMuTauMuTauEAnalyzer::MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedEle1Iso_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, double Ele1IsoThreshold_, TString Ele1RelId_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
+MuMuTauMuTauEAnalyzer::MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedMu3Iso_, bool invertedEle1Iso_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, double MuIsoUpperBound_, TString MuonId_, TString EleRelId_, double EleIsoUpperBound_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -146,11 +156,15 @@ MuMuTauMuTauEAnalyzer::MuMuTauMuTauEAnalyzer(TString fileName_, TString outputDi
     nMaxEvents = nMaxEvents_;
     isMC = isMC_;
     invertedMu2Iso = invertedMu2Iso_;
+    invertedMu3Iso = invertedMu3Iso_;
     invertedEle1Iso = invertedEle1Iso_;
+    Mu1IsoThreshold = Mu1IsoThreshold_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
     Mu3IsoThreshold = Mu3IsoThreshold_;
-    Ele1IsoThreshold = Ele1IsoThreshold_;
-    Ele1RelId = Ele1RelId_;
+    MuIsoUpperBound = MuIsoUpperBound_; 
+    MuonId = MuonId_;
+    EleRelId = EleRelId_;
+    EleIsoUpperBound = EleIsoUpperBound_;
     diMuonMassLowThreshold = diMuonMassLowThreshold_;
     diMuonMassHighThreshold = diMuonMassHighThreshold_;
     invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
@@ -233,6 +247,9 @@ void MuMuTauMuTauEAnalyzer::Init()
    recoMuonTriggerFlag = 0;
    recoMuonRefToElectron = 0;
    recoMuonRefToTau = 0;
+   recoMuonIdLoose = 0;
+   recoMuonIdMedium = 0;
+   recoMuonIdTight = 0;
    recoElectronPt = 0;
    recoElectronEta = 0;
    recoElectronPhi = 0;
@@ -271,6 +288,9 @@ void MuMuTauMuTauEAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoMuonRefToElectron", &recoMuonRefToElectron, &b_recoMuonRefToElectron);
    fChain->SetBranchAddress("recoMuonRefToTau", &recoMuonRefToTau, &b_recoMuonRefToTau);
+   fChain->SetBranchAddress("recoMuonIdLoose", &recoMuonIdLoose, &b_recoMuonIdLoose);
+   fChain->SetBranchAddress("recoMuonIdMedium", &recoMuonIdMedium, &b_recoMuonIdMedium);
+   fChain->SetBranchAddress("recoMuonIdTight", &recoMuonIdTight, &b_recoMuonIdTight);
    fChain->SetBranchAddress("recoElectronPt", &recoElectronPt, &b_recoElectronPt);
    fChain->SetBranchAddress("recoElectronEta", &recoElectronEta, &b_recoElectronEta);
    fChain->SetBranchAddress("recoElectronPhi", &recoElectronPhi, &b_recoElectronPhi);

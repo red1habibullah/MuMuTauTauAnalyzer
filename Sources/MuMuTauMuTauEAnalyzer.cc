@@ -50,7 +50,13 @@ void MuMuTauMuTauEAnalyzer::Loop()
       bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25) 
+          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          bool passMuonID = isLoose || isMedium || isTight;
+          bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
+
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID && passDXYDZ) 
           {
               Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu1Iso = recoMuonIsolation->at(iMuon);
@@ -67,8 +73,14 @@ void MuMuTauMuTauEAnalyzer::Loop()
       // ---- start loop on muon candidates for mu2 ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
+          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          bool passMuonID = isLoose || isMedium || isTight;
+          bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
+
           if (iMuon == indexMu1) continue;
-          if ((invertedMu2Iso == false && recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || (invertedMu2Iso == true && recoMuonIsolation->at(iMuon) < Mu2IsoThreshold)) continue;
+          if ((!invertedMu2Iso && recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || (invertedMu2Iso && recoMuonIsolation->at(iMuon) < Mu2IsoThreshold) || (invertedMu2Iso && recoMuonIsolation->at(iMuon) > MuIsoUpperBound) || !passMuonID || !passDXYDZ) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
@@ -89,17 +101,17 @@ void MuMuTauMuTauEAnalyzer::Loop()
       // ------- start loop on electron candidates -------
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
-          bool condEleLoose = Ele1RelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
-          bool condEleMedium = Ele1RelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
-          bool condEleTight = Ele1RelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
-          bool condEleNull = Ele1RelId != "LOOSE" && Ele1RelId != "MEDIUM" && Ele1RelId != "TIGHT" && recoElectronIsolation->at(iEle) < Ele1IsoThreshold;
+          bool condEleLoose = EleRelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
+          bool condEleMedium = EleRelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
+          bool condEleTight = EleRelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
+          bool condEleNull = EleRelId != "LOOSE" && EleRelId != "MEDIUM" && EleRelId != "TIGHT" && recoElectronIsolation->at(iEle) < EleIsoUpperBound;
           bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
 
           // -------------------- inverted electron ID -----------------------------
-          bool condInvertEleLoose = Ele1RelId == "LOOSE" && recoElectronIdLoose->at(iEle) <= 0;
-          bool condInvertEleMedium = Ele1RelId == "MEDIUM" && recoElectronIdMedium->at(iEle) <= 0;
-          bool condInvertEleTight = Ele1RelId == "TIGHT" && recoElectronIdTight->at(iEle) <= 0;
-          bool condInvertEleIso = recoElectronIsolation->at(iEle) < Ele1IsoThreshold;
+          bool condInvertEleLoose = EleRelId == "LOOSE" && recoElectronIdLoose->at(iEle) <= 0;
+          bool condInvertEleMedium = EleRelId == "MEDIUM" && recoElectronIdMedium->at(iEle) <= 0;
+          bool condInvertEleTight = EleRelId == "TIGHT" && recoElectronIdTight->at(iEle) <= 0;
+          bool condInvertEleIso = recoElectronIsolation->at(iEle) < EleIsoUpperBound;
           bool passCondInvertEleId = (condInvertEleLoose || condInvertEleMedium || condInvertEleTight) && condInvertEleIso;
 
           if ((!invertedEle1Iso && !passCondEleId) || (invertedEle1Iso && !passCondInvertEleId)) continue;
@@ -115,13 +127,20 @@ void MuMuTauMuTauEAnalyzer::Loop()
 
           for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
           {
+              bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+              bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+              bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+              bool passMuonID = isLoose || isMedium || isTight;
+              bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
+
               if (iMuon == indexMu1 || iMuon == indexMu2) continue;
+              if ((!invertedMu3Iso && recoMuonIsolation->at(iMuon) > Mu3IsoThreshold) || (invertedMu3Iso && recoMuonIsolation->at(iMuon) < Mu3IsoThreshold) || (invertedMu3Iso && recoMuonIsolation->at(iMuon) > MuIsoUpperBound) || !passMuonID || !passDXYDZ) continue;
 
               TLorentzVector Mu3Cand; // prepare this variable for dR(Mu3, electron) implementation
               Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               bool overlapMuEle = recoMuonRefToElectron->at(iMuon) > 0 && recoElectronRefToMuon->at(iEle) > 0 && recoMuonRefToElectron->at(iMuon) == recoElectronRefToMuon->at(iEle);
 
-              if ((recoMuonIsolation->at(iMuon) < Mu3IsoThreshold) && (Ele.DeltaR(Mu3Cand) < smallestDR) && (recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))) && ((Ele+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4) && !overlapMuEle)
+              if ((Ele.DeltaR(Mu3Cand) < smallestDR) && (recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))) && ((Ele+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4) && !overlapMuEle)
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
                   Mu3Iso = recoMuonIsolation->at(iMuon);
