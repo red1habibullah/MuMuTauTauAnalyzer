@@ -115,6 +115,8 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           
           TLorentzVector Mu3Cand;
           Mu3Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+          bool qcdVeto = (recoMuonPDGId->at(indexMu1) != recoMuonPDGId->at(iMuon) && (Mu1+Mu3Cand).M() > 12.0) || (recoMuonPDGId->at(indexMu2) != recoMuonPDGId->at(iMuon) && (Mu2+Mu3Cand).M() > 12.0);
+          if (!qcdVeto) continue;
 
           if (Mu3Cand.DeltaR(Mu1) < 0.4 || Mu3Cand.DeltaR(Mu2) < 0.4) continue;
           if (Mu3Cand.Pt() > highestPt)
