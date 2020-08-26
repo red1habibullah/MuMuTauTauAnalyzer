@@ -92,6 +92,7 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
               Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu2Iso = recoMuonIsolation->at(iMuon);
               highestPt = Mu2Cand.Pt();
+              indexMu2 = iMuon;
               findMu2 = true;
           } // end if pair candidates
       } // end loop for mu2
