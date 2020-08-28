@@ -144,6 +144,9 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           invMassMu1Mu2->Fill((Mu1+Mu2).M(), weight);
           dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), (Mu1+Mu2).M(), weight);
 
+          invMassMu1Mu3->Fill((Mu1+Mu3).M(), weight);
+          invMassMu2Mu3->Fill((Mu2+Mu3).M(), weight);
+
           mu1Iso->Fill(Mu1Iso, weight);
           mu2Iso->Fill(Mu2Iso, weight);
           mu3Iso->Fill(Mu3Iso, weight);
