@@ -80,7 +80,7 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
 
           if (iMuon == indexMu1) continue;
-          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID || !passDXYDZ) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID || !passDXYDZ || recoMuonPt->at(iMuon) < 20.0) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
