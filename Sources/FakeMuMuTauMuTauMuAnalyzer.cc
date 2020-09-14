@@ -119,6 +119,20 @@ void FakeMuMuTauMuTauMuAnalyzer::Loop()
           bool qcdVeto = (recoMuonPDGId->at(indexMu1) != recoMuonPDGId->at(iMuon) && (Mu1+Mu3Cand).M() > 12.0) || (recoMuonPDGId->at(indexMu2) != recoMuonPDGId->at(iMuon) && (Mu2+Mu3Cand).M() > 12.0);
           if (!qcdVeto) continue;
 
+          // ---- bjet veto for the probe muon ---
+          bool bjetVeto = false;
+          for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
+          {
+              TLorentzVector Jet;
+              Jet.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
+              if (Mu3Cand.DeltaR(Jet) < 0.4 && recoJetCSV->at(iJet) > 0.5426)
+              {
+                  bjetVeto = true;
+                  break;
+              } // end if bjet veto
+          } // end for loop over the reco-jets
+          if (bjetVeto) continue;
+
           if (Mu3Cand.DeltaR(Mu1) < 0.4 || Mu3Cand.DeltaR(Mu2) < 0.4) continue;
           if (Mu3Cand.Pt() > highestPt)
           {

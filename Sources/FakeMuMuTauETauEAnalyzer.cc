@@ -113,6 +113,20 @@ void FakeMuMuTauETauEAnalyzer::Loop()
           TLorentzVector Ele1Cand;
           Ele1Cand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
 
+          // ---- bjet veto for the probe electron ---
+          bool bjetVeto = false;
+          for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
+          {
+              TLorentzVector Jet;
+              Jet.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
+              if (Ele1Cand.DeltaR(Jet) < 0.4 && recoJetCSV->at(iJet) > 0.5426)
+              {
+                  bjetVeto = true;
+                  break;
+              } // end if bjet veto
+          } // end for loop over the reco-jets
+          if (bjetVeto) continue;
+
           if (Ele1Cand.DeltaR(Mu1) < 0.4 || Ele1Cand.DeltaR(Mu2) < 0.4) continue;
           if (Ele1Cand.Pt() > highestPt)
           {
