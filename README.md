@@ -6,7 +6,7 @@ of variable histograms and/or flat trees.
 
 # Introduction for running the analyzer
 
-First you must make sure you have the ROOT library included in your local environment. If you need to run this framework in batch mode, it is better to set up a CMSSW package and run the following commands in its "src/" directory. 
+First you must make sure you have the ROOT and BOOST C++ libraries included in your local environment. If you need to run this framework in batch mode, it is better to set up a CMSSW package and run the following commands in its "src/" directory. 
 
 $ git clone https://github.com/Fengwangdong/MuMuTauTauAnalyzer.git
 
