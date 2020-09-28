@@ -1,10 +1,12 @@
 #define MuMuTauETauHadAnalyzer_cxx
 #include "MuMuTauETauHadAnalyzer.h"
+#include "RoccoR.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
 #include <TFile.h>
+#include <TRandom.h>
 #include <iomanip>
 #include <iostream>
 #include <TLorentzVector.h>
@@ -22,6 +24,20 @@ void MuMuTauETauHadAnalyzer::Loop()
    cout << "We will run on " << nentries << " events" << endl;
 
    Long64_t nbytes = 0, nb = 0;
+
+   // ---- define the variable for rochester correction ----
+   string rochesterFileName = rochesterFile.Data();
+   RoccoR rc(rochesterFileName);
+   double rochesterSF = 1;
+   int errorMember = 0;
+
+   if (muonScaleSyst < 0) muonScaleSyst = fabs(muonScaleSyst);
+   if (muonScaleSyst > 104) muonScaleSyst = 104;
+   if (muonScaleSyst > 5)
+   {
+       errorMember = muonScaleSyst - 5;
+       muonScaleSyst = 1; // error set to statistical uncertainty replicas
+   } // end if muonScaleSyst > 5
 
    for (Long64_t jentry=0; jentry<nentries; jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -51,9 +67,28 @@ void MuMuTauETauHadAnalyzer::Loop()
       bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < 0.25) 
+          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          bool passMuonID = isLoose || isMedium || isTight;
+          bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
+
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID && passDXYDZ) 
           {
               Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              double recoMuonMass = Mu1.M();
+
+              if (isMC)
+              {
+                  double rng = gRandom->Rndm();
+                  rochesterSF = rc.kSmearMC(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonNTrackerLayers->at(iMuon), rng, muonScaleSyst, errorMember);
+              } // end if isMC == true
+
+              else{
+                  rochesterSF = rc.kScaleDT(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), muonScaleSyst, errorMember);
+              } // end if isMC == false (data)
+
+              Mu1.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
               Mu1Iso = recoMuonIsolation->at(iMuon);
               indexMu1 = iMuon;
               findMu1 = true;
@@ -68,21 +103,40 @@ void MuMuTauETauHadAnalyzer::Loop()
       // ---- start loop on muon candidates for mu2 ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
+          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          bool passMuonID = isLoose || isMedium || isTight;
+          bool passDXYDZ = recoMuonDXY->at(iMuon) < 0.2 && recoMuonDZ->at(iMuon) < 0.5;
+
           if (iMuon == indexMu1) continue;
-          if ((invertedMu2Iso == false && recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || (invertedMu2Iso == true && recoMuonIsolation->at(iMuon) < Mu2IsoThreshold)) continue;
+          if ((!invertedMu2Iso && recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || (invertedMu2Iso && recoMuonIsolation->at(iMuon) < Mu2IsoThreshold) || (invertedMu2Iso && recoMuonIsolation->at(iMuon) > MuIsoUpperBound) || !passMuonID || !passDXYDZ) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+          double recoMuonMass = Mu2Cand.M();
+
+          if (isMC)
+          {
+              double rng = gRandom->Rndm();
+              rochesterSF = rc.kSmearMC(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonNTrackerLayers->at(iMuon), rng, muonScaleSyst, errorMember);
+          } // end if isMC == true
+
+          else{
+              rochesterSF = rc.kScaleDT(recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)), recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), muonScaleSyst, errorMember);
+          } // end if isMC == false (data)
+
+          Mu2Cand.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
 
           if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(indexMu1) == (-1) * recoMuonPDGId->at(iMuon)) && ((Mu1+Mu2Cand).M() > diMuonMassLowThreshold) && ((Mu1+Mu2Cand).M() < diMuonMassHighThreshold))
           {
-              Mu2.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+              Mu2.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
               Mu2Iso = recoMuonIsolation->at(iMuon);
               smallestDR = Mu1.DeltaR(Mu2);
               findMu2 = true;
           } // end if pair candidates
       } // end loop for mu2
-          
+
       if (!findMu2) continue;
       bool findEleTauPair = false;
 
@@ -173,6 +227,13 @@ void MuMuTauETauHadAnalyzer::Loop()
               bool passCondInvertTauMVA = (condInvertTauMVARaw && (condInvertTauMVAWPVVLoose || condInvertTauMVAWPVLoose || condInvertTauMVAWPLoose || condInvertTauMVAWPMedium || condInvertTauMVAWPTight || condInvertTauMVAWPVTight || condInvertTauMVAWPVVTight));
               // -------------------------------------------------------------------------------------------------
 
+              bool condTauAntiMuMVALoose = tauAntiMuDisc == "LOOSE" && recoTauAntiMuMVALoose->at(iTau)>0;
+              bool condTauAntiMuMVATight = tauAntiMuDisc == "TIGHT" && recoTauAntiMuMVATight->at(iTau)>0; 
+              bool condTauAntiMuMVANull = tauAntiMuDisc != "LOOSE" && tauAntiMuDisc != "TIGHT";
+
+              bool passCondTauAntiMuMVA = (condTauAntiMuMVALoose || condTauAntiMuMVATight || condTauAntiMuMVANull);
+              // -------------------------------------------------------------------------------------------------
+
               bool condTauAntiEleMVALoose = tauAntiEleDisc == "LOOSE" && recoTauAntiEleMVALoose->at(iTau)>0;
               bool condTauAntiEleMVAMedium = tauAntiEleDisc == "MEDIUM" && recoTauAntiEleMVAMedium->at(iTau)>0;
               bool condTauAntiEleMVATight = tauAntiEleDisc == "TIGHT" && recoTauAntiEleMVATight->at(iTau)>0; 
@@ -181,15 +242,32 @@ void MuMuTauETauHadAnalyzer::Loop()
               bool passCondTauAntiEleMVA = (condTauAntiEleMVALoose || condTauAntiEleMVAMedium || condTauAntiEleMVATight || condTauAntiEleMVANull);
               // -------------------------------------------------------------------------------------------------
 
-              if ((!invertedTauIso && !passCondTauMVA) || (invertedTauIso && !passCondInvertTauMVA) || !passCondTauAntiEleMVA) continue;
+              if ((!invertedTauIso && !passCondTauMVA) || (invertedTauIso && !passCondInvertTauMVA) || !passCondTauAntiMuMVA || !passCondTauAntiEleMVA) continue;
           } // end if !deepTauID (tauMVAID)
 
           TLorentzVector TauCand;
           TauCand.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+          double recoTauMass = TauCand.M();
+          TauCand.SetPtEtaPhiM(recoTauPt->at(iTau)*tauScaleCorr, recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauMass);
 
           if (TauCand.DeltaR(Mu1) < 0.8 || TauCand.DeltaR(Mu2) < 0.8) continue;
+
+          // ---- bjet veto for tau ---
+          bool bjetVeto = false;
+          for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
+          {
+              TLorentzVector Jet;
+              Jet.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
+              if (TauCand.DeltaR(Jet) < 0.4 && recoJetCSV->at(iJet) > 0.5426)
+              {
+                  bjetVeto = true;
+                  break;
+              } // end if bjet veto
+          } // end for loop over the reco-jets
+          if (bjetVeto) continue;
+
           if ((recoTauDecayMode->at(iTau) != tauDecayModeThreshold) && (tauDecayModeThreshold == 0 || tauDecayModeThreshold == 1 || tauDecayModeThreshold == 5 || tauDecayModeThreshold == 6 || tauDecayModeThreshold == 10 || tauDecayModeThreshold == 11)) continue;
-          Tau.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
+          Tau.SetPtEtaPhiM(recoTauPt->at(iTau)*tauScaleCorr, recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauMass);
           TauIso = deepTauID ? recoTauDeepVSjetraw->at(iTau) : recoTauIsoMVArawValue->at(iTau);
           TauDM = recoTauDecayMode->at(iTau);
 
@@ -198,13 +276,31 @@ void MuMuTauETauHadAnalyzer::Loop()
 
           for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
           {
+              bool condEleLoose = EleRelId == "LOOSE" && recoElectronIdLooseNoIso->at(iEle) > 0;
+              bool condEleMedium = EleRelId == "MEDIUM" && recoElectronIdMediumNoIso->at(iEle) > 0;
+              bool condEleTight = EleRelId == "TIGHT" && recoElectronIdTightNoIso->at(iEle) > 0;
+              bool condEleNull = EleRelId != "LOOSE" && EleRelId != "MEDIUM" && EleRelId != "TIGHT";
+              bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
+
+              if (!passCondEleId) continue;
+
               TLorentzVector EleCand; // prepare this variable for dR(Ele, tau) implementation
               EleCand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
+              double recoElectronMass = EleCand.M();
+              double recoElectronPtCorr = recoElectronPt->at(iEle);
+              
+              if (electronScaleSyst == 0) recoElectronPtCorr = recoElectronPt->at(iEle) * recoElectronEcalTrkEnergyPostCorr->at(iEle) / recoElectronEnergy->at(iEle);
+              if (electronScaleSyst == 1) recoElectronPtCorr = recoElectronPt->at(iEle) * recoElectronEnergyScaleUp->at(iEle) / recoElectronEnergy->at(iEle); 
+              if (electronScaleSyst == -1) recoElectronPtCorr = recoElectronPt->at(iEle) * recoElectronEnergyScaleDown->at(iEle) / recoElectronEnergy->at(iEle); 
+              if (electronScaleSyst == 2) recoElectronPtCorr = recoElectronPt->at(iEle) * recoElectronEnergySigmaUp->at(iEle) / recoElectronEnergy->at(iEle); 
+              if (electronScaleSyst == -2) recoElectronPtCorr = recoElectronPt->at(iEle) * recoElectronEnergySigmaDown->at(iEle) / recoElectronEnergy->at(iEle); 
+
+              EleCand.SetPtEtaPhiM(recoElectronPtCorr, recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronMass);
               bool overlapEleTau = recoElectronRefToTau->at(iEle) > 0 && recoTauRefToElectron->at(iTau) > 0 && recoElectronRefToTau->at(iEle) == recoTauRefToElectron->at(iTau);
 
               if ((Tau.DeltaR(EleCand) < smallestDR) && (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle))) && ((Tau+EleCand).M() < 60.0) && (EleCand.DeltaR(Mu1) > 0.4) && (EleCand.DeltaR(Mu2) > 0.4) && !overlapEleTau)
               {
-                  Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
+                  Ele.SetPtEtaPhiM(recoElectronPtCorr, recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronMass);
                   EleIso = recoElectronIsolation->at(iEle); 
                   smallestDR = Tau.DeltaR(Ele);
                   findEle = true;

@@ -38,6 +38,9 @@ public :
    vector<int>     *recoMuonTriggerFlag;
    vector<int>     *recoMuonRefToElectron;
    vector<int>     *recoMuonRefToTau;
+   vector<int>     *recoMuonIdLoose;
+   vector<int>     *recoMuonIdMedium;
+   vector<int>     *recoMuonIdTight;
    vector<float>   *recoElectronPt;
    vector<float>   *recoElectronEta;
    vector<float>   *recoElectronPhi;
@@ -47,8 +50,17 @@ public :
    vector<int>     *recoElectronIdLoose;
    vector<int>     *recoElectronIdMedium;
    vector<int>     *recoElectronIdTight;
+   vector<int>     *recoElectronIdLooseNoIso;
+   vector<int>     *recoElectronIdMediumNoIso;
+   vector<int>     *recoElectronIdTightNoIso;
    vector<float>   *recoElectronEcalTrkEnergyPostCorr;
    vector<float>   *recoElectronEcalTrkEnergyErrPostCorr;
+   vector<float>   *recoElectronEnergyScaleValue;
+   vector<float>   *recoElectronEnergyScaleUp;
+   vector<float>   *recoElectronEnergyScaleDown;
+   vector<float>   *recoElectronEnergySigmaValue;
+   vector<float>   *recoElectronEnergySigmaUp;
+   vector<float>   *recoElectronEnergySigmaDown;
    vector<int>     *recoElectronRefToMuon;
    vector<int>     *recoElectronRefToTau;
    vector<float>   *recoTauPt;
@@ -57,6 +69,8 @@ public :
    vector<float>   *recoTauEnergy;
    vector<int>     *recoTauPDGId;
    vector<float>   *recoTauDecayMode;
+   vector<float>   *recoTauDecayModeFinding;
+   vector<float>   *recoTauDecayModeFindingNewDMs;
    vector<int>     *recoTauRefToMuon;
    vector<int>     *recoTauRefToElectron;
    vector<float>   *recoTauDeepVSeraw;
@@ -126,6 +140,9 @@ public :
    TBranch        *b_recoMuonTriggerFlag;   //!
    TBranch        *b_recoMuonRefToElectron;   //!
    TBranch        *b_recoMuonRefToTau;   //!
+   TBranch        *b_recoMuonIdLoose;   //!
+   TBranch        *b_recoMuonIdMedium;   //!
+   TBranch        *b_recoMuonIdTight;   //!
    TBranch        *b_recoElectronPt;   //!
    TBranch        *b_recoElectronEta;   //!
    TBranch        *b_recoElectronPhi;   //!
@@ -135,8 +152,17 @@ public :
    TBranch        *b_recoElectronIdLoose;   //!
    TBranch        *b_recoElectronIdMedium;   //!
    TBranch        *b_recoElectronIdTight;   //!
+   TBranch        *b_recoElectronIdLooseNoIso;   //!
+   TBranch        *b_recoElectronIdMediumNoIso;   //!
+   TBranch        *b_recoElectronIdTightNoIso;   //!
    TBranch        *b_recoElectronEcalTrkEnergyPostCorr;   //!
    TBranch        *b_recoElectronEcalTrkEnergyErrPostCorr;   //!
+   TBranch        *b_recoElectronEnergyScaleValue;   //!
+   TBranch        *b_recoElectronEnergyScaleUp;   //!
+   TBranch        *b_recoElectronEnergyScaleDown;   //!
+   TBranch        *b_recoElectronEnergySigmaValue;   //!
+   TBranch        *b_recoElectronEnergySigmaUp;   //!
+   TBranch        *b_recoElectronEnergySigmaDown;   //!
    TBranch        *b_recoElectronRefToMuon;   //!
    TBranch        *b_recoElectronRefToTau;   //!
    TBranch        *b_recoTauPt;   //!
@@ -145,6 +171,8 @@ public :
    TBranch        *b_recoTauEnergy;   //!
    TBranch        *b_recoTauPDGId;   //!
    TBranch        *b_recoTauDecayMode;   //!
+   TBranch        *b_recoTauDecayModeFinding;   //!
+   TBranch        *b_recoTauDecayModeFindingNewDMs;   //!
    TBranch        *b_recoTauRefToMuon;   //!
    TBranch        *b_recoTauRefToElectron;   //!
    TBranch        *b_recoTauDeepVSeraw;   //!
@@ -209,20 +237,29 @@ public :
    bool isMC;
    bool invertedMu2Iso;
    bool invertedTauIso;
+   double Mu1IsoThreshold;
    double Mu2IsoThreshold;
+   double MuIsoUpperBound;
+   TString MuonId;
+   TString EleRelId;
    double diMuonMassLowThreshold;
    double diMuonMassHighThreshold;
    bool tauMVAIsoRawORWP;
    double tauMVAIsoRawThreshold;
    TString tauMVAIsoWP;
+   TString tauAntiMuDisc;
    TString tauAntiEleDisc;
    bool deepTauID;
    TString deepTauVSele;
    TString deepTauVSmu;
    TString deepTauVSjet;
    double tauDecayModeThreshold;
+   int muonScaleSyst;
+   int electronScaleSyst;
+   double tauScaleCorr;
+   TString rochesterFile;
 
-   MuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu2IsoThreshold_ = 0.25, double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiEleDisc_ = "NULL", bool deepTauID_ = false, TString deepTauVSele_ = "LOOSE", TString deepTauVSmu_ = "LOOSE", TString deepTauVSjet_ = "MEDIUM", double tauDecayModeThreshold_ = -1);
+   MuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double MuIsoUpperBound_ = 0.4, TString MuonId_ = "LOOSE", TString EleRelId_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0, bool tauMVAIsoRawORWP_ = false, double tauMVAIsoRawThreshold_ = -0.5, TString tauMVAIsoWP_ = "MEDIUM", TString tauAntiMuDisc_ = "NULL", TString tauAntiEleDisc_ = "NULL", bool deepTauID_ = false, TString deepTauVSele_ = "LOOSE", TString deepTauVSmu_ = "LOOSE", TString deepTauVSjet_ = "MEDIUM", double tauDecayModeThreshold_ = -1, int muonScaleSyst_ = 0, int electronScaleSyst_ = 0, double tauScaleCorr_ = 1.0, TString rochesterFile_ = "");
    string createOutputFileName();
    virtual ~MuMuTauETauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -237,7 +274,7 @@ public :
 #endif
 
 #ifdef MuMuTauETauHadAnalyzer_cxx
-MuMuTauETauHadAnalyzer::MuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu2IsoThreshold_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiEleDisc_, bool deepTauID_, TString deepTauVSele_, TString deepTauVSmu_, TString deepTauVSjet_, double tauDecayModeThreshold_) : Histomutau() 
+MuMuTauETauHadAnalyzer::MuMuTauETauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double MuIsoUpperBound_, TString MuonId_, TString EleRelId_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_, bool tauMVAIsoRawORWP_, double tauMVAIsoRawThreshold_, TString tauMVAIsoWP_, TString tauAntiMuDisc_, TString tauAntiEleDisc_, bool deepTauID_, TString deepTauVSele_, TString deepTauVSmu_, TString deepTauVSjet_, double tauDecayModeThreshold_, int muonScaleSyst_, int electronScaleSyst_, double tauScaleCorr_, TString rochesterFile_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -247,18 +284,27 @@ MuMuTauETauHadAnalyzer::MuMuTauETauHadAnalyzer(TString fileName_, TString output
     isMC = isMC_;
     invertedMu2Iso = invertedMu2Iso_;
     invertedTauIso = invertedTauIso_;
+    Mu1IsoThreshold = Mu1IsoThreshold_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
+    MuIsoUpperBound = MuIsoUpperBound_;
+    MuonId = MuonId_;
+    EleRelId = EleRelId_;
     diMuonMassLowThreshold = diMuonMassLowThreshold_;
     diMuonMassHighThreshold = diMuonMassHighThreshold_;
     tauMVAIsoRawORWP = tauMVAIsoRawORWP_;
     tauMVAIsoRawThreshold = tauMVAIsoRawThreshold_;
     tauMVAIsoWP = tauMVAIsoWP_;
+    tauAntiMuDisc = tauAntiMuDisc_;
     tauAntiEleDisc = tauAntiEleDisc_;
     deepTauID = deepTauID_;
     deepTauVSele = deepTauVSele_;
     deepTauVSmu = deepTauVSmu_;
     deepTauVSjet = deepTauVSjet_;
     tauDecayModeThreshold = tauDecayModeThreshold_;
+    muonScaleSyst = muonScaleSyst_;
+    electronScaleSyst = electronScaleSyst_;
+    tauScaleCorr = tauScaleCorr_;
+    rochesterFile = rochesterFile_;
     invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
 
     //--- Create output directory if necessary ---
@@ -339,6 +385,9 @@ void MuMuTauETauHadAnalyzer::Init()
    recoMuonTriggerFlag = 0;
    recoMuonRefToElectron = 0;
    recoMuonRefToTau = 0;
+   recoMuonIdLoose = 0;
+   recoMuonIdMedium = 0;
+   recoMuonIdTight = 0;
    recoElectronPt = 0;
    recoElectronEta = 0;
    recoElectronPhi = 0;
@@ -348,8 +397,17 @@ void MuMuTauETauHadAnalyzer::Init()
    recoElectronIdLoose = 0;
    recoElectronIdMedium = 0;
    recoElectronIdTight = 0;
+   recoElectronIdLooseNoIso = 0;
+   recoElectronIdMediumNoIso = 0;
+   recoElectronIdTightNoIso = 0;
    recoElectronEcalTrkEnergyPostCorr = 0;
    recoElectronEcalTrkEnergyErrPostCorr = 0;
+   recoElectronEnergyScaleValue = 0;
+   recoElectronEnergyScaleUp = 0;
+   recoElectronEnergyScaleDown = 0;
+   recoElectronEnergySigmaValue = 0;
+   recoElectronEnergySigmaUp = 0;
+   recoElectronEnergySigmaDown = 0;
    recoElectronRefToMuon = 0;
    recoElectronRefToTau = 0;
    recoTauPt = 0;
@@ -358,6 +416,8 @@ void MuMuTauETauHadAnalyzer::Init()
    recoTauEnergy = 0;
    recoTauPDGId = 0;
    recoTauDecayMode = 0;
+   recoTauDecayModeFinding = 0;
+   recoTauDecayModeFindingNewDMs = 0;
    recoTauRefToMuon = 0;
    recoTauRefToElectron = 0;
    recoTauDeepVSeraw = 0;
@@ -424,6 +484,9 @@ void MuMuTauETauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonTriggerFlag", &recoMuonTriggerFlag, &b_recoMuonTriggerFlag);
    fChain->SetBranchAddress("recoMuonRefToElectron", &recoMuonRefToElectron, &b_recoMuonRefToElectron);
    fChain->SetBranchAddress("recoMuonRefToTau", &recoMuonRefToTau, &b_recoMuonRefToTau);
+   fChain->SetBranchAddress("recoMuonIdLoose", &recoMuonIdLoose, &b_recoMuonIdLoose);
+   fChain->SetBranchAddress("recoMuonIdMedium", &recoMuonIdMedium, &b_recoMuonIdMedium);
+   fChain->SetBranchAddress("recoMuonIdTight", &recoMuonIdTight, &b_recoMuonIdTight);
    fChain->SetBranchAddress("recoElectronPt", &recoElectronPt, &b_recoElectronPt);
    fChain->SetBranchAddress("recoElectronEta", &recoElectronEta, &b_recoElectronEta);
    fChain->SetBranchAddress("recoElectronPhi", &recoElectronPhi, &b_recoElectronPhi);
@@ -433,8 +496,17 @@ void MuMuTauETauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoElectronIdLoose", &recoElectronIdLoose, &b_recoElectronIdLoose);
    fChain->SetBranchAddress("recoElectronIdMedium", &recoElectronIdMedium, &b_recoElectronIdMedium);
    fChain->SetBranchAddress("recoElectronIdTight", &recoElectronIdTight, &b_recoElectronIdTight);
+   fChain->SetBranchAddress("recoElectronIdLooseNoIso", &recoElectronIdLooseNoIso, &b_recoElectronIdLooseNoIso);
+   fChain->SetBranchAddress("recoElectronIdMediumNoIso", &recoElectronIdMediumNoIso, &b_recoElectronIdMediumNoIso);
+   fChain->SetBranchAddress("recoElectronIdTightNoIso", &recoElectronIdTightNoIso, &b_recoElectronIdTightNoIso);
    fChain->SetBranchAddress("recoElectronEcalTrkEnergyPostCorr", &recoElectronEcalTrkEnergyPostCorr, &b_recoElectronEcalTrkEnergyPostCorr);
    fChain->SetBranchAddress("recoElectronEcalTrkEnergyErrPostCorr", &recoElectronEcalTrkEnergyErrPostCorr, &b_recoElectronEcalTrkEnergyErrPostCorr);
+   fChain->SetBranchAddress("recoElectronEnergyScaleValue", &recoElectronEnergyScaleValue, &b_recoElectronEnergyScaleValue);
+   fChain->SetBranchAddress("recoElectronEnergyScaleUp", &recoElectronEnergyScaleUp, &b_recoElectronEnergyScaleUp);
+   fChain->SetBranchAddress("recoElectronEnergyScaleDown", &recoElectronEnergyScaleDown, &b_recoElectronEnergyScaleDown);
+   fChain->SetBranchAddress("recoElectronEnergySigmaValue", &recoElectronEnergySigmaValue, &b_recoElectronEnergySigmaValue);
+   fChain->SetBranchAddress("recoElectronEnergySigmaUp", &recoElectronEnergySigmaUp, &b_recoElectronEnergySigmaUp);
+   fChain->SetBranchAddress("recoElectronEnergySigmaDown", &recoElectronEnergySigmaDown, &b_recoElectronEnergySigmaDown);
    fChain->SetBranchAddress("recoElectronRefToMuon", &recoElectronRefToMuon, &b_recoElectronRefToMuon);
    fChain->SetBranchAddress("recoElectronRefToTau", &recoElectronRefToTau, &b_recoElectronRefToTau);
    fChain->SetBranchAddress("recoTauPt", &recoTauPt, &b_recoTauPt);
@@ -443,6 +515,8 @@ void MuMuTauETauHadAnalyzer::Init()
    fChain->SetBranchAddress("recoTauEnergy", &recoTauEnergy, &b_recoTauEnergy);
    fChain->SetBranchAddress("recoTauPDGId", &recoTauPDGId, &b_recoTauPDGId);
    fChain->SetBranchAddress("recoTauDecayMode", &recoTauDecayMode, &b_recoTauDecayMode);
+   fChain->SetBranchAddress("recoTauDecayModeFinding", &recoTauDecayModeFinding, &b_recoTauDecayModeFinding);
+   fChain->SetBranchAddress("recoTauDecayModeFindingNewDMs", &recoTauDecayModeFindingNewDMs, &b_recoTauDecayModeFindingNewDMs);
    fChain->SetBranchAddress("recoTauRefToMuon", &recoTauRefToMuon, &b_recoTauRefToMuon);
    fChain->SetBranchAddress("recoTauRefToElectron", &recoTauRefToElectron, &b_recoTauRefToElectron);
    
