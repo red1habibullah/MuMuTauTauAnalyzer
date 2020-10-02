@@ -23,15 +23,13 @@ also customized in the command line for instance when executing the analyzer, fo
 
 # Run the diMuon Analyzer:
 
-$ ./runMuMuAnalyzer doWhat=DYJets maxEvents=1000 inputFile=inputFile.root ###### for producing histograms of the dimuon channel (control region)
+$ ./runMuMuAnalyzer doWhat=DYJets maxEvents=1000 inputFile=inputFile.root ###### for producing histograms of the dimuon channel (low diMu-mass control region)
 
 $ ./runZMuMuAnalyzer doWhat=DYJets maxEvents=1000 inputFile=inputFile.root ###### for producing histograms of the dimuon channel (Z boson control region)
 
 # Run the diMuon + ditau (tau_mu + tau_mu) Analyzer:
 
 $ ./runMuMuTauMuTauMuAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.root ###### for producing histograms of the tau_mu + tau_mu channel
-
-$ ./runFakeMuMuTauMuTauMuAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_mu + tau_mu channel (control region for jet faking muon study) 
 
 # Run the diMuon + ditau (tau_mu + tau_e) Analyzer:
 
@@ -41,25 +39,33 @@ $ ./runMuMuTauMuTauEAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.r
 
 $ ./runMuMuTauETauEAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.root ###### for producing histograms of the tau_e + tau_e channel
 
-$ ./runFakeMuMuTauETauEAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_e + tau_e channel (control region for jet faking muon study) 
-
 # Run the diMuon + ditau (tau_mu + tau_h) Analyzer:
 
 $ ./runMuMuTauMuTauHadAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.root ###### for producing histograms of the tau_mu + tau_h channel
-
-$ ./runFakeMuMuTauMuTauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_mu + tau_h channel (control region for jet faking tau study) 
 
 # Run the diMuon + ditau (tau_e + tau_h) Analyzer:
 
 $ ./runMuMuTauETauHadAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.root ###### for producing histograms of the tau_e + tau_h channel
 
-$ ./runFakeMuMuTauETauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_e + tau_h channel (control region for jet faking muon study) 
-
 # Run the diMuon + ditau (tau_h + tau_h) Analyzer:
 
 $ ./runMuMuTauHadTauHadAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.root ###### for producing histograms of the tau_h + tau_h channel
 
-$ ./runFakeMuMuTauHadTauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_h + tau_h channel (control region for jet faking muon study) 
+# Run the Z+Mu (muon + muon + tau_mu) Analyzer:
+
+$ ./runFakeMuMuTauMuAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_mu channel (control region for jet faking muon study) 
+
+# Run the Z+Ele (muon + muon + tau_e) Analyzer:
+
+$ ./runFakeMuMuTauEAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_e channel (control region for jet faking electron study) 
+
+# Run the Z+Tau (muon + muon + tau_h) Analyzer:
+
+$ ./runFakeMuMuTauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_h channel (control region for jet faking tau study) 
+
+# Run the Z+diTau (muon + muon + tau_h + tau_h) Analyzeri (STILL DEVELOPING):
+
+$ ./runFakeMuMuTauHadTauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_h + tau_h channel (control region for jet faking di-tau study) 
 
 # Run the ZTauTau (muon + tau_h) Analyzer:
 

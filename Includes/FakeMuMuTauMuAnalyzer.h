@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Tue Jun 18 14:19:21 2019 by ROOT version 6.10/08
+// Tue Aug  6 17:46:43 2019 by ROOT version 6.10/08
 // from TTree objectTree/objectTree
-// found on file: MuMuTauTauTreelization.root
+// found on file: MuMuTreelization.root
 //////////////////////////////////////////////////////////
 
-#ifndef FakeMuMuTauETauEAnalyzer_h
-#define FakeMuMuTauETauEAnalyzer_h
+#ifndef FakeMuMuTauMuAnalyzer_h
+#define FakeMuMuTauMuAnalyzer_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -18,7 +18,7 @@
 #include <vector>
 #include "HistoZmumu.h"
 
-class FakeMuMuTauETauEAnalyzer : public HistoZmumu {
+class FakeMuMuTauMuAnalyzer : public HistoZmumu {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -41,19 +41,6 @@ public :
    vector<int>     *recoMuonIdLoose;
    vector<int>     *recoMuonIdMedium;
    vector<int>     *recoMuonIdTight;
-   vector<float>   *recoElectronPt;
-   vector<float>   *recoElectronEta;
-   vector<float>   *recoElectronPhi;
-   vector<float>   *recoElectronEnergy;
-   vector<int>     *recoElectronPDGId;
-   vector<float>   *recoElectronIsolation;
-   vector<int>     *recoElectronIdLoose;
-   vector<int>     *recoElectronIdMedium;
-   vector<int>     *recoElectronIdTight;
-   vector<float>   *recoElectronEcalTrkEnergyPostCorr;
-   vector<float>   *recoElectronEcalTrkEnergyErrPostCorr;
-   vector<int>     *recoElectronRefToMuon;
-   vector<int>     *recoElectronRefToTau;
    vector<float>   *recoJetPt;
    vector<float>   *recoJetEta;
    vector<float>   *recoJetPhi;
@@ -85,19 +72,6 @@ public :
    TBranch        *b_recoMuonIdLoose;   //!
    TBranch        *b_recoMuonIdMedium;   //!
    TBranch        *b_recoMuonIdTight;   //!
-   TBranch        *b_recoElectronPt;   //!
-   TBranch        *b_recoElectronEta;   //!
-   TBranch        *b_recoElectronPhi;   //!
-   TBranch        *b_recoElectronEnergy;   //!
-   TBranch        *b_recoElectronPDGId;   //!
-   TBranch        *b_recoElectronIsolation;   //!
-   TBranch        *b_recoElectronIdLoose;   //!
-   TBranch        *b_recoElectronIdMedium;   //!
-   TBranch        *b_recoElectronIdTight;   //!
-   TBranch        *b_recoElectronEcalTrkEnergyPostCorr;   //!
-   TBranch        *b_recoElectronEcalTrkEnergyErrPostCorr;   //!
-   TBranch        *b_recoElectronRefToMuon;   //!
-   TBranch        *b_recoElectronRefToTau;   //!
    TBranch        *b_recoJetPt;   //!
    TBranch        *b_recoJetEta;   //!
    TBranch        *b_recoJetPhi;   //!
@@ -121,13 +95,12 @@ public :
    bool isMC;
    double Mu1IsoThreshold;
    double Mu2IsoThreshold;
+   double Mu3IsoThreshold;
    TString MuonId;
-   TString EleRelId;
-   double EleIsoUpperBound;
 
-   FakeMuMuTauETauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, TString MuonId_ = "LOOSE", TString EleRelId_ = "LOOSE", double EleIsoUpperBound_ = 0.3);
+   FakeMuMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double Mu3IsoThreshold_ = 0.25, TString MuonId_ = "LOOSE");
    string createOutputFileName();
-   virtual ~FakeMuMuTauETauEAnalyzer();
+   virtual ~FakeMuMuTauMuAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
@@ -139,8 +112,8 @@ public :
 
 #endif
 
-#ifdef FakeMuMuTauETauEAnalyzer_cxx
-FakeMuMuTauETauEAnalyzer::FakeMuMuTauETauEAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, TString MuonId_, TString EleRelId_, double EleIsoUpperBound_) : HistoZmumu() 
+#ifdef FakeMuMuTauMuAnalyzer_cxx
+FakeMuMuTauMuAnalyzer::FakeMuMuTauMuAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double Mu3IsoThreshold_, TString MuonId_) : HistoZmumu() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -150,9 +123,8 @@ FakeMuMuTauETauEAnalyzer::FakeMuMuTauETauEAnalyzer(TString fileName_, TString ou
     isMC = isMC_;
     Mu1IsoThreshold = Mu1IsoThreshold_;
     Mu2IsoThreshold = Mu2IsoThreshold_;
+    Mu3IsoThreshold = Mu3IsoThreshold_;
     MuonId = MuonId_;
-    EleRelId = EleRelId_;
-    EleIsoUpperBound = EleIsoUpperBound_;
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
@@ -171,7 +143,7 @@ FakeMuMuTauETauEAnalyzer::FakeMuMuTauETauEAnalyzer(TString fileName_, TString ou
     Init();
 }
 
-string FakeMuMuTauETauEAnalyzer::createOutputFileName()
+string FakeMuMuTauMuAnalyzer::createOutputFileName()
 {
     ostringstream outputName;
     fileName.Replace(0, fileName.Last('/'), "");
@@ -184,19 +156,19 @@ string FakeMuMuTauETauEAnalyzer::createOutputFileName()
     return outputName.str();
 }
 
-FakeMuMuTauETauEAnalyzer::~FakeMuMuTauETauEAnalyzer()
+FakeMuMuTauMuAnalyzer::~FakeMuMuTauMuAnalyzer()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t FakeMuMuTauETauEAnalyzer::GetEntry(Long64_t entry)
+Int_t FakeMuMuTauMuAnalyzer::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t FakeMuMuTauETauEAnalyzer::LoadTree(Long64_t entry)
+Long64_t FakeMuMuTauMuAnalyzer::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -209,7 +181,7 @@ Long64_t FakeMuMuTauETauEAnalyzer::LoadTree(Long64_t entry)
    return centry;
 }
 
-void FakeMuMuTauETauEAnalyzer::Init()
+void FakeMuMuTauMuAnalyzer::Init()
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -235,19 +207,6 @@ void FakeMuMuTauETauEAnalyzer::Init()
    recoMuonIdLoose = 0;
    recoMuonIdMedium = 0;
    recoMuonIdTight = 0;
-   recoElectronPt = 0;
-   recoElectronEta = 0;
-   recoElectronPhi = 0;
-   recoElectronEnergy = 0;
-   recoElectronPDGId = 0;
-   recoElectronIsolation = 0;
-   recoElectronIdLoose = 0;
-   recoElectronIdMedium = 0;
-   recoElectronIdTight = 0;
-   recoElectronEcalTrkEnergyPostCorr = 0;
-   recoElectronEcalTrkEnergyErrPostCorr = 0;
-   recoElectronRefToMuon = 0;
-   recoElectronRefToTau = 0;
    recoJetPt = 0;
    recoJetEta = 0;
    recoJetPhi = 0;
@@ -276,19 +235,6 @@ void FakeMuMuTauETauEAnalyzer::Init()
    fChain->SetBranchAddress("recoMuonIdLoose", &recoMuonIdLoose, &b_recoMuonIdLoose);
    fChain->SetBranchAddress("recoMuonIdMedium", &recoMuonIdMedium, &b_recoMuonIdMedium);
    fChain->SetBranchAddress("recoMuonIdTight", &recoMuonIdTight, &b_recoMuonIdTight);
-   fChain->SetBranchAddress("recoElectronPt", &recoElectronPt, &b_recoElectronPt);
-   fChain->SetBranchAddress("recoElectronEta", &recoElectronEta, &b_recoElectronEta);
-   fChain->SetBranchAddress("recoElectronPhi", &recoElectronPhi, &b_recoElectronPhi);
-   fChain->SetBranchAddress("recoElectronEnergy", &recoElectronEnergy, &b_recoElectronEnergy);
-   fChain->SetBranchAddress("recoElectronPDGId", &recoElectronPDGId, &b_recoElectronPDGId);
-   fChain->SetBranchAddress("recoElectronIsolation", &recoElectronIsolation, &b_recoElectronIsolation);
-   fChain->SetBranchAddress("recoElectronIdLoose", &recoElectronIdLoose, &b_recoElectronIdLoose);
-   fChain->SetBranchAddress("recoElectronIdMedium", &recoElectronIdMedium, &b_recoElectronIdMedium);
-   fChain->SetBranchAddress("recoElectronIdTight", &recoElectronIdTight, &b_recoElectronIdTight);
-   fChain->SetBranchAddress("recoElectronEcalTrkEnergyPostCorr", &recoElectronEcalTrkEnergyPostCorr, &b_recoElectronEcalTrkEnergyPostCorr);
-   fChain->SetBranchAddress("recoElectronEcalTrkEnergyErrPostCorr", &recoElectronEcalTrkEnergyErrPostCorr, &b_recoElectronEcalTrkEnergyErrPostCorr);
-   fChain->SetBranchAddress("recoElectronRefToMuon", &recoElectronRefToMuon, &b_recoElectronRefToMuon);
-   fChain->SetBranchAddress("recoElectronRefToTau", &recoElectronRefToTau, &b_recoElectronRefToTau);
    fChain->SetBranchAddress("recoJetPt", &recoJetPt, &b_recoJetPt);
    fChain->SetBranchAddress("recoJetEta", &recoJetEta, &b_recoJetEta);
    fChain->SetBranchAddress("recoJetPhi", &recoJetPhi, &b_recoJetPhi);
@@ -309,7 +255,7 @@ void FakeMuMuTauETauEAnalyzer::Init()
    Notify();
 }
 
-Bool_t FakeMuMuTauETauEAnalyzer::Notify()
+Bool_t FakeMuMuTauMuAnalyzer::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -320,18 +266,18 @@ Bool_t FakeMuMuTauETauEAnalyzer::Notify()
    return kTRUE;
 }
 
-void FakeMuMuTauETauEAnalyzer::Show(Long64_t entry)
+void FakeMuMuTauMuAnalyzer::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t FakeMuMuTauETauEAnalyzer::Cut(Long64_t entry)
+Int_t FakeMuMuTauMuAnalyzer::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef FakeMuMuTauETauEAnalyzer_cxx
+#endif // #ifdef FakeMuMuTauMuAnalyzer_cxx

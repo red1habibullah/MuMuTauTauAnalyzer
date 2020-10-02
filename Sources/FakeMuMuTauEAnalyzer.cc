@@ -1,5 +1,5 @@
-#define FakeMuMuTauETauEAnalyzer_cxx
-#include "FakeMuMuTauETauEAnalyzer.h"
+#define FakeMuMuTauEAnalyzer_cxx
+#include "FakeMuMuTauEAnalyzer.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
@@ -11,7 +11,7 @@
 #include <math.h>
 using namespace std;
 
-void FakeMuMuTauETauEAnalyzer::Loop()
+void FakeMuMuTauEAnalyzer::Loop()
 {
    TString outputfileName = createOutputFileName();
    TFile* outputFile = new TFile(outputfileName, "RECREATE");
