@@ -63,7 +63,7 @@ $ ./runFakeMuMuTauEAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root 
 
 $ ./runFakeMuMuTauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_h channel (control region for jet faking tau study) 
 
-# Run the Z+diTau (muon + muon + tau_h + tau_h) Analyzeri (STILL DEVELOPING):
+# Run the Z+diTau (muon + muon + tau_h + tau_h) Analyzer:
 
 $ ./runFakeMuMuTauHadTauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFile.root ##### for producing the histograms of dimuon + tau_h + tau_h channel (control region for jet faking di-tau study) 
 
