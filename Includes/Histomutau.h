@@ -109,7 +109,6 @@ class Histomutau{
         TH1D* tau2Eta;
         TH1D* tau2Phi;
         TH1D* tau2Mass;
-        TH1D* tau2DecayMode;
 
         TH1D* dRMu1Mu3;
         TH1D* dRMu1Mu4;

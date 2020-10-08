@@ -84,7 +84,7 @@ Histomutau::Histomutau(){
     double Ele2PtBin [] = {3, 10, 20, 30, 50, 100, 200}; 
     double Mu1Mu2PtBin [] = {0, 5, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 75, 80, 86, 92, 99, 107, 116, 126, 137, 149, 162, 176, 200};
     double tauPtBin [] = {8, 20, 30, 50, 100, 200};
-    double tau2PtBin [] = {8, 20, 30, 80};
+    double tau2PtBin [] = {8, 20, 30, 50, 100, 200};
     double Mu3TauPtBin [] = {0, 5, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 75, 80, 86, 92, 99, 107, 116, 126, 137, 149, 162, 176, 200};
     double Mu1Mu2Mu3TauPtBin [] = {0, 5, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 75, 80, 86, 92, 99, 107, 116, 126, 137, 149, 162, 176, 200};
 
@@ -145,7 +145,7 @@ Histomutau::Histomutau(){
     ele1Iso = newTH1D("ele1Iso", "e_{1}^{iso}", 20, 0, 20);
     ele2Iso = newTH1D("ele2Iso", "e_{2}^{iso}", 20, 0, 20);
     tauIsoMVA = newTH1D("tauIsoMVA", "#tau^{iso}", 20, -1, 1);
-    tau2IsoMVA = newTH1D("tau2IsoMVA", "#tau_{2}^{iso}", 20, -1, 1);
+    tau2IsoMVA = newTH1D("tau2IsoMVA", "#tau#tau^{iso}", 20, -1, 1);
 
     mu1Pt = newTH1D("mu1Pt", "p_{T}(#mu_{1}) [GeV]", NBinsMu1Pt, Mu1PtBin);
     mu1Eta = newTH1D("mu1Eta", "#eta(#mu_{1})", 20, -2.1, 2.1);
@@ -177,25 +177,24 @@ Histomutau::Histomutau(){
     tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 10, 0, 3);
     tauDecayMode = newTH1D("tauDecayMode", "DecayMode(#tau)", 12, 0, 12);
 
-    tau2Pt = newTH1D("tau2Pt", "p_{T}(#tau_{2}) [GeV]", NBinsTau2Pt, tau2PtBin);
-    tau2Eta = newTH1D("tau2Eta", "#eta(#tau_{2})", 20, -2.1, 2.1);
-    tau2Phi = newTH1D("tau2Phi", "#phi(#tau_{2})", 20, -2.5, 2.5);
-    tau2Mass = newTH1D("tau2Mass", "M(#tau_{2}) [GeV]", 10, 0, 3);
-    tau2DecayMode = newTH1D("tau2DecayMode", "DecayMode(#tau_{2})", 12, 0, 12);
+    tau2Pt = newTH1D("tau2Pt", "p_{T}(#tau#tau) [GeV]", NBinsTau2Pt, tau2PtBin);
+    tau2Eta = newTH1D("tau2Eta", "#eta(#tau#tau)", 20, -2.1, 2.1);
+    tau2Phi = newTH1D("tau2Phi", "#phi(#tau#tau)", 20, -2.5, 2.5);
+    tau2Mass = newTH1D("tau2Mass", "M(#tau#tau) [GeV]", 20, 0, 100);
 
     dRMu1Mu3 = newTH1D("dRMu1Mu3", "#Delta R(#mu_{1}#mu_{3})", 25, 0, 5);
     dRMu1Mu4 = newTH1D("dRMu1Mu4", "#Delta R(#mu_{1}#mu_{4})", 25, 0, 5);
     dRMu1Ele1 = newTH1D("dRMu1Ele1", "#Delta R(#mu_{1}e_{1})", 25, 0, 5);
     dRMu1Ele2 = newTH1D("dRMu1Ele2", "#Delta R(#mu_{1}e_{2})", 25, 0, 5);
     dRMu1Tau = newTH1D("dRMu1Tau", "#Delta R(#mu_{1}#tau)", 25, 0, 5);
-    dRMu1Tau2 = newTH1D("dRMu1Tau2", "#Delta R(#mu_{1}#tau_{2})", 25, 0, 5);
+    dRMu1Tau2 = newTH1D("dRMu1Tau2", "#Delta R(#mu_{1},#tau#tau)", 25, 0, 5);
 
     dRMu2Mu3 = newTH1D("dRMu2Mu3", "#Delta R(#mu_{2}#mu_{3})", 25, 0, 5);
     dRMu2Mu4 = newTH1D("dRMu2Mu4", "#Delta R(#mu_{2}#mu_{4})", 25, 0, 5);
     dRMu2Ele1 = newTH1D("dRMu2Ele1", "#Delta R(#mu_{2}e_{1})", 25, 0, 5);
     dRMu2Ele2 = newTH1D("dRMu2Ele2", "#Delta R(#mu_{2}e_{2})", 25, 0, 5);
     dRMu2Tau = newTH1D("dRMu2Tau", "#Delta R(#mu_{2}#tau)", 25, 0, 5);
-    dRMu2Tau2 = newTH1D("dRMu2Tau2", "#Delta R(#mu_{2}#tau_{2})", 25, 0, 5);
+    dRMu2Tau2 = newTH1D("dRMu2Tau2", "#Delta R(#mu_{2},#tau#tau)", 25, 0, 5);
 
     dRInvMassMu1Mu2 = newTH2D("dRInvMassMu1Mu2", "#Delta R(#mu_{1}#mu_{2})", "M(#mu_{1}#mu_{2})[GeV]", 25, 0, 1, 20, 0, 60);
     dRInvMassMu3Mu4 = newTH2D("dRInvMassMu3Mu4", "#Delta R(#mu_{3}#mu_{4})", "M(#mu_{3}#mu_{4})[GeV]", 25, 0, 1, 20, 0, 60);
