@@ -29,21 +29,14 @@ class HistoZmumu{
 
         // ------ reco-histograms ------
         TH1D* dRMu1Mu2;
-        TH1D* dRTauTau;
 
         TH1D* invMassMu1Mu2;
         TH1D* invMassMu1Mu3;
         TH1D* invMassMu2Mu3;
         TH1D* invMassMu1Ele;
         TH1D* invMassMu2Ele;
-        TH1D* invMassTauTau;
-
-        TH1D* invMassMuMuTauHadTauHad;
 
         TH1D* ptMu1Mu2;
-        TH1D* ptTauTau;
-
-        TH1D* ptMuMuTauHadTauHad;
 
         TH1D* mu1Iso;
         TH1D* mu2Iso;
@@ -78,7 +71,6 @@ class HistoZmumu{
         TH1D* tau2Eta;
         TH1D* tau2Phi;
         TH1D* tau2Mass;
-        TH1D* tau2DecayMode;
 
         TH1D* dRMu1Mu3;
         TH1D* dRMu1Ele1;
@@ -91,11 +83,9 @@ class HistoZmumu{
         TH1D* dRMu2Tau2;
 
         TH2D* dRInvMassMu1Mu2;
-        TH2D* dRInvMassTauTau;
 
         // ------ reco-gen response histograms ------
         TH2D* dRMu1Mu2VSGenMu1GenMu2;
-        TH2D* dRTauTauVSGenTauHadGenTauHad;
 
         TH2D* invMassMu1Mu2VSGenMu1GenMu2;
         TH2D* invMassTauTauVSGenTauHadGenTauHad;
@@ -127,7 +117,6 @@ class HistoZmumu{
         TH2D* tau2PtVSGenTauHad2Pt;
         TH2D* tau2EtaVSGenTauHad2Eta;
         TH2D* tau2PhiVSGenTauHad2Phi;
-        TH2D* tau2PtVSGenTauHad2VisPt;
 };
 
 #endif
