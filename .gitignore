@@ -24,6 +24,8 @@ runFakeMuMuTauMuAnalyzer
 runFakeMuMuTauMuTauEAnalyzer
 runFakeMuMuTauEAnalyzer
 runFakeMuMuTauHadAnalyzer
+runFakeMuMuTauMuTauHadAnalyzer
+runFakeMuMuTauETauHadAnalyzer
 runFakeMuMuTauHadTauHadAnalyzer
 runZTauMuTauHadAnalyzer
 runZMuMuAnalyzer
