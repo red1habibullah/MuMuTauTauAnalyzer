@@ -140,11 +140,12 @@ void MuMuTauHadTauHadAnalyzer::Loop()
       // ------- start loop on jet (di-tau_h) candidates -------
       for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
       {
-          bool condJetIdLoose = recoJetIdLoose->at(iJet) > 0;
+          bool condJetIdLoose = JetId == "LOOSE" && recoJetIdLoose->at(iJet) > 0;
           bool condJetIdTight = JetId == "TIGHT" && recoJetIdTight->at(iJet) > 0;
           bool condJetIdTightLepVeto = JetId == "TIGHTLEPVETO" && recoJetIdTightLepVeto->at(iJet) > 0;
+          bool condJetIdNull = JetId != "LOOSE" && JetId != "TIGHT" && JetId != "TIGHTLEPVETO";
           bool condJetIdPU = recoJetIdPileUp->at(iJet) > 0;
-          bool passCondJetId = (condJetIdLoose || condJetIdTight || condJetIdTightLepVeto) && condJetIdPU;
+          bool passCondJetId = ((condJetIdLoose || condJetIdTight || condJetIdTightLepVeto) && condJetIdPU) || condJetIdNull;
 
           if (!passCondJetId) continue;
           if (recoJetCSV->at(iJet) > 0.5426) continue; // bjet veto

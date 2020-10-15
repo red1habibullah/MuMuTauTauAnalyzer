@@ -136,11 +136,12 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
       // ---- search for an additional jet containing two taus for fake rate study ----
       for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
       {
-          bool condJetIdLoose = recoJetIdLoose->at(iJet) > 0;
+          bool condJetIdLoose = JetId == "LOOSE" && recoJetIdLoose->at(iJet) > 0;
           bool condJetIdTight = JetId == "TIGHT" && recoJetIdTight->at(iJet) > 0;
           bool condJetIdTightLepVeto = JetId == "TIGHTLEPVETO" && recoJetIdTightLepVeto->at(iJet) > 0;
+          bool condJetIdNull = JetId != "LOOSE" && JetId != "TIGHT" && JetId != "TIGHTLEPVETO";
           bool condJetIdPU = recoJetIdPileUp->at(iJet) > 0;
-          bool passCondJetId = (condJetIdLoose || condJetIdTight || condJetIdTightLepVeto) && condJetIdPU;
+          bool passCondJetId = ((condJetIdLoose || condJetIdTight || condJetIdTightLepVeto) && condJetIdPU) || condJetIdNull;
 
           if (!passCondJetId) continue;
           if (recoJetCSV->at(iJet) > 0.5426) continue; // bjet veto

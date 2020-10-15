@@ -82,7 +82,7 @@ HistoZmumu::HistoZmumu(){
     double Ele1PtBin [] = {3, 10, 20, 30, 50, 100, 200}; 
     double Mu1Mu2PtBin [] = {0, 5, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 75, 80, 86, 92, 99, 107, 116, 126, 137, 149, 162, 176, 200};
     double tauPtBin [] = {8, 20, 30, 50, 100, 200};
-    double tau2PtBin [] = {8, 20, 30, 50, 100, 200};
+    double tau2PtBin [] = {8, 20, 30, 50, 80, 120, 170, 230, 300, 380, 500};
 
     int NBinsMu1Pt = sizeof(Mu1PtBin)/sizeof(Mu1PtBin[0])-1;
     int NBinsMu2Pt = sizeof(Mu2PtBin)/sizeof(Mu2PtBin[0])-1;
