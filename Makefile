@@ -12,14 +12,14 @@ CXX           = g++ -std=c++11
 CXXFLAGS      = -g -Wall -fPIC   	
 CXXFLAGS      += $(ROOTCFLAGS) 
 
-SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc HistoZmutau.cc MuMuTauMuTauHadAnalyzer.cc MuMuTauMuTauMuAnalyzer.cc MuMuTauMuTauEAnalyzer.cc MuMuTauETauEAnalyzer.cc MuMuTauETauHadAnalyzer.cc MuMuTauHadTauHadAnalyzer.cc RoccoR.cc lumiana.cc ArgParser.cc ConfigArg.cc FakeMuMuTauHadAnalyzer.cc FakeMuMuTauMuAnalyzer.cc FakeMuMuTauEAnalyzer.cc FakeMuMuTauHadTauHadAnalyzer.cc ZTauMuTauHadAnalyzer.cc ZMuMuAnalyzer.cc
+SOURCES = HistoZmumu.cc MuMuAnalyzer.cc Histomutau.cc HistoZmutau.cc MuMuTauMuTauHadAnalyzer.cc MuMuTauMuTauMuAnalyzer.cc MuMuTauMuTauEAnalyzer.cc MuMuTauETauEAnalyzer.cc MuMuTauETauHadAnalyzer.cc MuMuTauHadTauHadAnalyzer.cc RoccoR.cc lumiana.cc ArgParser.cc ConfigArg.cc FakeMuMuTauHadAnalyzer.cc FakeMuMuTauMuAnalyzer.cc FakeMuMuTauEAnalyzer.cc FakeMuMuTauMuTauHadAnalyzer.cc FakeMuMuTauETauHadAnalyzer.cc FakeMuMuTauHadTauHadAnalyzer.cc ZTauMuTauHadAnalyzer.cc ZMuMuAnalyzer.cc
 
 SRCLIST = $(addprefix $(SRCDIR), $(SOURCES))
 OBJLIST = $(SRCLIST:.cc=.o)
 
 .PHONY: all clean
 
-all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuMuTauMuTauEAnalyzer runMuMuTauETauEAnalyzer runMuMuTauETauHadAnalyzer runMuMuTauHadTauHadAnalyzer runFakeMuMuTauHadAnalyzer runFakeMuMuTauMuAnalyzer runFakeMuMuTauEAnalyzer runFakeMuMuTauHadTauHadAnalyzer runZTauMuTauHadAnalyzer runZMuMuAnalyzer
+all: runMuMuAnalyzer runMuMuTauMuTauHadAnalyzer runMuMuTauMuTauMuAnalyzer runMuMuTauMuTauEAnalyzer runMuMuTauETauEAnalyzer runMuMuTauETauHadAnalyzer runMuMuTauHadTauHadAnalyzer runFakeMuMuTauHadAnalyzer runFakeMuMuTauMuAnalyzer runFakeMuMuTauEAnalyzer runFakeMuMuTauMuTauHadAnalyzer runFakeMuMuTauETauHadAnalyzer runFakeMuMuTauHadTauHadAnalyzer runZTauMuTauHadAnalyzer runZMuMuAnalyzer
 
 # ===========================================================================
 .cc.o:
@@ -83,6 +83,18 @@ runFakeMuMuTauEAnalyzer: $(OBJLIST) runFakeMuMuTauEAnalyzer.o
 	$(CXX) -o $@ $^ $(ROOTGLIBS)
 
 runFakeMuMuTauEAnalyzer.o: runFakeMuMuTauEAnalyzer.cc
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
+
+runFakeMuMuTauMuTauHadAnalyzer: $(OBJLIST) runFakeMuMuTauMuTauHadAnalyzer.o 
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
+
+runFakeMuMuTauMuTauHadAnalyzer.o: runFakeMuMuTauMuTauHadAnalyzer.cc
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
+
+runFakeMuMuTauETauHadAnalyzer: $(OBJLIST) runFakeMuMuTauETauHadAnalyzer.o 
+	$(CXX) -o $@ $^ $(ROOTGLIBS)
+
+runFakeMuMuTauETauHadAnalyzer.o: runFakeMuMuTauETauHadAnalyzer.cc
 	$(CXX) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 runFakeMuMuTauHadTauHadAnalyzer: $(OBJLIST) runFakeMuMuTauHadTauHadAnalyzer.o 
