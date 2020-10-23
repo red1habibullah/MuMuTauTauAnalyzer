@@ -121,7 +121,7 @@ Histomutau::Histomutau(){
     invMassMuMuTauEleTauEle = newTH1D("invMassMuMuTauEleTauEle", "M(#mu#muee)[GeV]", 25, 20, 1000);
     invMassMuMuTauMuTauHad = newTH1D("invMassMuMuTauMuTauHad", "M(#mu#mu#mu#tau)[GeV]", 25, 20, 1000);
     invMassMuMuTauEleTauHad = newTH1D("invMassMuMuTauEleTauHad", "M(#mu#mue#tau)[GeV]", 25, 20, 1000);
-    invMassMuMuTauHadTauHad = newTH1D("invMassMuMuTauHadTauHad", "M(#mu#mu#tau#tau)[GeV]", 50, 20, 1000);
+    invMassMuMuTauHadTauHad = newTH1D("invMassMuMuTauHadTauHad", "M(#mu#mu#tau#tau)[GeV]", 200, 20, 1000);
 
     ptMu1Mu2 = newTH1D("ptMu1Mu2", "p_{T}(#mu_{1}#mu_{2})[GeV]", NBinsMu1Mu2Pt, Mu1Mu2PtBin);
     ptMu3Mu4 = newTH1D("ptMu3Mu4", "p_{T}(#mu_{3}#mu_{4})[GeV]", NBinsMu3TauPt, Mu3TauPtBin);
@@ -145,7 +145,7 @@ Histomutau::Histomutau(){
     ele1Iso = newTH1D("ele1Iso", "e_{1}^{iso}", 20, 0, 20);
     ele2Iso = newTH1D("ele2Iso", "e_{2}^{iso}", 20, 0, 20);
     tauIsoMVA = newTH1D("tauIsoMVA", "#tau^{iso}", 20, -1, 1);
-    tau2IsoMVA = newTH1D("tau2IsoMVA", "#tau#tau^{iso}", 20, -1, 1);
+    tau2IsoMVA = newTH1D("tau2IsoMVA", "#tau#tau^{iso}", 20, 0, 1);
 
     mu1Pt = newTH1D("mu1Pt", "p_{T}(#mu_{1}) [GeV]", NBinsMu1Pt, Mu1PtBin);
     mu1Eta = newTH1D("mu1Eta", "#eta(#mu_{1})", 20, -2.1, 2.1);
@@ -180,7 +180,7 @@ Histomutau::Histomutau(){
     tau2Pt = newTH1D("tau2Pt", "p_{T}(#tau#tau) [GeV]", NBinsTau2Pt, tau2PtBin);
     tau2Eta = newTH1D("tau2Eta", "#eta(#tau#tau)", 20, -2.1, 2.1);
     tau2Phi = newTH1D("tau2Phi", "#phi(#tau#tau)", 20, -2.5, 2.5);
-    tau2Mass = newTH1D("tau2Mass", "M(#tau#tau) [GeV]", 40, 0, 80);
+    tau2Mass = newTH1D("tau2Mass", "M(#tau#tau) [GeV]", 30, 0, 60);
 
     dRMu1Mu3 = newTH1D("dRMu1Mu3", "#Delta R(#mu_{1}#mu_{3})", 25, 0, 5);
     dRMu1Mu4 = newTH1D("dRMu1Mu4", "#Delta R(#mu_{1}#mu_{4})", 25, 0, 5);
