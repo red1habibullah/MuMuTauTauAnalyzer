@@ -392,38 +392,5 @@ int main(int argc, char **argv)
         } // end else
     } // end if ZZInc
 
-    // --- always need to reinitialize the weight parameter for new sample -----
-    summedWeights = 0;
-
-    if (doWhat == "JPSI" || doWhat == "ALL")
-    {
-        if (inputFile.EndsWith(".root"))
-        {
-            lumiana JpsiLumi(inputFile);
-            summedWeights = JpsiLumi.Loop();
-            FakeMuMuTauETauHadAnalyzer JpsiHist(inputFile, outputDir, lumi*880400.0*1000, summedWeights, maxEvents, true, Mu1IsoThreshold, Mu2IsoThreshold, MuonId, EleRelId, diMuonMassLowThreshold, diMuonMassHighThreshold, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, matchRecGen, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, rochesterFile);
-            JpsiHist.Loop();
-        } // end if inputFile.EndsWith(".root")
-
-        else{
-            ifstream finLumi;
-            finLumi.open(inputFile);
-            string fileName;
-            while (getline(finLumi, fileName))
-            {
-                lumiana JpsiLumi(fileName);
-                summedWeights += JpsiLumi.Loop();
-            } // end while loop on weight sum
-
-            ifstream finTree;
-            finTree.open(inputFile);
-            while (getline(finTree, fileName))
-            {
-                FakeMuMuTauETauHadAnalyzer JpsiHist(fileName, outputDir, lumi*880400.0*1000, summedWeights, maxEvents, true, Mu1IsoThreshold, Mu2IsoThreshold, MuonId, EleRelId, diMuonMassLowThreshold, diMuonMassHighThreshold, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, matchRecGen, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, rochesterFile);
-                JpsiHist.Loop();
-            } // end while loop on input file list
-        } // end else
-    } // end if Jpsi
-
     return 0;
 }

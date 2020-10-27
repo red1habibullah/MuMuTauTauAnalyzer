@@ -247,7 +247,6 @@ int main(int argc, char **argv)
     // --- always need to reinitialize the weight parameter for new sample -----
     summedWeights = 0;
 
-
     if (doWhat == "WJETS" || doWhat == "ALL")
     {
         if (inputFile.EndsWith(".root"))
@@ -281,6 +280,38 @@ int main(int argc, char **argv)
     // --- always need to reinitialize the weight parameter for new sample -----
     summedWeights = 0;
 
+    if (doWhat == "JPSI" || doWhat == "ALL")
+    {
+        if (inputFile.EndsWith(".root"))
+        {
+            lumiana JpsiLumi(inputFile);
+            summedWeights = JpsiLumi.Loop();
+            MuMuTauMuTauHadAnalyzer JpsiHist(inputFile, outputDir, lumi*880400.0*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, muonScaleSyst, tauScaleCorr, rochesterFile);
+            JpsiHist.Loop();
+        } // end if inputFile.EndsWith(".root")
+
+        else{
+            ifstream finLumi;
+            finLumi.open(inputFile);
+            string fileName;
+            while (getline(finLumi, fileName))
+            {
+                lumiana JpsiLumi(fileName);
+                summedWeights += JpsiLumi.Loop();
+            }// end while loop for weight sum
+
+            ifstream finTree;
+            finTree.open(inputFile);
+            while (getline(finTree, fileName))
+            {
+                MuMuTauMuTauHadAnalyzer JpsiHist(fileName, outputDir, lumi*880400.0*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, muonScaleSyst, tauScaleCorr, rochesterFile);
+                JpsiHist.Loop();
+            } // end while loop on input file list
+        } // end else
+    } // end if Jpsi
+
+    // --- always need to reinitialize the weight parameter for new sample -----
+    summedWeights = 0;
 
     if (doWhat == "H125AA5" || doWhat == "ALL")
     {
