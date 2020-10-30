@@ -59,6 +59,9 @@ void MuMuTauMuTauHadAnalyzer::Loop()
       float TauIso;
       float TauDM;
 
+      float Mu1Dz;
+      float Mu2Dz;
+
       unsigned int indexMu1 = -1;
       unsigned int indexMu2 = -1;
       // ============================================================================
@@ -90,6 +93,7 @@ void MuMuTauMuTauHadAnalyzer::Loop()
 
               Mu1.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
               Mu1Iso = recoMuonIsolation->at(iMuon);
+              Mu1Dz = recoMuonDZ->at(iMuon);
               indexMu1 = iMuon;
               findMu1 = true;
               break;
@@ -132,6 +136,7 @@ void MuMuTauMuTauHadAnalyzer::Loop()
           {
               Mu2.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
               Mu2Iso = recoMuonIsolation->at(iMuon);
+              Mu2Dz = recoMuonDZ->at(iMuon);
               smallestDR = Mu1.DeltaR(Mu2);
               indexMu2 = iMuon;
               findMu2 = true;
@@ -382,9 +387,11 @@ void MuMuTauMuTauHadAnalyzer::Loop()
 
           Mu1Pt = Mu1.Pt();
           Mu1Eta = Mu1.Eta();
+          Mu1DZ = Mu1Dz;
 
           Mu2Pt = Mu2.Pt();
           Mu2Eta = Mu2.Eta();
+          Mu2DZ = Mu2Dz;
 
           Tau1Pt = Mu3.Pt();
           Tau1Eta = Mu3.Eta();
