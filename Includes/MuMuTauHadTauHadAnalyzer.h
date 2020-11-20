@@ -119,8 +119,10 @@ public :
    double deepDiTauRawLowerBound;
    int muonScaleSyst;
    TString rochesterFile;
+   int jetScaleSyst;
+   TString jecSystFile;
 
-   MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double MuIsoUpperBound_ = 0.4, TString MuonId_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0, TString JetId_ = "LOOSE", bool massDecorrelation_ = false, double deepDiTauRawThreshold_ = 0.5, double deepDiTauRawLowerBound_ = 0.2, int muonScaleSyst_ = 0, TString rochesterFile_ = "");
+   MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_ = 1.0, Long_t nMaxEvents_ = 0, bool isMC_ = false, bool invertedMu2Iso_ = false, bool invertedTauIso_ = false, double Mu1IsoThreshold_ = 0.25, double Mu2IsoThreshold_ = 0.25, double MuIsoUpperBound_ = 0.4, TString MuonId_ = "LOOSE", double diMuonMassLowThreshold_ = 0, double diMuonMassHighThreshold_ = 25.0, TString JetId_ = "LOOSE", bool massDecorrelation_ = false, double deepDiTauRawThreshold_ = 0.5, double deepDiTauRawLowerBound_ = 0.2, int muonScaleSyst_ = 0, TString rochesterFile_ = "", int jetScaleSyst_ = 0, TString jecSystFile_ = "");
    string createOutputFileName();
    virtual ~MuMuTauHadTauHadAnalyzer();
    virtual Int_t    Cut(Long64_t entry);
@@ -135,7 +137,7 @@ public :
 #endif
 
 #ifdef MuMuTauHadTauHadAnalyzer_cxx
-MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double MuIsoUpperBound_, TString MuonId_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_, TString JetId_, bool massDecorrelation_, double deepDiTauRawThreshold_, double deepDiTauRawLowerBound_, int muonScaleSyst_, TString rochesterFile_) : Histomutau() 
+MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString outputDir_, float lumiScale_, float summedWeights_, Long_t nMaxEvents_, bool isMC_, bool invertedMu2Iso_, bool invertedTauIso_, double Mu1IsoThreshold_, double Mu2IsoThreshold_, double MuIsoUpperBound_, TString MuonId_, double diMuonMassLowThreshold_, double diMuonMassHighThreshold_, TString JetId_, bool massDecorrelation_, double deepDiTauRawThreshold_, double deepDiTauRawLowerBound_, int muonScaleSyst_, TString rochesterFile_, int jetScaleSyst_, TString jecSystFile_) : Histomutau() 
 {
     fileName = fileName_;
     outputDir = outputDir_;
@@ -155,6 +157,8 @@ MuMuTauHadTauHadAnalyzer::MuMuTauHadTauHadAnalyzer(TString fileName_, TString ou
     deepDiTauRawLowerBound = deepDiTauRawLowerBound_;
     muonScaleSyst = muonScaleSyst_;
     rochesterFile = rochesterFile_;
+    jetScaleSyst = jetScaleSyst_;
+    jecSystFile = jecSystFile_;
     diMuonMassLowThreshold = diMuonMassLowThreshold_;
     diMuonMassHighThreshold = diMuonMassHighThreshold_;
     invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);

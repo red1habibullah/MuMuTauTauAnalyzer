@@ -1,6 +1,7 @@
 #define MuMuTauHadTauHadAnalyzer_cxx
 #include "MuMuTauHadTauHadAnalyzer.h"
 #include "RoccoR.h"
+#include "functions.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TStyle.h>
@@ -155,13 +156,17 @@ void MuMuTauHadTauHadAnalyzer::Loop()
 
           if ((!invertedTauIso && !condDiTauDisc) || (invertedTauIso && !condInvertDiTauDisc)) continue;
 
+          // ------ estimate JEC systematics ------
+          table TableJESunc(jecSystFile);
+          double jetEnergyCorr = 1 + jetScaleSyst * (TableJESunc.getEfficiency(recoJetPt->at(iJet), recoJetEta->at(iJet)));
+
           TLorentzVector TauCand;
-          TauCand.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
+          TauCand.SetPtEtaPhiE(recoJetPt->at(iJet) * jetEnergyCorr, recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet) * jetEnergyCorr);
 
           if (TauCand.DeltaR(Mu1) < 0.8 || TauCand.DeltaR(Mu2) < 0.8) continue;
           if (TauCand.Pt() > highestPt)
           {
-              Tau.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
+              Tau.SetPtEtaPhiE(recoJetPt->at(iJet) * jetEnergyCorr, recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet) * jetEnergyCorr);
               TauIso = massDecorrelation ? recoJetDeepDiTauValueMD->at(iJet) : recoJetDeepDiTauValue->at(iJet);
               highestPt = Tau.Pt();
               findTauTauPair = true;
