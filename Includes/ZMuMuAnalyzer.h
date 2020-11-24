@@ -119,7 +119,7 @@ ZMuMuAnalyzer::ZMuMuAnalyzer(TString fileName_, TString outputDir_, float lumiSc
     system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + "/ZMuMuInclusiveAnalyzer/objectTree";
+    TString treePath = fileName + "/DiMuDiTauAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();

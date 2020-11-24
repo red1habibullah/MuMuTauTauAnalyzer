@@ -165,7 +165,7 @@ FakeMuMuTauEAnalyzer::FakeMuMuTauEAnalyzer(TString fileName_, TString outputDir_
     system(command);
 
     TChain *chain = new TChain("", "");
-    TString treePath = fileName + "/ZMuMuInclusiveAnalyzer/objectTree";
+    TString treePath = fileName + "/DiMuDiTauAnalyzer/objectTree";
     chain->Add(treePath);
     fChain = chain;
     Init();
