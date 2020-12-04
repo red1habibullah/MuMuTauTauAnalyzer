@@ -87,7 +87,6 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
       } // end loop for mu1
 
       if (!findMu1) continue;
-      float dRCut = 0.3; // dR cut between Mu1 and Mu2
       float highestPt = 0;
       float invMassLowThre = diMuonMassLowThreshold;
       float invMassHighThre = diMuonMassHighThreshold;
@@ -121,8 +120,7 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
 
           Mu2Cand.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
 
-          if((Mu1.DeltaR(Mu2Cand) > dRCut) && (Mu2Cand.Pt() > highestPt) 
-                  && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
+          if((Mu2Cand.Pt() > highestPt) && ((Mu1+Mu2Cand).M() > invMassLowThre) && ((Mu1+Mu2Cand).M() < invMassHighThre)
                   && (recoMuonPDGId->at(indexMu1) == (-1) * recoMuonPDGId->at(iMuon)))
           {
               Mu2.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
