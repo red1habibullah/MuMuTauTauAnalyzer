@@ -19,12 +19,24 @@ int main(int argc, char **argv)
     double lumi            = cfg.getD("lumi", 1);
     bool invertedMu2Iso    = cfg.getB("invertedMu2Iso", false);
     bool invertedTauIso    = cfg.getB("invertedTauIso", false);
+    bool invertedTau2Iso   = cfg.getB("invertedTau2Iso", false);
     double Mu1IsoThreshold = cfg.getD("Mu1IsoThreshold", 0.25);
     double Mu2IsoThreshold = cfg.getD("Mu2IsoThreshold", 0.25);
     double MuIsoUpperBound = cfg.getD("MuIsoUpperBound", 0.5);
     TString MuonId         = cfg.getS("MuonId", "LOOSE");
     double diMuonMassLowThreshold  = cfg.getD("diMuonMassLowThreshold", 0);
     double diMuonMassHighThreshold = cfg.getD("diMuonMassHighThreshold", 25.0);
+    bool boostDiTauOpt             = cfg.getB("boostDiTauOpt", false);
+    bool tauMVAIsoRawORWP          = cfg.getB("tauMVAIsoRawORWP", false);
+    double tauMVAIsoRawThreshold   = cfg.getD("tauMVAIsoRawThreshold", -0.5);
+    TString tauMVAIsoWP            = cfg.getS("tauMVAIsoWP", "MEDIUM");
+    TString tauAntiMuDisc          = cfg.getS("tauAntiMuDisc", "NULL");
+    TString tauAntiEleDisc         = cfg.getS("tauAntiEleDisc", "NULL");
+    bool deepTauID                 = cfg.getB("deepTauID", false);
+    TString deepTauVSele           = cfg.getS("deepTauVSele", "VVVLOOSE");
+    TString deepTauVSmu            = cfg.getS("deepTauVSmu", "VLOOSE");
+    TString deepTauVSjet           = cfg.getS("deepTauVSjet", "LOOSE");
+    double tauDecayModeThreshold   = cfg.getD("tauDecayModeThreshold", -1);
     TString JetId                  = cfg.getS("JetId", "LOOSE");
     bool massDecorrelation         = cfg.getB("massDecorrelation", false);
     double deepDiTauRawThreshold   = cfg.getD("deepDiTauRawThreshold", 0.5);
@@ -77,6 +89,11 @@ int main(int argc, char **argv)
                 getArg(currentArg, invertedTauIso);
             }
 
+            else if (currentArg.BeginsWith("invertedTau2Iso="))
+            {
+                getArg(currentArg, invertedTau2Iso);
+            }
+
             else if (currentArg.BeginsWith("Mu1IsoThreshold="))
             {
                 getArg(currentArg, Mu1IsoThreshold);
@@ -105,6 +122,51 @@ int main(int argc, char **argv)
             else if (currentArg.BeginsWith("diMuonMassHighThreshold="))
             {
                 getArg(currentArg, diMuonMassHighThreshold);
+            }
+
+            else if (currentArg.BeginsWith("boostDiTauOpt="))
+            {
+                getArg(currentArg, boostDiTauOpt);
+            }
+
+            else if (currentArg.BeginsWith("tauMVAIsoRawORWP="))
+            {
+                getArg(currentArg, tauMVAIsoRawORWP);
+            }
+
+            else if (currentArg.BeginsWith("tauMVAIsoRawThreshold="))
+            {
+                getArg(currentArg, tauMVAIsoRawThreshold);
+            }
+
+            else if (currentArg.BeginsWith("tauMVAIsoWP="))
+            {
+                getArg(currentArg, tauMVAIsoWP);
+            }
+
+            else if (currentArg.BeginsWith("deepTauID="))
+            {
+                getArg(currentArg, deepTauID);
+            }
+
+            else if (currentArg.BeginsWith("deepTauVSele="))
+            {
+                getArg(currentArg, deepTauVSele);
+            }
+
+            else if (currentArg.BeginsWith("deepTauVSmu="))
+            {
+                getArg(currentArg, deepTauVSmu);
+            }
+
+            else if (currentArg.BeginsWith("deepTauVSjet="))
+            {
+                getArg(currentArg, deepTauVSjet);
+            }
+
+            else if (currentArg.BeginsWith("tauDecayModeThreshold="))
+            {
+                getArg(currentArg, tauDecayModeThreshold);
             }
 
             else if (currentArg.BeginsWith("JetId="))
@@ -151,6 +213,12 @@ int main(int argc, char **argv)
     
     doWhat.ToUpper();
     MuonId.ToUpper();
+    tauAntiMuDisc.ToUpper();
+    tauAntiEleDisc.ToUpper();
+    tauMVAIsoWP.ToUpper();
+    deepTauVSele.ToUpper();
+    deepTauVSmu.ToUpper();
+    deepTauVSjet.ToUpper();
     JetId.ToUpper();
 
     //------------------------- data histograms production -------------------
@@ -158,7 +226,7 @@ int main(int argc, char **argv)
     {
         if (inputFile.EndsWith(".root"))
         {
-            MuMuTauHadTauHadAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+            MuMuTauHadTauHadAnalyzer DataHist(inputFile, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
             DataHist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -168,7 +236,7 @@ int main(int argc, char **argv)
             string fileName;
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+                MuMuTauHadTauHadAnalyzer DataHist(fileName, outputDir, 1, 1, maxEvents, false, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
                 DataHist.Loop();
             } // end while loop on file list 
         } // end else inputFile.EndsWith(".root")
@@ -184,7 +252,7 @@ int main(int argc, char **argv)
         {
             lumiana DYJetsLumi(inputFile);
             summedWeights = DYJetsLumi.Loop();
-            MuMuTauHadTauHadAnalyzer DYJetsHist(inputFile, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+            MuMuTauHadTauHadAnalyzer DYJetsHist(inputFile, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
             DYJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -202,7 +270,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer DYJetsHist(fileName, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+                MuMuTauHadTauHadAnalyzer DYJetsHist(fileName, outputDir, lumi*6077.22*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
                 DYJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -218,7 +286,7 @@ int main(int argc, char **argv)
         {
             lumiana WJetsLumi(inputFile);
             summedWeights = WJetsLumi.Loop();
-            MuMuTauHadTauHadAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+            MuMuTauHadTauHadAnalyzer WJetsHist(inputFile, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
             WJetsHist.Loop();
         } // end if inputFile.EndsWith(".root")
 
@@ -236,7 +304,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+                MuMuTauHadTauHadAnalyzer WJetsHist(fileName, outputDir, lumi*61526.7*1000, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
                 WJetsHist.Loop();
             } // end while loop on input file list
         } // end else
@@ -252,7 +320,7 @@ int main(int argc, char **argv)
         {
             lumiana H125AA5Lumi(inputFile);
             summedWeights = H125AA5Lumi.Loop();
-            MuMuTauHadTauHadAnalyzer H125AA5Hist(inputFile, outputDir, 1, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+            MuMuTauHadTauHadAnalyzer H125AA5Hist(inputFile, outputDir, 1, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
             H125AA5Hist.Loop();
         } // end if inputFile.EndsWith(".root")
         
@@ -270,7 +338,7 @@ int main(int argc, char **argv)
             finTree.open(inputFile);
             while (getline(finTree, fileName))
             {
-                MuMuTauHadTauHadAnalyzer H125AA5Hist(fileName, outputDir, 1, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
+                MuMuTauHadTauHadAnalyzer H125AA5Hist(fileName, outputDir, 1, summedWeights, maxEvents, true, invertedMu2Iso, invertedTauIso, invertedTau2Iso, Mu1IsoThreshold, Mu2IsoThreshold, MuIsoUpperBound, MuonId, diMuonMassLowThreshold, diMuonMassHighThreshold, boostDiTauOpt, tauMVAIsoRawORWP, tauMVAIsoRawThreshold, tauMVAIsoWP, tauAntiMuDisc, tauAntiEleDisc, deepTauID, deepTauVSele, deepTauVSmu, deepTauVSjet, tauDecayModeThreshold, JetId, massDecorrelation, deepDiTauRawThreshold, deepDiTauRawLowerBound, muonScaleSyst, rochesterFile, jetScaleSyst, jecSystFile);
                 H125AA5Hist.Loop();
             } // end while loop on input file list
         } // end else 
