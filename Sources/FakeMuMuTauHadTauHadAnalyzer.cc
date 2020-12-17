@@ -254,9 +254,9 @@ void FakeMuMuTauHadTauHadAnalyzer::Loop()
           float smallestDR = 0.8; // dR cut between tau1 and tau2
           bool findTau2 = false;
 
-          for (unsigned int iTau2=0; iTau2<recoTauPt->size(); iTau2++)
+          for (unsigned int iTau2=iTau+1; iTau2<recoTauPt->size(); iTau2++)
           {
-              if (iTau2 == iTau) continue;
+              //if (iTau2 == iTau) continue;
               if (deepTauID && recoTauDeepVSjetraw->size() > 0)
               {
                   // -------------------------------------------------------------------------------
