@@ -6,6 +6,14 @@
 using namespace std;
 
 // ---------- customize the axis settings of TH1D and TH2D ----------------
+TH1I* Histomutau::newTH1I(string name, string xTitle, int nBins, double xLow, double xUp){
+  
+  TH1I* hist = new TH1I(name.c_str(), name.c_str(), nBins, xLow, xUp);
+  hist->GetXaxis()->SetTitle(xTitle.c_str());
+  hist->GetYaxis()->SetTitle("# Events");
+  histColl.push_back(hist);
+  return hist;
+}
 TH1D* Histomutau::newTH1D(string name, string xTitle, int nBins, double *xBins){
     TH1D* hist = new TH1D(name.c_str(), name.c_str(), nBins, xBins);
     hist->GetXaxis()->SetTitle(xTitle.c_str());
@@ -68,7 +76,8 @@ TH2D* Histomutau::newTH2D(string name, string xTitle, string yTitle, int nBinsX,
     hist->GetXaxis()->SetTitle(xTitle.c_str());
     hist->GetYaxis()->SetTitle(yTitle.c_str());
     hist->GetZaxis()->SetTitle("# Events");
-    hist->SetOption("HIST");
+    hist->GetZaxis()->SetRangeUser(0,100);
+    hist->SetOption("colz text");
     histColl.push_back(hist);
     return hist;
 }
@@ -100,6 +109,8 @@ Histomutau::Histomutau(){
     int NBinsMu3TauPt = sizeof(Mu3TauPtBin)/sizeof(Mu3TauPtBin[0])-1;
     int NBinsMu1Mu2Mu3TauPt = sizeof(Mu1Mu2Mu3TauPtBin)/sizeof(Mu1Mu2Mu3TauPtBin[0])-1;
 
+    CutFlow = newTH1I("Cut Flow", "Cuts", 12, 0.0, 12.0);
+    
     dRMu1Mu2 = newTH1D("dRMu1Mu2", "#Delta R(#mu_{1}#mu_{2})", 25, 0, 1.0);
     dRMu3Mu4 = newTH1D("dRMu3Mu4", "#Delta R(#mu_{3}#mu_{4})", 25, 0, 1.0);
     dRMu3Ele = newTH1D("dRMu3Ele", "#Delta R(#mu_{3}e)", 25, 0, 1.0);
@@ -203,6 +214,10 @@ Histomutau::Histomutau(){
     dRInvMassMu3Tau = newTH2D("dRInvMassMu3Tau", "#Delta R(#mu_{3}#tau)", "M(#mu_{3}#tau)[GeV]", 25, 0, 1, 20, 0, 60);
     dRInvMassEleTau = newTH2D("dRInvMassEleTau", "#Delta R(e#tau)", "M(e#tau)[GeV]", 25, 0, 1, 20, 0, 60);
     dRInvMassTauTau = newTH2D("dRInvMassTauTau", "#Delta R(#tau#tau)", "M(#tau#tau)[GeV]", 25, 0, 1, 20, 0, 60);
+
+    dRIsoMu3Tau = newTH2D("dRIsoMu3Tau", "#Delta R(#mu_{3}#tau)", "#tau Discriminator Raw Value", 25, 0, 5, 20, 0.5, 1);
+    dRFailIsoMu3Tau = newTH2D("dRFailIsoMu3Tau", "#Delta R(#mu_{3}#tau)", "#tau Discriminator Raw value", 25, 0, 5, 20, 0.5, 1);
+
 
     // ----------- flat tree for fit -----------
     TreeMuMuTauTau = new TTree("TreeMuMuTauTau","TreeMuMuTauTau");

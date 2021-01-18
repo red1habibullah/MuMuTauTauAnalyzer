@@ -285,6 +285,7 @@ string MuMuTauMuTauHadAnalyzer::createOutputFileName()
     outputName << "/";
     outputName << fileName;
     outputName << "_histogram";
+    outputName << "_dRTest";
     outputName << ".root";
     return outputName.str();
 }

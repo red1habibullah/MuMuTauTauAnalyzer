@@ -65,9 +65,33 @@ void MuMuTauMuTauHadAnalyzer::Loop()
       unsigned int indexMu1 = -1;
       unsigned int indexMu2 = -1;
       // ============================================================================
+      // ------- Starting the Cut Flow Histogram ----
+      CutFlow->Fill(0.5);
+      CutFlow->GetXaxis()->SetBinLabel(1,"No Cuts");
+      CutFlow->GetXaxis()->SetBinLabel(2,"#mu_{1} Found");
+      CutFlow->GetXaxis()->SetBinLabel(3,"#mu_{2} Found");
+      if (deepTauID)
+	{
+      CutFlow->GetXaxis()->SetBinLabel(4,"#tau pass Deep Discriminant ");
+	}
+      else
+	{
+          CutFlow->GetXaxis()->SetBinLabel(4," At least 1 #tau pass MVA Discriminant ");
 
+	}
+
+      CutFlow->GetXaxis()->SetBinLabel(5,"dR(#tau,#mu_{1}/#mu_{2}) > 0.8 ");
+      CutFlow->GetXaxis()->SetBinLabel(6,"bjet Veto ");
+      CutFlow->GetXaxis()->SetBinLabel(7," Smallest dR(#tau,#mu_{3}) ");
+      CutFlow->GetXaxis()->SetBinLabel(8,"#tau #mu Opposite Sign ");
+      CutFlow->GetXaxis()->SetBinLabel(9,"M_{#tau #mu} <60.0 ");
+      CutFlow->GetXaxis()->SetBinLabel(10,"dR(#mu_{3},#mu_{1}/#mu_{2}) > 0.4 ");
+      CutFlow->GetXaxis()->SetBinLabel(11,"#mu_{3} #tau non overlap ");
+      CutFlow->GetXaxis()->SetBinLabel(12,"#tau #mu pair found");
+
+      
       // ---- start loop on muon candidates for mu1 ----
-      bool findMu1 = false;
+       bool findMu1 = false;
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
           bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
@@ -101,6 +125,10 @@ void MuMuTauMuTauHadAnalyzer::Loop()
       } // end loop for mu1
 
       if (!findMu1) continue;
+      if(findMu1)
+	{
+	  CutFlow->Fill(1.5);
+	}
       float smallestDR = 1.0; // dR cut between Mu1 and Mu2
       bool findMu2 = false;
 
@@ -144,8 +172,18 @@ void MuMuTauMuTauHadAnalyzer::Loop()
       } // end loop for mu2
           
       if (!findMu2) continue;
+      if(findMu2)
+        {
+          CutFlow->Fill(2.5);
+	}
 
+      
       bool findMuTauPair = false;
+      //----------- Booleans to fill once per event.
+      bool TauPassCond = false;
+      bool dRCrossCleanCond = false;
+      bool BjetVeto = false;
+      bool dRSmallestCond = false;
       // ------- start loop on tau candidates -------
       for (unsigned int iTau=0; iTau<recoTauPt->size(); iTau++)
       {
@@ -205,6 +243,12 @@ void MuMuTauMuTauHadAnalyzer::Loop()
               // -------------------------------------------------------------------------------
 
               if ((!invertedTauIso && !passCondTauDeep) || (invertedTauIso && !passCondInvertTauDeepVSjet)) continue;
+	      if (!((!invertedTauIso && !passCondTauDeep) || (invertedTauIso && !passCondInvertTauDeepVSjet)))
+		{
+		  //CutFlow->Fill(3.5);
+		  TauPassCond = true;
+
+		}
           } // end if deepTauID && recoTauDeepVSjetraw->size() > 0
 
           else{
@@ -249,7 +293,13 @@ void MuMuTauMuTauHadAnalyzer::Loop()
               // -------------------------------------------------------------------------------------------------
 
               if ((!invertedTauIso && !passCondTauMVA) || (invertedTauIso && !passCondInvertTauMVA) || !passCondTauAntiMuMVA || !passCondTauAntiEleMVA) continue;
-          } // end if !deepTauID (tauMVAID)
+	      if (!((!invertedTauIso && !passCondTauMVA) || (invertedTauIso && !passCondInvertTauMVA) || !passCondTauAntiMuMVA || !passCondTauAntiEleMVA))
+		{
+		  //CutFlow->Fill(3.5);
+		  TauPassCond = true;
+		}
+
+	  } // end if !deepTauID (tauMVAID)
 
           TLorentzVector TauCand;
           TauCand.SetPtEtaPhiE(recoTauPt->at(iTau), recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauEnergy->at(iTau));
@@ -257,7 +307,14 @@ void MuMuTauMuTauHadAnalyzer::Loop()
           TauCand.SetPtEtaPhiM(recoTauPt->at(iTau)*tauScaleCorr, recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauMass);
 
           if (TauCand.DeltaR(Mu1) < 0.8 || TauCand.DeltaR(Mu2) < 0.8) continue;
-
+	  
+	  if (!(TauCand.DeltaR(Mu1) < 0.8 || TauCand.DeltaR(Mu2) < 0.8))
+	    {
+	      //CutFlow->Fill(4.5);
+	      dRCrossCleanCond = true;
+	      
+	    }
+	  
           // ---- bjet veto for tau ---
           bool bjetVeto = false;
           for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
@@ -271,8 +328,12 @@ void MuMuTauMuTauHadAnalyzer::Loop()
               } // end if bjet veto
           } // end for loop over the reco-jets
           if (bjetVeto) continue;
-
-          if ((recoTauDecayMode->at(iTau) != tauDecayModeThreshold) && (tauDecayModeThreshold == 0 || tauDecayModeThreshold == 1 || tauDecayModeThreshold == 5 || tauDecayModeThreshold == 6 || tauDecayModeThreshold == 10 || tauDecayModeThreshold == 11)) continue;
+	  if (!(bjetVeto))
+	    {
+	      //CutFlow->Fill(5.5);
+	      BjetVeto = true;
+	    }
+	  if ((recoTauDecayMode->at(iTau) != tauDecayModeThreshold) && (tauDecayModeThreshold == 0 || tauDecayModeThreshold == 1 || tauDecayModeThreshold == 5 || tauDecayModeThreshold == 6 || tauDecayModeThreshold == 10 || tauDecayModeThreshold == 11)) continue;
           Tau.SetPtEtaPhiM(recoTauPt->at(iTau)*tauScaleCorr, recoTauEta->at(iTau), recoTauPhi->at(iTau), recoTauMass);
           TauIso = deepTauID ? recoTauDeepVSjetraw->at(iTau) : recoTauIsoMVArawValue->at(iTau);
           TauDM = recoTauDecayMode->at(iTau);
@@ -308,23 +369,88 @@ void MuMuTauMuTauHadAnalyzer::Loop()
               Mu3Cand.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
 
               bool overlapMuTau = recoMuonRefToTau->at(iMuon) > 0 && recoTauRefToMuon->at(iTau) > 0 && recoMuonRefToTau->at(iMuon) == recoTauRefToMuon->at(iTau);
+	      
 
+
+
+	      if (Tau.DeltaR(Mu3Cand) < smallestDR)
+		{
+		  //CutFlow->Fill(6.5);
+		  dRSmallestCond = true;
+		  if (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon)))
+		    {
+		      CutFlow->Fill(7.5);
+		      
+		      if ((Tau+Mu3Cand).M() < 60.0)
+			{
+			  CutFlow->Fill(8.5);
+			
+			  if( (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4))
+			    {
+			      CutFlow->Fill(9.5);
+
+			      if(!overlapMuTau)
+				{
+				  CutFlow->Fill(10.5);
+				}
+			    }
+			  
+			}
+		    }
+		  
+		}
+	      // else
+	      // 	{
+	      // 	dRFailIsoMu3Tau->Fill(Mu3.DeltaR(Tau),TauIso);
+	      // 	}
+
+	      
+	      
               if ((Tau.DeltaR(Mu3Cand) < smallestDR) && (recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))) && ((Tau+Mu3Cand).M() < 60.0) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4) && !overlapMuTau)
-              {
+		{
                   Mu3.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
                   Mu3Iso = recoMuonIsolation->at(iMuon); 
                   smallestDR = Tau.DeltaR(Mu3);
                   findMu3 = true;
-              } // end if find mu3 with tau matched
+		} // end if find mu3 with tau matched
           } // end loop for mu3
-
-          if (!findMu3) continue;
-          else{
-              findMuTauPair = true;
-              break;
+	 
+	  if (!findMu3)
+	  {                                                                                                                                                                                                                                                      
+	          dRFailIsoMu3Tau->Fill(Mu3.DeltaR(Tau),TauIso);                                                                                                                                                                                                         
+	  }
+          
+	  if (!findMu3) continue;
+	  
+	  else{
+	    findMuTauPair = true;
+	    break;
           } // end if findMu3
       } // end loop for tau
-
+      
+      //----- CutFlow Bins Filled outside TauLoop to be once per event
+      if (TauPassCond)
+	{
+	  CutFlow->Fill(3.5); 
+	  
+	  
+	  if (dRCrossCleanCond)
+	    {
+	      CutFlow->Fill(4.5); 
+	      
+	      
+	      if (BjetVeto)
+		{
+		  CutFlow->Fill(5.5); 
+		  
+		  
+		  if (dRSmallestCond)
+		    {
+		      CutFlow->Fill(6.5); 
+		    }
+		}
+	    }
+	}
       // ---- prepare event weight info ----
       double weight = 1;
       if (isMC == true)
@@ -335,7 +461,9 @@ void MuMuTauMuTauHadAnalyzer::Loop()
       // ---- fill histograms ----
       if (findMu1 && findMu2 && findMuTauPair)
       {
-          ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
+	  CutFlow->Fill(11.5);
+
+	  ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
           dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
           invMassMu1Mu2->Fill((Mu1+Mu2).M(), weight);
           dRInvMassMu1Mu2->Fill(Mu1.DeltaR(Mu2), (Mu1+Mu2).M(), weight);
@@ -377,7 +505,10 @@ void MuMuTauMuTauHadAnalyzer::Loop()
           ptMuMuTauMuTauHad->Fill((Mu1+Mu2+Mu3+Tau).Pt(), weight);
           invMassMuMuTauMuTauHad->Fill((Mu1+Mu2+Mu3+Tau).M(), weight);
 
-          // ----- fill flat trees -----
+          
+	  dRIsoMu3Tau->Fill(Mu3.DeltaR(Tau),TauIso);
+	  
+	  // ----- fill flat trees -----
           invMassMuMu = (Mu1+Mu2).M();
           visMassTauTau = (Mu3+Tau).M();
           visMassMuMuTauTau = (Mu1+Mu2+Mu3+Tau).M();
@@ -411,7 +542,7 @@ void MuMuTauMuTauHadAnalyzer::Loop()
 
    int numberofhist = histColl.size();
    for(int i=0; i<numberofhist; i++){
-       if (isMC) histColl[i]->Scale(lumiScale/summedWeights);
+     //if (isMC) histColl[i]->Scale(lumiScale/summedWeights);
        histColl[i]->Write();
    } // end loop for writing all the histograms into the output file
 

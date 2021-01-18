@@ -16,7 +16,9 @@ class Histomutau{
 
         vector<TH1*> histColl;
 
-        TH1D* newTH1D(string, string, int, double*);
+        TH1I* newTH1I(string, string, int, double, double);
+	
+	TH1D* newTH1D(string, string, int, double*);
         TH1D* newTH1D(string, string, int, double, double);
         TH1D* newTH1D(string, string, vector<double>&);
 
@@ -28,7 +30,9 @@ class Histomutau{
         Histomutau();
         ~Histomutau();
 
-        TH1D* dRMu1Mu2;
+        TH1I* CutFlow;
+	
+	TH1D* dRMu1Mu2;
         TH1D* dRMu3Mu4;
         TH1D* dRMu3Ele;
         TH1D* dREleEle;
@@ -132,7 +136,11 @@ class Histomutau{
         TH2D* dRInvMassEleTau;
         TH2D* dRInvMassTauTau;
 
-        // ----------- flat tree for fit -----------
+        TH2D* dRIsoMu3Tau;
+	TH2D* dRFailIsoMu3Tau;
+	
+	
+	// ----------- flat tree for fit -----------
         TTree* TreeMuMuTauTau;
         
         double invMassMuMu;
