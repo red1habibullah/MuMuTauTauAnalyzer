@@ -42,6 +42,7 @@ void FakeMuMuTauMuAnalyzer::Loop()
 
       unsigned int indexMu1 = -1;
       unsigned int indexMu2 = -1;
+      unsigned int indexMu3 = -1;
       // =============================================================================
 
       // ---- start loop on muon candidates for mu1 ----
@@ -137,9 +138,32 @@ void FakeMuMuTauMuAnalyzer::Loop()
               Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu3Iso = recoMuonIsolation->at(iMuon);
               highestPt = Mu3Cand.Pt();
+              indexMu3 = iMuon;
               findMu3 = true;
           } // end if Mu3Cand.Pt() > highestPt
       } // end loop for Mu3
+
+      bool findMu4 = false;
+
+      // ---- veto the forth muon probe for fake rate study ----
+      for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
+      {
+          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          bool passMuonID = isLoose || isMedium || isTight;
+          //bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
+
+          if (iMuon == indexMu1 || iMuon == indexMu2 || iMuon == indexMu3) continue;
+          //if (recoMuonIsolation->at(iMuon) > Mu3IsoThreshold || !passMuonID || !passDXYDZ) continue;
+          if (!passMuonID) continue;
+          
+          TLorentzVector Mu4Cand;
+          Mu4Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
+
+          if (Mu4Cand.DeltaR(Mu1) < 0.4 || Mu4Cand.DeltaR(Mu2) < 0.4) continue;
+          findMu4 = true;
+      } // end loop for Mu4
 
       // ---- prepare event weight info ----
       double weight = 1;
@@ -149,7 +173,7 @@ void FakeMuMuTauMuAnalyzer::Loop()
       } // end if isMC == true
 
       // ---- fill histograms ----
-      if (findMu1 && findMu2 && findMu3)
+      if (findMu1 && findMu2 && findMu3 && !findMu4)
       {
           ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
           dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);

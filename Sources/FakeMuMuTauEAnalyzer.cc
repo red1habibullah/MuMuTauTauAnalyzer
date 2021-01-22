@@ -41,6 +41,7 @@ void FakeMuMuTauEAnalyzer::Loop()
       float Ele1Iso;
 
       unsigned int indexMu1 = -1;
+      unsigned int indexEle1 = -1;
       // ============================================================================
 
       // ---- start loop on muon candidates for mu1 ----
@@ -98,7 +99,7 @@ void FakeMuMuTauEAnalyzer::Loop()
       bool findEle = false;
       highestPt = 7.0; // pt threshold for reco-electron
 
-      // ---- search for a electron-electron pair for fake rate study ----
+      // ---- search for an additional electron for fake rate study ----
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
           bool condEleLoose = EleRelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
@@ -131,8 +132,28 @@ void FakeMuMuTauEAnalyzer::Loop()
               Ele1.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
               Ele1Iso = recoElectronIsolation->at(iEle);
               highestPt = Ele1Cand.Pt();
+              indexEle1 = iEle;
               findEle = true;
           } // end if Ele1Cand.Pt() > highestPt
+      } // end loop for electron
+
+      // ----veto the second electron for fake rate study ----
+      bool findEle2 = false;
+      for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
+      {
+          bool condEleLoose = EleRelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
+          bool condEleMedium = EleRelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
+          bool condEleTight = EleRelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
+          bool condEleNull = EleRelId != "LOOSE" && EleRelId != "MEDIUM" && EleRelId != "TIGHT" && recoElectronIsolation->at(iEle) < EleIsoUpperBound;
+          bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
+
+          if (!passCondEleId) continue;
+          if (iEle == indexEle1) continue;
+          TLorentzVector Ele2Cand;
+          Ele2Cand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
+
+          if (Ele2Cand.DeltaR(Mu1) < 0.4 || Ele2Cand.DeltaR(Mu2) < 0.4 || Ele2Cand.DeltaR(Ele1) < 0.2) continue;
+          findEle2 = true;
       } // end loop for electron
 
       // ---- prepare event weight info ----
@@ -143,7 +164,7 @@ void FakeMuMuTauEAnalyzer::Loop()
       } // end if isMC == true
 
       // ---- fill histograms ----
-      if (findMu1 && findMu2 && findEle)
+      if (findMu1 && findMu2 && findEle && !findEle2)
       {
           ptMu1Mu2->Fill((Mu1+Mu2).Pt(), weight);
           dRMu1Mu2->Fill(Mu1.DeltaR(Mu2), weight);
