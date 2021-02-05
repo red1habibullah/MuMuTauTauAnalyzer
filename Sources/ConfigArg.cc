@@ -246,7 +246,7 @@ bool ConfigArg::get(const char* key, T& value){
         std::cerr << "Warning: parameter " << key << " was not found in configuration file!\n";
         std::string value_;
         convert(value, value_);
-        std::cerr << "         will use " << value_ << " as defautl value or the command line option.\n"; 
+        std::cerr << "         will use " << value_ << " as default value or the command line option.\n"; 
         std::string key_(key);
         table_[key_] = value_;
         return false;
