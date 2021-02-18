@@ -61,9 +61,10 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
           bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
           bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
           bool passMuonID = isLoose || isMedium || isTight;
-          bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
+          //bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
 
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID && passDXYDZ) 
+          //if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID && passDXYDZ) 
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID) 
           {
               Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               double recoMuonMass = Mu1.M();
@@ -99,10 +100,11 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
           bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
           bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
           bool passMuonID = isLoose || isMedium || isTight;
-          bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
+          //bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
 
           if (iMuon == indexMu1) continue;
-          if ((recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || !passMuonID || !passDXYDZ) continue;
+          //if ((recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || !passMuonID || !passDXYDZ) continue;
+          if ((recoMuonIsolation->at(iMuon) > Mu2IsoThreshold) || !passMuonID) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
@@ -206,18 +208,18 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
           if (TauCand.DeltaR(Mu1) < 0.8 || TauCand.DeltaR(Mu2) < 0.8) continue;
 
           // ---- bjet veto for tau ---
-          bool bjetVeto = false;
-          for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
-          {
-              TLorentzVector Jet;
-              Jet.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
-              if (TauCand.DeltaR(Jet) < 0.4 && recoJetCSV->at(iJet) > 0.5426)
-              {
-                  bjetVeto = true;
-                  break;
-              } // end if bjet veto
-          } // end for loop over the reco-jets
-          if (bjetVeto) continue;
+          //bool bjetVeto = false;
+          //for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
+          //{
+          //    TLorentzVector Jet;
+          //    Jet.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
+          //    if (TauCand.DeltaR(Jet) < 0.4 && recoJetCSV->at(iJet) > 0.5426)
+          //    {
+          //        bjetVeto = true;
+          //        break;
+          //    } // end if bjet veto
+          //} // end for loop over the reco-jets
+          //if (bjetVeto) continue;
 
           if ((recoTauDecayMode->at(iTau) != tauDecayModeThreshold) && (tauDecayModeThreshold == 0 || tauDecayModeThreshold == 1 || tauDecayModeThreshold == 5 || tauDecayModeThreshold == 6 || tauDecayModeThreshold == 10 || tauDecayModeThreshold == 11)) continue;
 
@@ -241,7 +243,8 @@ void FakeMuMuTauETauHadAnalyzer::Loop()
               TLorentzVector EleCand;
               EleCand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
               bool overlapEleTau = recoElectronRefToTau->at(iEle) > 0 && recoTauRefToElectron->at(iTau) > 0 && recoElectronRefToTau->at(iEle) == recoTauRefToElectron->at(iTau);
-              if ((recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle))) && (Tau.DeltaR(EleCand) < smallestDR) && ((Tau+EleCand).M() < 60.0) && (EleCand.DeltaR(Mu1) > 0.4) && (EleCand.DeltaR(Mu2) > 0.4) && !overlapEleTau)
+              //if ((recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle))) && (Tau.DeltaR(EleCand) < smallestDR) && ((Tau+EleCand).M() < 60.0) && (EleCand.DeltaR(Mu1) > 0.4) && (EleCand.DeltaR(Mu2) > 0.4) && !overlapEleTau)
+              if ((recoTauPDGId->at(iTau)/fabs(recoTauPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle))) && (Tau.DeltaR(EleCand) < smallestDR) && (EleCand.DeltaR(Mu1) > 0.4) && (EleCand.DeltaR(Mu2) > 0.4) && !overlapEleTau)
               {
                   Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
                   EleIso = recoElectronIsolation->at(iEle);
