@@ -52,9 +52,10 @@ void FakeMuMuTauEAnalyzer::Loop()
           bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
           bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
           bool passMuonID = isLoose || isMedium || isTight;
-          bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
+          //bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
 
-          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID && passDXYDZ)
+          //if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID && passDXYDZ)
+          if (recoMuonTriggerFlag->at(iMuon) == 1 && recoMuonIsolation->at(iMuon) < Mu1IsoThreshold && passMuonID)
           {
               Mu1.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
               Mu1Iso = recoMuonIsolation->at(iMuon);
@@ -77,10 +78,11 @@ void FakeMuMuTauEAnalyzer::Loop()
           bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
           bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
           bool passMuonID = isLoose || isMedium || isTight;
-          bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
+          //bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
 
           if (iMuon == indexMu1) continue;
-          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID || !passDXYDZ || recoMuonPt->at(iMuon) < 20.0) continue;
+          //if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID || !passDXYDZ || recoMuonPt->at(iMuon) < 20.0) continue;
+          if (recoMuonIsolation->at(iMuon) > Mu2IsoThreshold || !passMuonID || recoMuonPt->at(iMuon) < 20.0) continue;
 
           TLorentzVector Mu2Cand; // prepare this variable for dR(Mu1,Mu2) implementation
           Mu2Cand.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
@@ -113,18 +115,18 @@ void FakeMuMuTauEAnalyzer::Loop()
           Ele1Cand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
 
           // ---- bjet veto for the probe electron ---
-          bool bjetVeto = false;
-          for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
-          {
-              TLorentzVector Jet;
-              Jet.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
-              if (Ele1Cand.DeltaR(Jet) < 0.4 && recoJetCSV->at(iJet) > 0.5426)
-              {
-                  bjetVeto = true;
-                  break;
-              } // end if bjet veto
-          } // end for loop over the reco-jets
-          if (bjetVeto) continue;
+          //bool bjetVeto = false;
+          //for (unsigned int iJet=0; iJet<recoJetPt->size(); iJet++)
+          //{
+          //    TLorentzVector Jet;
+          //    Jet.SetPtEtaPhiE(recoJetPt->at(iJet), recoJetEta->at(iJet), recoJetPhi->at(iJet), recoJetEnergy->at(iJet));
+          //    if (Ele1Cand.DeltaR(Jet) < 0.4 && recoJetCSV->at(iJet) > 0.5426)
+          //    {
+          //        bjetVeto = true;
+          //        break;
+          //    } // end if bjet veto
+          //} // end for loop over the reco-jets
+          //if (bjetVeto) continue;
 
           if (Ele1Cand.DeltaR(Mu1) < 0.4 || Ele1Cand.DeltaR(Mu2) < 0.4) continue;
           if (Ele1Cand.Pt() > highestPt)
