@@ -151,10 +151,11 @@ void FakeMuMuTauMuAnalyzer::Loop()
       // ---- veto the forth muon probe for fake rate study ----
       for (unsigned int iMuon=0; iMuon<recoMuonPt->size(); iMuon++)
       {
-          bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
-          bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
-          bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
-          bool passMuonID = isLoose || isMedium || isTight;
+          //bool isLoose = MuonId == "LOOSE" && recoMuonIdLoose->at(iMuon) > 0;
+          //bool isMedium = MuonId == "MEDIUM" && recoMuonIdMedium->at(iMuon) > 0;
+          //bool isTight = MuonId == "TIGHT" && recoMuonIdTight->at(iMuon) > 0;
+          //bool passMuonID = isLoose || isMedium || isTight;
+          bool passMuonID = recoMuonIdLoose->at(iMuon) > 0;
           //bool passDXYDZ = fabs(recoMuonDXY->at(iMuon)) < 0.2 && fabs(recoMuonDZ->at(iMuon)) < 0.5;
 
           if (iMuon == indexMu1 || iMuon == indexMu2 || iMuon == indexMu3) continue;
@@ -167,6 +168,9 @@ void FakeMuMuTauMuAnalyzer::Loop()
           if (Mu4Cand.DeltaR(Mu1) < 0.4 || Mu4Cand.DeltaR(Mu2) < 0.4) continue;
           findMu4 = true;
       } // end loop for Mu4
+
+      // --- requirement on MET to suppress WZ background ---
+      if (recoMET->at(0) > 20.0) continue;
 
       // ---- prepare event weight info ----
       double weight = 1;

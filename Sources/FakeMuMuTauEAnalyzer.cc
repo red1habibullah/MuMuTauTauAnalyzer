@@ -143,20 +143,23 @@ void FakeMuMuTauEAnalyzer::Loop()
       bool findEle2 = false;
       for (unsigned int iEle=0; iEle<recoElectronPt->size(); iEle++)
       {
-          bool condEleLoose = EleRelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
-          bool condEleMedium = EleRelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
-          bool condEleTight = EleRelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
-          bool condEleNull = EleRelId != "LOOSE" && EleRelId != "MEDIUM" && EleRelId != "TIGHT" && recoElectronIsolation->at(iEle) < EleIsoUpperBound;
-          bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
+          //bool condEleLoose = EleRelId == "LOOSE" && recoElectronIdLoose->at(iEle) > 0;
+          //bool condEleMedium = EleRelId == "MEDIUM" && recoElectronIdMedium->at(iEle) > 0;
+          //bool condEleTight = EleRelId == "TIGHT" && recoElectronIdTight->at(iEle) > 0;
+          //bool condEleNull = EleRelId != "LOOSE" && EleRelId != "MEDIUM" && EleRelId != "TIGHT" && recoElectronIsolation->at(iEle) < EleIsoUpperBound;
+          //bool passCondEleId = condEleLoose || condEleMedium || condEleTight || condEleNull;
+          bool passCondEleId = (fabs(recoElectronEta->at(iEle)) <= 1.479) ? (recoElectronIsolation->at(iEle) < 0.198 + 0.506/recoElectronPt->at(iEle)) : (recoElectronIsolation->at(iEle) < 0.203 + 0.963/recoElectronPt->at(iEle));
 
           if (!passCondEleId) continue;
           if (iEle == indexEle1) continue;
-          TLorentzVector Ele2Cand;
-          Ele2Cand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
-
-          if (Ele2Cand.DeltaR(Mu1) < 0.4 || Ele2Cand.DeltaR(Mu2) < 0.4 || Ele2Cand.DeltaR(Ele1) < 0.2) continue;
+          //TLorentzVector Ele2Cand;
+          //Ele2Cand.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
+          //if (Ele2Cand.DeltaR(Mu1) < 0.4 || Ele2Cand.DeltaR(Mu2) < 0.4 || Ele2Cand.DeltaR(Ele1) < 0.2) continue;
           findEle2 = true;
       } // end loop for electron
+
+      // --- requirement on MET to suppress WZ background ---
+      if (recoMET->at(0) > 20.0) continue;
 
       // ---- prepare event weight info ----
       double weight = 1;
