@@ -96,7 +96,7 @@ HistoZmutau::HistoZmutau(){
     ptMuTau = newTH1D("ptMuTau", "p_{T}(#mu#tau)[GeV]", NBinsMuTauPt, MuTauPtBin);
 
     mtMuMet = newTH1D("mtMuMet", "M_{T}(#mu#slash{E_{T}})[GeV]", 20, 20, 180);
-    pzeta = newTH1D("pzeta", "D_{#zeta}[GeV]", 40, -125, 75);
+    pzeta = newTH1D("pzeta", "D_{#zeta}[GeV]", 25, -85, 75);
 
     muPt = newTH1D("muPt", "p_{T}(#mu) [GeV]", NBinsMuPt, MuPtBin);
     muEta = newTH1D("muEta", "#eta(#mu)", 20, -2.1, 2.1);
@@ -109,7 +109,7 @@ HistoZmutau::HistoZmutau(){
     tauPt = newTH1D("tauPt", "p_{T}(#tau) [GeV]", NBinsTauPt, tauPtBin);
     tauEta = newTH1D("tauEta", "#eta(#tau)", 20, -2.1, 2.1);
     tauPhi = newTH1D("tauPhi", "#phi(#tau)", 20, -2.5, 2.5);
-    tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 10, 0, 3);
+    tauMass = newTH1D("tauMass", "M(#tau) [GeV]", 30, 0, 3);
     tauDecayMode = newTH1D("tauDecayMode", "DecayMode(#tau)", 12, 0, 12);
     tauIsoMVA = newTH1D("tauIsoMVA", "#tau^{iso}", 20, -1, 1);
 
