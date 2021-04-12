@@ -64,11 +64,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
       TLorentzVector Tau;
       TLorentzVector Tau2;
 
-      float Mu1Iso;
-      float Mu2Iso;
-      float Mu3Iso;
-      float Mu4Iso;
-      float EleIso;
       float TauIso;
       float TauDM;
       float Tau2Iso;
@@ -879,6 +874,35 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
           } // end if highest pt
       } // end loop for jets containing tau candidates
 
+      if (findTauTauPair)
+      {
+          // ----- fill flat trees -----
+          invMassMu1Mu2_tt = (Mu1+Mu2).M();
+          visMassTauTau_tt = Tau.M();
+          visMass2Mu2Tau_tt = (Mu1+Mu2+Tau).M();
+          
+          deltaRMu1Mu2_tt = Mu1.DeltaR(Mu2);
+
+          mu1Pt_tt = Mu1.Pt();
+          mu1Eta_tt = Mu1.Eta();
+          mu1Phi_tt = Mu1.Phi();
+          mu1Mass_tt = Mu1.M();
+
+          mu2Pt_tt = Mu2.Pt();
+          mu2Eta_tt = Mu2.Eta();
+          mu2Phi_tt = Mu2.Phi();
+          mu2Mass_tt = Mu2.M();
+
+          tauPt_tt = Tau.Pt();
+          tauEta_tt = Tau.Eta();
+          tauPhi_tt = Tau.Phi();
+          tauMass_tt = Tau.M();
+          tauDisc_tt = TauIso;
+
+          eventWeight_tt = weight/summedWeights;
+          TreeTauTau->Fill();
+      } // end if findTauTauPair = true
+
       // ------- start loop on tau candidates -------
       for (unsigned int iTau=0; iTau<recoTauBoostedPt->size(); iTau++)
       {
@@ -1045,7 +1069,11 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
 
               // ----- fill flat trees -----
               invMassMu1Mu2_tt = (Mu1+Mu2).M();
+              visMassTauTau_tt = (Tau+Tau2).M();
+              visMass2Mu2Tau_tt = (Mu1+Mu2+Tau+Tau2).M();
+              
               deltaRMu1Mu2_tt = Mu1.DeltaR(Mu2);
+              deltaRTauTau_tt = Tau.DeltaR(Tau2);
 
               mu1Pt_tt = Mu1.Pt();
               mu1Eta_tt = Mu1.Eta();
@@ -1057,37 +1085,19 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
               mu2Phi_tt = Mu2.Phi();
               mu2Mass_tt = Mu2.M();
 
-              if (boostDiTauOpt)
-              {
-                  visMassTauTau_tt = (Tau+Tau2).M();
-                  visMass2Mu2Tau_tt = (Mu1+Mu2+Tau+Tau2).M();
-                  deltaRTauTau_tt = Tau.DeltaR(Tau2);
+              tauPt_tt = Tau.Pt();
+              tauEta_tt = Tau.Eta();
+              tauPhi_tt = Tau.Phi();
+              tauMass_tt = Tau.M();
+              tauDisc_tt = TauIso;
+              tauDM_tt = TauDM;
 
-                  tauPt_tt = Tau.Pt();
-                  tauEta_tt = Tau.Eta();
-                  tauPhi_tt = Tau.Phi();
-                  tauMass_tt = Tau.M();
-                  tauDisc_tt = TauIso;
-                  tauDM_tt = TauDM;
-
-                  tau2Pt_tt = Tau2.Pt();
-                  tau2Eta_tt = Tau2.Eta();
-                  tau2Phi_tt = Tau2.Phi();
-                  tau2Mass_tt = Tau2.M();
-                  tau2Disc_tt = Tau2Iso;
-                  tau2DM_tt = Tau2DM;
-              } // end if boostDiTauOpt == true
-
-              else{
-                  visMassTauTau_tt = Tau.M();
-                  visMass2Mu2Tau_tt = (Mu1+Mu2+Tau).M();
-
-                  tauPt_tt = Tau.Pt();
-                  tauEta_tt = Tau.Eta();
-                  tauPhi_tt = Tau.Phi();
-                  tauMass_tt = Tau.M();
-                  tauDisc_tt = TauIso;
-              } // end if boostDiTauOpt == false
+              tau2Pt_tt = Tau2.Pt();
+              tau2Eta_tt = Tau2.Eta();
+              tau2Phi_tt = Tau2.Phi();
+              tau2Mass_tt = Tau2.M();
+              tau2Disc_tt = Tau2Iso;
+              tau2DM_tt = Tau2DM;
 
               eventWeight_tt = weight/summedWeights;
               TreeTauTau->Fill();
