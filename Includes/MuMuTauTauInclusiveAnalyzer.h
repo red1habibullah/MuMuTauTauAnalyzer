@@ -641,7 +641,6 @@ MuMuTauTauInclusiveAnalyzer::MuMuTauTauInclusiveAnalyzer(TString fileName_, TStr
     rochesterFile = rochesterFile_;
     jetScaleSyst = jetScaleSyst_;
     jecSystFile = jecSystFile_;
-    invMassMu1Mu2->SetBins(20, diMuonMassLowThreshold, diMuonMassHighThreshold);
 
     //--- Create output directory if necessary ---
     if (nMaxEvents > 0) {
