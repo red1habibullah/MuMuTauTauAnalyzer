@@ -79,6 +79,8 @@ $ ./runFakeMuMuTauHadTauHadAnalyzer doWhat=Data maxEvents=3000 inputFile=inputFi
 
 $ ./runZTauMuTauHadAnalyzer doWhat=DYJets maxEvents=2000 inputFile=inputFile.root ####### for producing histograms for tauID study 
 
+# Run the diMuon + ditau inclusive Analyzer:
+$ ./runMuMuTauTauInclusiveAnalyzer doWhat=H125AA5 maxEvents=2000 inputFile=inputFile.root ###### for producing flat trees of all channels
 ###############################################################
 
 NOTE: If the parameters are customized in the command line, their default values in "mumutautau.cfg" will be ignored. 
