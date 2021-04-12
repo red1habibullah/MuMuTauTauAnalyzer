@@ -100,7 +100,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
               } // end if isMC == false (data)
 
               Mu1.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
-              Mu1Iso = recoMuonIsolation->at(iMuon);
               indexMu1 = iMuon;
               findMu1 = true;
               break;
@@ -143,7 +142,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
           if((Mu1.DeltaR(Mu2Cand) < smallestDR) && (recoMuonPDGId->at(indexMu1) == (-1) * recoMuonPDGId->at(iMuon)) && ((Mu1+Mu2Cand).M() > diMuonMassLowThreshold) && ((Mu1+Mu2Cand).M() < diMuonMassHighThreshold))
           {
               Mu2.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
-              Mu2Iso = recoMuonIsolation->at(iMuon);
               smallestDR = Mu1.DeltaR(Mu2);
               indexMu2 = iMuon;
               findMu2 = true;
@@ -188,7 +186,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
 
           if (Mu4Cand.DeltaR(Mu1) < 0.4 || Mu4Cand.DeltaR(Mu2) < 0.4) continue;
           Mu4.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-          Mu4Iso = recoMuonIsolation->at(iMuon);
 
           float smallestDR = 1.0; // dR cut between Mu3 and Mu4
           bool findMu3 = false;
@@ -228,7 +225,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
               if ((Mu4.DeltaR(Mu3Cand) < smallestDR) && (recoMuonPDGId->at(iMuon3) == (-1) * recoMuonPDGId->at(iMuon)) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4))
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon3), recoMuonEta->at(iMuon3), recoMuonPhi->at(iMuon3), recoMuonEnergy->at(iMuon3));
-                  Mu3Iso = recoMuonIsolation->at(iMuon3);
                   smallestDR = Mu4.DeltaR(Mu3);
                   findMu3 = true;
               } // end if find mu3 with mu4 matched
@@ -314,7 +310,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
           //if (bjetVeto) continue;
 
           Ele.SetPtEtaPhiE(recoElectronPt->at(iEle), recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronEnergy->at(iEle));
-          EleIso = recoElectronIsolation->at(iEle);
 
           float smallestDR = 1.0; // dR cut between Mu3 and electron
           bool findMu3 = false;
@@ -356,7 +351,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
               if ((Ele.DeltaR(Mu3Cand) < smallestDR) && (recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4) && !overlapMuEle)
               {
                   Mu3.SetPtEtaPhiE(recoMuonPt->at(iMuon), recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonEnergy->at(iMuon));
-                  Mu3Iso = recoMuonIsolation->at(iMuon);
                   smallestDR = Ele.DeltaR(Mu3);
                   findMu3 = true;
               } // end if find mu3 with electron matched
@@ -573,7 +567,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
               if ((Tau.DeltaR(Mu3Cand) < smallestDR) && (recoTauMuonCleanedPDGId->at(iTau)/fabs(recoTauMuonCleanedPDGId->at(iTau)) == (-1) * recoMuonPDGId->at(iMuon)/fabs(recoMuonPDGId->at(iMuon))) && (Mu3Cand.DeltaR(Mu1) > 0.4) && (Mu3Cand.DeltaR(Mu2) > 0.4) && !overlapMuTau)
               {
                   Mu3.SetPtEtaPhiM(recoMuonPt->at(iMuon)*rochesterSF, recoMuonEta->at(iMuon), recoMuonPhi->at(iMuon), recoMuonMass);
-                  Mu3Iso = recoMuonIsolation->at(iMuon); 
                   smallestDR = Tau.DeltaR(Mu3);
                   findMu3 = true;
               } // end if find mu3 with tau matched
@@ -786,7 +779,6 @@ void MuMuTauTauInclusiveAnalyzer::Loop()
               if ((Tau.DeltaR(EleCand) < smallestDR) && (recoTauElectronCleanedPDGId->at(iTau)/fabs(recoTauElectronCleanedPDGId->at(iTau)) == (-1) * recoElectronPDGId->at(iEle)/fabs(recoElectronPDGId->at(iEle))) && (EleCand.DeltaR(Mu1) > 0.4) && (EleCand.DeltaR(Mu2) > 0.4) && !overlapEleTau)
               {
                   Ele.SetPtEtaPhiM(recoElectronPtCorr, recoElectronEta->at(iEle), recoElectronPhi->at(iEle), recoElectronMass);
-                  EleIso = recoElectronIsolation->at(iEle); 
                   smallestDR = Tau.DeltaR(Ele);
                   findEle = true;
               } // end if find electron with tau matched
